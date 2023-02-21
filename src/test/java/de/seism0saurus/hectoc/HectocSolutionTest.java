@@ -2,6 +2,8 @@ package de.seism0saurus.hectoc;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
 public class HectocSolutionTest {
@@ -37,5 +39,20 @@ public class HectocSolutionTest {
     @Test
     public void acceptCorrectNumberAndOrderOfNumbers(){
        assertDoesNotThrow(() -> solution.checkSolution("123456"));
+    }
+
+    @Test
+    public void testRealHectoc(){
+        final HectocChallenge challange = HectocChallenge.builder()
+        .firstDigit(4)
+        .secondDigit(9)
+        .thirdDigit(8)
+        .fourthDigit(3)
+        .fifthDigit(8)
+        .sixtDigit(8)
+        .build();
+        final HectocSolution solution = new HectocSolution(challange);
+        assertDoesNotThrow(() -> solution.checkSolution("4+98-3+8/8"));
+        assertTrue(solution.isValid());
     }
 }
