@@ -26,7 +26,7 @@ public class HectocSolution {
     }
 
     private void checkSymbols(final String equotation){
-        Pattern pattern = Pattern.compile("([+\\-*\\^\\(\\)]*[1-9]){6}[+\\-*\\‚^\\(\\)]*");
+        Pattern pattern = Pattern.compile("([+\\-*/\\^\\(\\)]*[1-9]){6}[+\\-*/\\^\\(\\)]*");
         Matcher matcher = pattern.matcher(equotation);
         if (!matcher.find()) {
             throw new IllegalArgumentException("Not a valid Hectoc solution. Please use only +, -, *, /, (, ) and ^ and the six digits from your Hectoc.");
