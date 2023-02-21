@@ -11,7 +11,7 @@ import de.seism0saurus.hectoc.HectocChallenge;
 import de.seism0saurus.hectoc.HectocGenerator;
 import de.seism0saurus.hectoc.HectocSolution;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200,https://hectoc.seism0saurus.de/", maxAge = 3600)
 @RestController
 public class HectocService {
 
