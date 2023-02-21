@@ -1,0 +1,42 @@
+<div>
+  <h1>Hectoc Challenger</h1>
+
+  <div class="tutorial">
+    <p>Solve hectoc challenges.
+      Hectocs are mathematical challenges developed by <a href="https://en.wikipedia.org/wiki/Yusnier_Viera">Yusnier Viera</a>.
+      More infos at https://wir-rechnen.de/hectoc
+    </p>
+    <p>
+      The goal is to combine the 6 numbers to a total of 100.
+      You can use the mathematical operations + - * / ^ and the parenthesis ()
+      Numbers can be combined but you have to use all 6 of them.
+
+      This site is a private project from <a href="https://seism0saurus.de">seism0saurus.de</a>
+    </p>
+  </div>
+
+  <div class="challenge">
+    <div class="hectoc">
+      {{hectoc}}
+    </div>
+    <button mat-fab extended id="refresh" name="refresh" aria-label="refresh" (click)="newHectoc()">
+      <mat-icon>refresh</mat-icon>
+      New challenge
+    </button>
+  </div>
+
+  <form class="solution" (ngSubmit)="solve()">
+    <mat-form-field appearance="fill">
+      <mat-label>Solution</mat-label>
+      <input matInput id="equotation" name="equotation" required [(ngModel)]="solution">
+      <button matSuffix mat-icon-button id="close" name="close" aria-label="close" (click)="this.solution=''">
+        <mat-icon>close</mat-icon>
+      </button>
+      <!-- <mat-error *ngIf="solution.errors?.['solveFailed']">{{errorSolve}}</mat-error> -->
+    </mat-form-field>
+    <button mat-fab extended color="primary" id="solve" name="solve" aria-label="solve" (click)="solve()">
+      <mat-icon>calculate</mat-icon>
+      Solve
+    </button>
+  </form>
+</div>
