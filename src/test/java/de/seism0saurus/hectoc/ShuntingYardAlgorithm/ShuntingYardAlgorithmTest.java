@@ -79,16 +79,36 @@ public class ShuntingYardAlgorithmTest {
         thirdStack.push(Operator.MINUS);
         thirdStack.push(Number.of(1));
 
-        final String fourthEquotation = "-3+5";
-        final Stack<StackElement> fourthStack = new Stack<>();
-        fourthStack.push(Number.of(-3));
-        fourthStack.push(Operator.PLUS);
-        fourthStack.push(Number.of(5));
+        final String negativeNumberAtTheStartEquotation = "-3+5";
+        final Stack<StackElement> negativeNumberAtTheStartEquotationStack = new Stack<>();
+        negativeNumberAtTheStartEquotationStack.push(Number.of(-3));
+        negativeNumberAtTheStartEquotationStack.push(Operator.PLUS);
+        negativeNumberAtTheStartEquotationStack.push(Number.of(5));
+
+        final String negativeNumberInTheMiddleEquotation = "(5+8+7)*(-9+2*7)";
+        final Stack<StackElement> negativeNumberInTheMiddleStack = new Stack<>();
+        negativeNumberInTheMiddleStack.push(Operator.LEFTPARENTHESIS);
+        negativeNumberInTheMiddleStack.push(Number.of(5));
+        negativeNumberInTheMiddleStack.push(Operator.PLUS);
+        negativeNumberInTheMiddleStack.push(Number.of(8));
+        negativeNumberInTheMiddleStack.push(Operator.PLUS);
+        negativeNumberInTheMiddleStack.push(Number.of(7));
+        negativeNumberInTheMiddleStack.push(Operator.RIGHTPARENTHESIS);
+        negativeNumberInTheMiddleStack.push(Operator.MULTIPLICATION);
+        negativeNumberInTheMiddleStack.push(Operator.LEFTPARENTHESIS);
+        negativeNumberInTheMiddleStack.push(Number.of(-9));
+        negativeNumberInTheMiddleStack.push(Operator.PLUS);
+        negativeNumberInTheMiddleStack.push(Number.of(2));
+        negativeNumberInTheMiddleStack.push(Operator.MULTIPLICATION);
+        negativeNumberInTheMiddleStack.push(Number.of(7));
+        negativeNumberInTheMiddleStack.push(Operator.RIGHTPARENTHESIS);
+
         return Stream.of(
           Arguments.of(firstEquotation, firstStack),
           Arguments.of(secondEquotation, secondStack),
           Arguments.of(thirdEquotation, thirdStack),
-          Arguments.of(fourthEquotation, fourthStack)
+          Arguments.of(negativeNumberAtTheStartEquotation, negativeNumberAtTheStartEquotationStack),
+          Arguments.of(negativeNumberInTheMiddleEquotation, negativeNumberInTheMiddleStack)
         );
     }
 
