@@ -31,6 +31,7 @@ export class AppComponent {
       {
         next: (data) => {
           this.hectoc = data.challenge;
+          this.solution = '';
           this.getFailed = false;
           this.errorGet = null;
         },
