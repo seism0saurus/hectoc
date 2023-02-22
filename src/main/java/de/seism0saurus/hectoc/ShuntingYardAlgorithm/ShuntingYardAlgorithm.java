@@ -26,7 +26,7 @@ public class ShuntingYardAlgorithm {
                         if (needToMergeToNumberCharacters(tokens)){
                             int lastInt = ((Number) tokens.pop()).value();
                             tokens.push(Number.of(lastInt * 10 + Character.getNumericValue(c)));
-                        } else if (isFirstNumberNegative(tokens)){
+                        } else if (isFirstNumberNegative(tokens) || isPreviousOperatorAMinusWithoutANumberBefore(tokens)){
                             tokens.pop();
                             tokens.push(Number.of(-Character.getNumericValue(c)));
                         } else {
@@ -44,6 +44,17 @@ public class ShuntingYardAlgorithm {
 
     private boolean isFirstNumberNegative(final Stack<StackElement> tokens) {
         return tokens.size() == 1 && tokens.peek() == Operator.MINUS;
+    }
+
+    private boolean isPreviousOperatorAMinusWithoutANumberBefore(final Stack<StackElement> tokens) {
+        if(tokens.size() < 2 || tokens.peek() != Operator.MINUS){
+            return false;
+        } else {
+            final Operator minus = (Operator) tokens.pop();
+            final boolean isOperator = tokens.peek() instanceof Operator;
+            tokens.push(minus);
+            return isOperator;
+        }
     }
 
     private boolean needToMergeToNumberCharacters(final Stack<StackElement> tokens) {
