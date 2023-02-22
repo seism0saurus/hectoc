@@ -37,8 +37,20 @@ public class HectocSolutionTest {
     }
 
     @Test
+    public void detectAdditionalZero(){
+        assertThrows(IllegalArgumentException.class,
+            () -> solution.checkSolution("1234560"));
+    }
+
+    @Test
     public void acceptCorrectNumberAndOrderOfNumbers(){
        assertDoesNotThrow(() -> solution.checkSolution("123456"));
+    }
+
+
+    @Test
+    public void acceptSyntacticalCorrectEquotations(){
+       assertDoesNotThrow(() -> solution.checkSolution("((1))^2/3*4-5+(6)"));
     }
 
     @Test
