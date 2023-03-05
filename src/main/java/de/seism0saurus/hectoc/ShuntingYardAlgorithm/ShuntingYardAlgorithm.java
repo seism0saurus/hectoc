@@ -26,7 +26,7 @@ public class ShuntingYardAlgorithm {
                         if (needToMergeToNumberCharacters(tokens)){
                             int lastInt = ((Number) tokens.pop()).value();
                             tokens.push(Number.of(lastInt * 10 + Character.getNumericValue(c)));
-                        } else if (isFirstNumberNegative(tokens) || isPreviousOperatorAnUnaryMinus(tokens)){
+                        } else if (isPreviousOperatorAnUnaryMinus(tokens)){
                             tokens.pop();
                             tokens.push(Number.of(-Character.getNumericValue(c)));
                         } else {
@@ -50,14 +50,19 @@ public class ShuntingYardAlgorithm {
         return tokens;
     }
 
-    private boolean isFirstNumberNegative(final Stack<StackElement> tokens) {
-        return tokens.size() == 1 && tokens.peek() == Operator.MINUS;
+    private boolean needToMergeToNumberCharacters(final Stack<StackElement> tokens) {
+        return !tokens.empty() && tokens.peek() instanceof Number;
     }
 
     private boolean isPreviousOperatorAnUnaryMinus(final Stack<StackElement> tokens) {
-        if(tokens.size() < 2 || tokens.peek() != Operator.MINUS){
+        if (tokens.empty() || tokens.peek() != Operator.MINUS){
+            // If there are no previous tokens or the previous token was no minus, it's impossible to be an unary minus
             return false;
+        } else if (tokens.size() == 1) {
+            // If there is exactly one token and it is a minus it is an unary minus
+            return true;
         } else {
+            // If there are more tokens and the previous one was a minus, it depends on the token before the minus
             final Operator minus = (Operator) tokens.pop();
             final boolean isOperator = tokens.peek() instanceof Operator;
             tokens.push(minus);
@@ -73,14 +78,10 @@ public class ShuntingYardAlgorithm {
                 final Operator minus = (Operator) tokens.pop();
                 final StackElement element = tokens.peek();
                 tokens.push(minus);
-                return !(element instanceof Number);
+                return !(element instanceof Number || element == Operator.RIGHTPARENTHESIS);
             }
         }
-        return true;
-    }
-
-    private boolean needToMergeToNumberCharacters(final Stack<StackElement> tokens) {
-        return !tokens.empty() && tokens.peek() instanceof Number;
+        return false;
     }
 
     protected Stack<StackElement> createRpn(final Stack<StackElement> tokens){

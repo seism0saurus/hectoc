@@ -103,12 +103,50 @@ public class ShuntingYardAlgorithmTest {
         negativeNumberInTheMiddleStack.push(Number.of(7));
         negativeNumberInTheMiddleStack.push(Operator.RIGHTPARENTHESIS);
 
+
+        final String unaryMinusBeforeParenthesisEquotation = "(-(4+3)+8+4)*5*4";
+        final Stack<StackElement> unaryMinusBeforeParenthesisStack = new Stack<>();
+        unaryMinusBeforeParenthesisStack.push(Operator.LEFTPARENTHESIS);
+        unaryMinusBeforeParenthesisStack.push(Number.of(-1));
+        unaryMinusBeforeParenthesisStack.push(Operator.MULTIPLICATION);
+        unaryMinusBeforeParenthesisStack.push(Operator.LEFTPARENTHESIS);
+        unaryMinusBeforeParenthesisStack.push(Number.of(4));
+        unaryMinusBeforeParenthesisStack.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisStack.push(Number.of(3));
+        unaryMinusBeforeParenthesisStack.push(Operator.RIGHTPARENTHESIS);
+        unaryMinusBeforeParenthesisStack.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisStack.push(Number.of(8));
+        unaryMinusBeforeParenthesisStack.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisStack.push(Number.of(4));
+        unaryMinusBeforeParenthesisStack.push(Operator.RIGHTPARENTHESIS);
+        unaryMinusBeforeParenthesisStack.push(Operator.MULTIPLICATION);
+        unaryMinusBeforeParenthesisStack.push(Number.of(5));
+        unaryMinusBeforeParenthesisStack.push(Operator.MULTIPLICATION);
+        unaryMinusBeforeParenthesisStack.push(Number.of(4));
+
+
+        final String unaryMinusBetweenParenthesisEquotation = "(2+2)-(1+2)";
+        final Stack<StackElement> unaryMinusBetweenParenthesisStack = new Stack<>();
+        unaryMinusBetweenParenthesisStack.push(Operator.LEFTPARENTHESIS);
+        unaryMinusBetweenParenthesisStack.push(Number.of(2));
+        unaryMinusBetweenParenthesisStack.push(Operator.PLUS);
+        unaryMinusBetweenParenthesisStack.push(Number.of(2));
+        unaryMinusBetweenParenthesisStack.push(Operator.RIGHTPARENTHESIS);
+        unaryMinusBetweenParenthesisStack.push(Operator.MINUS);
+        unaryMinusBetweenParenthesisStack.push(Operator.LEFTPARENTHESIS);
+        unaryMinusBetweenParenthesisStack.push(Number.of(1));
+        unaryMinusBetweenParenthesisStack.push(Operator.PLUS);
+        unaryMinusBetweenParenthesisStack.push(Number.of(2));
+        unaryMinusBetweenParenthesisStack.push(Operator.RIGHTPARENTHESIS);
+
         return Stream.of(
           Arguments.of(firstEquotation, firstStack),
           Arguments.of(secondEquotation, secondStack),
           Arguments.of(thirdEquotation, thirdStack),
           Arguments.of(negativeNumberAtTheStartEquotation, negativeNumberAtTheStartEquotationStack),
-          Arguments.of(negativeNumberInTheMiddleEquotation, negativeNumberInTheMiddleStack)
+          Arguments.of(negativeNumberInTheMiddleEquotation, negativeNumberInTheMiddleStack),
+          Arguments.of(unaryMinusBeforeParenthesisEquotation, unaryMinusBeforeParenthesisStack),
+          Arguments.of(unaryMinusBetweenParenthesisEquotation, unaryMinusBetweenParenthesisStack)
         );
     }
 
@@ -184,10 +222,71 @@ public class ShuntingYardAlgorithmTest {
         thirdRpn.push(Number.of(1));
         thirdRpn.push(Operator.MINUS);
 
+
+        final Stack<StackElement> unaryMinusBeforeParenthesisStack = new Stack<>();
+        unaryMinusBeforeParenthesisStack.push(Operator.LEFTPARENTHESIS);
+        unaryMinusBeforeParenthesisStack.push(Number.of(-1));
+        unaryMinusBeforeParenthesisStack.push(Operator.MULTIPLICATION);
+        unaryMinusBeforeParenthesisStack.push(Operator.LEFTPARENTHESIS);
+        unaryMinusBeforeParenthesisStack.push(Number.of(4));
+        unaryMinusBeforeParenthesisStack.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisStack.push(Number.of(3));
+        unaryMinusBeforeParenthesisStack.push(Operator.RIGHTPARENTHESIS);
+        unaryMinusBeforeParenthesisStack.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisStack.push(Number.of(8));
+        unaryMinusBeforeParenthesisStack.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisStack.push(Number.of(4));
+        unaryMinusBeforeParenthesisStack.push(Operator.RIGHTPARENTHESIS);
+        unaryMinusBeforeParenthesisStack.push(Operator.MULTIPLICATION);
+        unaryMinusBeforeParenthesisStack.push(Number.of(5));
+        unaryMinusBeforeParenthesisStack.push(Operator.MULTIPLICATION);
+        unaryMinusBeforeParenthesisStack.push(Number.of(4));
+
+        final Stack<StackElement> unaryMinusBeforeParenthesisRpn = new Stack<>();
+        unaryMinusBeforeParenthesisRpn.push(Number.of(-1));
+        unaryMinusBeforeParenthesisRpn.push(Number.of(4));
+        unaryMinusBeforeParenthesisRpn.push(Number.of(3));        
+        unaryMinusBeforeParenthesisRpn.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisRpn.push(Operator.MULTIPLICATION);
+        unaryMinusBeforeParenthesisRpn.push(Number.of(8));
+        unaryMinusBeforeParenthesisRpn.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisRpn.push(Number.of(4));
+        unaryMinusBeforeParenthesisRpn.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisRpn.push(Number.of(5));
+        unaryMinusBeforeParenthesisRpn.push(Operator.MULTIPLICATION);
+        unaryMinusBeforeParenthesisRpn.push(Number.of(4));
+        unaryMinusBeforeParenthesisRpn.push(Operator.MULTIPLICATION);
+        
+        
+        final Stack<StackElement> unaryMinusBetweenParenthesisStack = new Stack<>();
+        unaryMinusBetweenParenthesisStack.push(Operator.LEFTPARENTHESIS);
+        unaryMinusBetweenParenthesisStack.push(Number.of(2));
+        unaryMinusBetweenParenthesisStack.push(Operator.PLUS);
+        unaryMinusBetweenParenthesisStack.push(Number.of(2));
+        unaryMinusBetweenParenthesisStack.push(Operator.RIGHTPARENTHESIS);
+        unaryMinusBetweenParenthesisStack.push(Operator.MINUS);
+        unaryMinusBetweenParenthesisStack.push(Operator.LEFTPARENTHESIS);
+        unaryMinusBetweenParenthesisStack.push(Number.of(1));
+        unaryMinusBetweenParenthesisStack.push(Operator.PLUS);
+        unaryMinusBetweenParenthesisStack.push(Number.of(2));
+        unaryMinusBetweenParenthesisStack.push(Operator.RIGHTPARENTHESIS);
+
+        final Stack<StackElement> unaryMinusBetweenParenthesisRpn = new Stack<>();
+        unaryMinusBetweenParenthesisRpn.push(Number.of(2));
+        unaryMinusBetweenParenthesisRpn.push(Number.of(2));
+        unaryMinusBetweenParenthesisRpn.push(Operator.PLUS);
+        unaryMinusBetweenParenthesisRpn.push(Number.of(1));
+        unaryMinusBetweenParenthesisRpn.push(Number.of(2));
+        unaryMinusBetweenParenthesisRpn.push(Operator.PLUS);
+        unaryMinusBetweenParenthesisRpn.push(Operator.MINUS);
+
+
         return Stream.of(
           Arguments.of(firstStack, firstRpn),
           Arguments.of(secondStack, secondRpn),
-          Arguments.of(thirdStack, thirdRpn)
+          Arguments.of(thirdStack, thirdRpn),
+          Arguments.of(unaryMinusBeforeParenthesisStack, unaryMinusBeforeParenthesisRpn),
+          Arguments.of(unaryMinusBetweenParenthesisStack, unaryMinusBetweenParenthesisRpn)
         );
     }
 
@@ -231,10 +330,41 @@ public class ShuntingYardAlgorithmTest {
         thirdRpn.push(Number.of(1));
         thirdRpn.push(Operator.MINUS);
 
+
+        final int unaryMinusBeforeParenthesisSolution = 100;
+        final Stack<StackElement> unaryMinusBeforeParenthesisRpn = new Stack<>();
+        unaryMinusBeforeParenthesisRpn.push(Number.of(-1));
+        unaryMinusBeforeParenthesisRpn.push(Number.of(4));
+        unaryMinusBeforeParenthesisRpn.push(Number.of(3));        
+        unaryMinusBeforeParenthesisRpn.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisRpn.push(Operator.MULTIPLICATION);
+        unaryMinusBeforeParenthesisRpn.push(Number.of(8));
+        unaryMinusBeforeParenthesisRpn.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisRpn.push(Number.of(4));
+        unaryMinusBeforeParenthesisRpn.push(Operator.PLUS);
+        unaryMinusBeforeParenthesisRpn.push(Number.of(5));
+        unaryMinusBeforeParenthesisRpn.push(Operator.MULTIPLICATION);
+        unaryMinusBeforeParenthesisRpn.push(Number.of(4));
+        unaryMinusBeforeParenthesisRpn.push(Operator.MULTIPLICATION);
+
+
+        final int unaryMinusBetweenParenthesisSolution = 1;
+        final Stack<StackElement> unaryMinusBetweenParenthesisRpn = new Stack<>();
+        unaryMinusBetweenParenthesisRpn.push(Number.of(2));
+        unaryMinusBetweenParenthesisRpn.push(Number.of(2));
+        unaryMinusBetweenParenthesisRpn.push(Operator.PLUS);
+        unaryMinusBetweenParenthesisRpn.push(Number.of(1));
+        unaryMinusBetweenParenthesisRpn.push(Number.of(2));
+        unaryMinusBetweenParenthesisRpn.push(Operator.PLUS);
+        unaryMinusBetweenParenthesisRpn.push(Operator.MINUS);
+
+        
         return Stream.of(
           Arguments.of(firstRpn, firstResult),
           Arguments.of(secondRpn, secondResult),
-          Arguments.of(thirdRpn, thirdResult)
+          Arguments.of(thirdRpn, thirdResult),
+          Arguments.of(unaryMinusBeforeParenthesisRpn, unaryMinusBeforeParenthesisSolution),
+          Arguments.of(unaryMinusBetweenParenthesisRpn, unaryMinusBetweenParenthesisSolution)
         );
     }
 }
