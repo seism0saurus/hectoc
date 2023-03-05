@@ -26,7 +26,7 @@ public class ShuntingYardAlgorithm {
                         if (needToMergeToNumberCharacters(tokens)){
                             int lastInt = ((Number) tokens.pop()).value();
                             tokens.push(Number.of(lastInt * 10 + Character.getNumericValue(c)));
-                        } else if (isFirstNumberNegative(tokens) || isPreviousOperatorAMinusWithoutANumberBefore(tokens)){
+                        } else if (isFirstNumberNegative(tokens) || isPreviousOperatorAnUnaryMinus(tokens)){
                             tokens.pop();
                             tokens.push(Number.of(-Character.getNumericValue(c)));
                         } else {
@@ -34,7 +34,15 @@ public class ShuntingYardAlgorithm {
                         }
                     }
                     case '+','-','*','/','^','(',')' -> {
-                        tokens.push(Operator.from(c));
+                        if (isOperatorALeftParenthesisWithUnaryMinusBefore(c,tokens)){
+                            //Throw away the minus and replace it with (-1) *
+                            tokens.pop();
+                            tokens.push(Number.of(-1));
+                            tokens.push(Operator.MULTIPLICATION);
+                            tokens.push(Operator.from(c));
+                        } else {
+                            tokens.push(Operator.from(c));
+                        }
                     }
                     default -> throw new IllegalArgumentException("Illegal character found.");
                 }  
@@ -46,7 +54,7 @@ public class ShuntingYardAlgorithm {
         return tokens.size() == 1 && tokens.peek() == Operator.MINUS;
     }
 
-    private boolean isPreviousOperatorAMinusWithoutANumberBefore(final Stack<StackElement> tokens) {
+    private boolean isPreviousOperatorAnUnaryMinus(final Stack<StackElement> tokens) {
         if(tokens.size() < 2 || tokens.peek() != Operator.MINUS){
             return false;
         } else {
@@ -55,6 +63,20 @@ public class ShuntingYardAlgorithm {
             tokens.push(minus);
             return isOperator;
         }
+    }
+
+    private boolean isOperatorALeftParenthesisWithUnaryMinusBefore(final char c, final Stack<StackElement> tokens) {
+        if ('(' == c){
+            if(tokens.size() < 2 || tokens.peek() != Operator.MINUS){
+                return false;
+            } else {
+                final Operator minus = (Operator) tokens.pop();
+                final StackElement element = tokens.peek();
+                tokens.push(minus);
+                return !(element instanceof Number);
+            }
+        }
+        return true;
     }
 
     private boolean needToMergeToNumberCharacters(final Stack<StackElement> tokens) {
