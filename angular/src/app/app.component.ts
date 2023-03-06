@@ -18,11 +18,15 @@ export class AppComponent {
   solveFailed: Boolean = false;
   errorSolve: any = null;
   isSolving: Boolean = false;
+  startTime: DOMHighResTimeStamp;
+  endTime: DOMHighResTimeStamp;
 
   constructor(
     private service: HectocService,
     public dialog: MatDialog
     ){
+    this.startTime = performance.now();
+    this.endTime = this.startTime;
     this.newHectoc();
   }
   
@@ -34,6 +38,7 @@ export class AppComponent {
           this.solution = '';
           this.getFailed = false;
           this.errorGet = null;
+          this.startTime = performance.now()
         },
         error: (error) => {
           console.error(error);
@@ -47,6 +52,7 @@ export class AppComponent {
   solve() {
     if (!this.isSolving){
       this.isSolving = true;
+      this.endTime = performance.now();
       let solutionDto = { solution: this.solution.trim()};
       this.solveFailed = false;
       this.errorSolve = null;
@@ -58,7 +64,8 @@ export class AppComponent {
               challenge: this.hectoc,
               solution: this.solution,
               valid: data.valid,
-              result: data.result
+              result: data.result,
+              time: (this.endTime - this.startTime) / 1000
             }
             this.openDialog(dialogDTO);
           },
@@ -70,7 +77,8 @@ export class AppComponent {
               challenge: this.hectoc,
               solution: this.solution,
               valid: false,
-              error: error.error
+              error: error.error,
+              time: (this.endTime - this.startTime) / 1000
             }
             this.openDialog(dialogDTO);
             this.isSolving = false;
