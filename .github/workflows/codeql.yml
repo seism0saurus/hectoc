@@ -70,8 +70,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 18.13.0
-    - name: npm dependencies
-      run: cd webapp/angular && npm install
+    - name: npm dependencies and Angular cli
+      run: cd webapp/angular && npm install -g @angular/cli@15.2.10
     - name: Compile and package
       run: mvn --batch-mode --update-snapshots package --file pom.xml
 
