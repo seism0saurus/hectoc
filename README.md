@@ -15,6 +15,7 @@ For example: 991347 can be solved with "99+1-(3+4-7)".
 ## Projects
 
 This repository contains multiple subprojects that are grouped around the Hectoc theme.
+The work in this repository is licensed under the MIT License. See [LICENSE](./LICENSE) for more information.
 
 ### Challenger
 
