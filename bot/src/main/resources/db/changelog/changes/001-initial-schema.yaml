@@ -1,0 +1,116 @@
+databaseChangeLog:
+- changeSet:
+    id:  001-initial-schema-001-table-notifications
+    author:  seism0saurus
+    comment: Create the table for the processed notifications
+    changes:
+      - createTable:
+          tableName:  notifications
+          columns:
+            -  column:
+                 name:  id
+                 type:  UUID
+                 defaultValueComputed: UUID()
+                 constraints:
+                   primaryKey:  true
+            -  column:
+                name:  notification_id
+                type:  varchar(255)
+                constraints:
+                  nullable: false
+            -  column:
+                name:  status_id
+                type:  varchar(255)
+                constraints:
+                  nullable: false
+            -  column:
+                 name:  challenge_id
+                 type:  varchar(255)
+                 constraints:
+                   nullable: false
+            -  column:
+                name:  solution
+                type:  varchar(255)
+                constraints:
+                  nullable: true
+            -  column:
+                name:  dismissed
+                type:  boolean
+                defaultValueBoolean: false
+                constraints:
+                  nullable: false
+- changeSet:
+    id:  001-initial-schema-002-create-index-on-notifications-challenge-id
+    author:  seism0saurus
+    comment: Create an index on the challenge status id, so we can search for all mentions for one challenge
+    changes:
+      - createIndex:
+          columns:
+            - column:
+                name:  challenge_id
+          indexName:  idx_notifications_challenge_id
+          tableName:  notifications
+          unique:  false
+- changeSet:
+    id:  001-initial-schema-003-table-challenge
+    author:  seism0saurus
+    comment: Create the table for challenges and their status id
+    changes:
+      - createTable:
+          tableName:  challenges
+          columns:
+            -  column:
+                 name:  id
+                 type:  UUID
+                 defaultValueComputed: UUID()
+                 constraints:
+                   primaryKey:  true
+            -  column:
+                 name:  challenge
+                 type:  varchar(6)
+                 constraints:
+                   nullable: false
+            -  column:
+                 name:  status_id
+                 type:  varchar(255)
+                 constraints:
+                   nullable: false
+                   unique: true
+- changeSet:
+    id:  001-initial-schema-004-create-index-on-challenges-status-id
+    author:  seism0saurus
+    comment: Create an index on the challenges status id, so we can search for a challenge by its status id
+    changes:
+      - createIndex:
+          columns:
+            - column:
+                name:  status_id
+          indexName:  idx_challenges_status_id
+          tableName:  challenges
+          unique:  true
+- changeSet:
+    id:  001-initial-schema-005-create-index-on-challenges-challenge
+    author:  seism0saurus
+    comment: Create an index on the challenges challenge, so we can find all statuses for a challenge
+    changes:
+      - createIndex:
+          columns:
+            - column:
+                name:  challenge
+          indexName:  idx_challenges_challenge
+          tableName:  challenges
+          unique:  false
+#- changeSet:
+#    id:  001-initial-schema-006-create-index-on-challenge-id
+#    author:  seism0saurus
+#    comment: Create foreign key constraint from
+#    changes:
+#      -  addForeignKeyConstraint:
+#           baseColumnNames:  challenge_id
+#           baseTableName:  notifications
+#           constraintName:  fk_notifications_challenge_id_to_challenges_status_id
+#           onDelete:  RESTRICT
+#           onUpdate:  RESTRICT
+#           referencedColumnNames:  status_id
+#           referencedTableName:  challenges
+#           validate:  true

@@ -1,6 +1,6 @@
 package de.seism0saurus.hectoc.bruteforcer;
 
-import de.seism0saurus.hectoc.webapp.shuntingyardalgorithm.StackElement;
+import de.seism0saurus.hectoc.shuntingyardalgorithm.StackElement;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
