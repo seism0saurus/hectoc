@@ -1,0 +1,29 @@
+# This workflow will test the current version of the Hectoc Challenger webapp.
+# Runs only, if the main pom.xml was changes (dependencies) or the shared library was changed or the webapp itself.
+
+name: Hectoc Bruteforcer Build
+
+on:
+  push:
+    paths:
+      - shared/**
+      - bruteforcer/**
+      - pom.xml
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Verify the shared part of the project
+        run: mvn --batch-mode --update-snapshots verify --file shared/pom.xml
+      - name: Install the shared part of the project
+        run: mvn --batch-mode install --file shared/pom.xml
+      - name: Verify the bot
+        run: mvn --batch-mode --update-snapshots verify --file bruteforce/pom.xml
