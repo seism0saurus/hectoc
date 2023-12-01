@@ -13,5 +13,5 @@ To create executable jar files, call `maven package`
 TBD...
 
 ### GitHub Actions
-There is a GitHub action, that runs the maven `verify` step for each event, that changes the main [pom.xml](../pom.xml),
+There is a GitHub [action](../.github/workflows/webapp-verify.yml), that runs the maven `verify` step for each event, that changes the main [pom.xml](../pom.xml),
 the [shared library](../shared) or this webapp.
