@@ -70,8 +70,6 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 18.13.0
-        cache: 'npm'
-        cache-dependency-path: 'webapps/angular/package-lock.json'
     - name: npm dependencies and Angular cli
       run: cd webapp/angular && npm install -g @angular/cli@15.2.10
     - name: Compile and package
