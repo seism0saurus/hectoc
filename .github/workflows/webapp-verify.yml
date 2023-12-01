@@ -26,8 +26,7 @@ jobs:
       with:
         node-version: 18.13.0
     - name: npm dependencies and Angular cli
-      working-directory: webapps/angular
-      run: npm install -g @angular/cli@15.2.10
+      run: cd webapp/angular && npm install -g @angular/cli@15.2.10
     - name: Verify the shared part of the project
       run: mvn --batch-mode --update-snapshots verify --file shared/pom.xml
     - name: Install the shared part of the project
