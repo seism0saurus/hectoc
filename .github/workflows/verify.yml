@@ -1,14 +1,10 @@
 # This workflow will test the current version of the Hectoc Challenger webapp.
 # Runs only, if the main pom.xml was changes (dependencies) or the shared library was changed or the webapp itself.
 
-name: Hectoc Bot Build
+name: Verify repository code
 
 on:
-  push:
-    paths:
-      - shared/**
-      - bot/**
-      - pom.xml
+  push
 
 jobs:
   verify:
@@ -25,5 +21,18 @@ jobs:
         run: mvn --batch-mode --update-snapshots verify --file shared/pom.xml
       - name: Install the shared part of the project
         run: mvn --batch-mode install --file shared/pom.xml
+
       - name: Verify the bot
         run: mvn --batch-mode --update-snapshots verify --file bot/pom.xml
+
+      - name: Verify the bruteforcer
+        run: mvn --batch-mode --update-snapshots verify --file bruteforce/pom.xml
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.13.0
+      - name: npm dependencies and Angular cli
+        run: cd webapp/angular && npm install -g @angular/cli@15.2.10
+      - name: Verify the webapp
+        run: mvn --batch-mode --update-snapshots verify --file webapp/pom.xml
