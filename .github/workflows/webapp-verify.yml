@@ -23,11 +23,8 @@ jobs:
         cache: maven
     - name: Install Node
       uses: actions/setup-node@v4
-      working-directory: webapps/angular
       with:
         node-version: 18.13.0
-        cache: 'npm'
-        cache-dependency-path: './package-lock.json'
     - name: npm dependencies and Angular cli
       working-directory: webapps/angular
       run: npm install -g @angular/cli@15.2.10
