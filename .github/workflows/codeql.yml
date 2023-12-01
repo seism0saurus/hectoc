@@ -66,6 +66,12 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+    - name: Install Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 18.13.0
+    - name: npm dependencies
+      run: cd webapp/angular npm install
     - name: Compile and package
       run: mvn --batch-mode --update-snapshots package --file pom.xml
 
