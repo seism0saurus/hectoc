@@ -1,8 +1,8 @@
 package de.seism0saurus.hectoc.bruteforcer;
 
-import de.seism0saurus.hectoc.webapp.shuntingyardalgorithm.Number;
-import de.seism0saurus.hectoc.webapp.shuntingyardalgorithm.Operator;
-import de.seism0saurus.hectoc.webapp.shuntingyardalgorithm.StackElement;
+import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
+import de.seism0saurus.hectoc.shuntingyardalgorithm.Operator;
+import de.seism0saurus.hectoc.shuntingyardalgorithm.StackElement;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

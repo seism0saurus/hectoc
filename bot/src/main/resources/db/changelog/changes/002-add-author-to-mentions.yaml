@@ -1,0 +1,15 @@
+databaseChangeLog:
+- changeSet:
+    id:  002-add-author-to-notifications-001-add-author
+    author:  seism0saurus
+    comment: Add a column for the author to the notifications
+    changes:
+      - addColumn:
+          tableName:  notifications
+          columns:
+            -  column:
+                 name:  author
+                 type:  varchar(255)
+                 constraints:
+                   nullable: false
+                 defaultValue: unknown
