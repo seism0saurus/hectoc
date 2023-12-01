@@ -1,25 +1,48 @@
-# Hectoc Challenger
+# Hectoc Repository
 
-A webapplication for generating and validation of hectoc riddles.
-
-Hectocs are mathematical challenges developed by [Yusnier Viera](https://en.wikipedia.org/wiki/Yusnier_Viera). More
-infos at [https://wir-rechnen.de/hectoc](https://wir-rechnen.de/hectoc).
-
+Hectocs are small mathematical riddles or challenges developed by [Yusnier Viera](https://en.wikipedia.org/wiki/Yusnier_Viera).
+A german source can be found at [https://wir-rechnen.de/hectoc](https://wir-rechnen.de/hectoc).
 Both sources are unrelated to this project.
+This site is an OpenSource project from [seism0saurus](https://seism0saurus.de).
 
-The goal is to combine the 6 numbers to a total of 100. You can use the mathematical operations + - * / ^ and the
-parenthesis () Numbers can be combined but you have to use all 6 of them.
+The Hectocs consist of six numbers.
+The goal is to combine the 6 numbers to a total of 100.
+You can use the mathematical operations + - * / ^ and the parenthesis ( ).
+Numbers can be combined, but you have to use all 6 of them and are not allowed to change the order.
 
 For example: 991347 can be solved with "99+1-(3+4-7)".
 
-This site is a private project from seism0saurus
+## Projects
 
-## Development
+This repository contains multiple subprojects that are grouped around the Hectoc theme.
 
-You can start the main class in [HectocApplication.java](/src/main/java/de/seism0saurus/hectoc/HectocApplication.java)
-with the IDE of your choice.
+### Challenger
 
-The frontend development server can be starten with `ng serve` from inside the [angular](/angular/) folder, after you
-have installed the dependencies with `npm install`.
+The Hectoc Challenger in the [webapp](./webapp) folder is a webapplication, that creates challenges and checks your answer.
 
-Some paths or names are hard coded at the moment, so you will have to fix these.
+### Library
+
+The Hectoc library in the [shared](.shared) folder contains some Java classes to generate Hectocs
+and check solutions with a modified version of a [Shunting Yard Algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm)
+and stacks.
+
+You can use that library, if you want to implement your own Java apps or tools for Hectocs.
+
+### Bot
+
+The Hectoc Bot in the [bot](./bot) folder is a Mastodon bot, that runs [@hourlyhectoc@botsin.space](https://botsin.space/@hourlyhectoc).
+It posts a Hectoc every hour and can favorite correct answers. Wrong answers get a private commend.
+
+### Bruteforcer
+
+The Hectoc Bruteforcer in the [bruteforcer](./bruteforcer) is a commandline tool
+to try all possible solutions for the [https://wir-rechnen.de/hectoc/hectocs-ungeloest-unsolved](unsolved challenges).
+
+## Build
+
+The projects are structured as multimodule maven project.
+It should be sufficient to call `maven compile` in the parent directory.
+To create executable jar files, call `maven package`
+
+## Run
+TBD...
