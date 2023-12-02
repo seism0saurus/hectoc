@@ -24,8 +24,8 @@ public class HectocTokenizer {
                     switch (c) {
                         case '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
                             if (needToMergeToNumberCharacters(tokens)) {
-                                int lastInt = ((Number) tokens.pop()).value();
-                                tokens.push(Number.of(lastInt * 10 + Character.getNumericValue(c)));
+                                Number merged = mergeNumbers(c, tokens);
+                                tokens.push(merged);
                             } else if (isPreviousOperatorAnUnaryMinus(tokens)) {
                                 tokens.pop();
                                 tokens.push(Number.of(-Character.getNumericValue(c)));
@@ -48,6 +48,23 @@ public class HectocTokenizer {
                     }
                 });
         return tokens;
+    }
+
+    /**
+     * Merge the last number and the current character.
+     * @param c The second number as character.
+     * @param tokens The stack with the other numbers.
+     * @return The merged Number of the character c and the last number on the stack.
+     */
+    private static Number mergeNumbers(Character c, Stack<StackElement> tokens) {
+        int lastInt = ((Number) tokens.pop()).value();
+        Number merged;
+        if (lastInt < 0){
+            merged = Number.of(lastInt * 10 - Character.getNumericValue(c));
+        } else {
+            merged = Number.of(lastInt * 10 + Character.getNumericValue(c));
+        }
+        return merged;
     }
 
     /**
