@@ -97,6 +97,7 @@ jobs:
           KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
         run: |
           echo "${SSH_KEY}" > ssh.key
+          chmod 600 ssh.key
           mkdir ~/.ssh
           echo "${KNOWN_HOSTS}" > ~/.ssh/known_hosts
       - name: Restart docker-compose
