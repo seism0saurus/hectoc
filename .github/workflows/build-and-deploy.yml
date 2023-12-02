@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: shared.jar
-          path: shared/target/shared-${VERSION}.jar
+          path: /home/runner/work/hectoc/hectoc/shared/target/shared-${VERSION}.jar
           retention-days: 1
 
   build-bot:
