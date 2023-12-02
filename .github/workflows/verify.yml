@@ -20,7 +20,7 @@ jobs:
         uses: actions/cache/save@v3
         with:
           path: ~/.m2/repository
-          key: maven
+          key: maven-verify
 
   changes:
     runs-on: ubuntu-latest
@@ -66,7 +66,7 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ~/.m2/repository
-          key: maven
+          key: maven-verify
       - name: Verify the bot
         run: mvn --batch-mode --update-snapshots verify --file bot/pom.xml
 
@@ -86,7 +86,7 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ~/.m2/repository
-          key: maven
+          key: maven-verify
       - name: Install Node
         uses: actions/setup-node@v4
         with:
@@ -114,14 +114,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ~/.m2/repository
-          key: maven
+          key: maven-verify
       - name: Verify the bruteforcer
         run: mvn --batch-mode --update-snapshots verify --file bruteforcer/pom.xml
 
   verify-shared:
     runs-on: ubuntu-latest
     if: ${{ needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
-    needs: build-shared
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 21
@@ -130,10 +129,5 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
-      - name: Get cache for local Maven repository
-        uses: actions/cache/restore@v3
-        with:
-          path: ~/.m2/repository
-          key: maven
       - name: Verify shared
         run: mvn --batch-mode --update-snapshots verify --file shared/pom.xml
