@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: bot
-          path: /bot/target/bot-${VERSION}.jar
+          path: bot/target/bot-${VERSION}.jar
           retention-days: 1
 
   create-image-bot:
@@ -113,7 +113,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: webapp
-          path: /webapp/target/webapp-${VERSION}.jar
+          path: webapp/target/webapp-${VERSION}.jar
           retention-days: 1
 
   build-bruteforcer:
