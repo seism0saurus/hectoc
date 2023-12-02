@@ -1,5 +1,7 @@
 FROM eclipse-temurin:21-jre
-ARG JAR_FILE=webapp-0.0.1-SNAPSHOT.jar
+
+ARG JAR_FILE=webapp.jar
+
 COPY ${JAR_FILE} application/application.jar
 RUN groupadd spring && useradd -g spring spring
 USER spring:spring

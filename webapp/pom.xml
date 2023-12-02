@@ -76,18 +76,6 @@
                             <commandlineArgs>compile_angular.sh</commandlineArgs>
                         </configuration>
                     </execution>
-
-                    <execution>
-                        <id>Deploy jar to docker-compose</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>bash</executable>
-                            <commandlineArgs>deploy.sh</commandlineArgs>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
         </plugins>
