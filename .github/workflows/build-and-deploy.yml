@@ -173,7 +173,7 @@ jobs:
 
   deploy-webapp:
     runs-on: ubuntu-latest
-    needs: create-image-bot
+    needs: create-image-webapp
     environment: hectoc.seism0saurus.de
     steps:
       - name: Prepare ssh
