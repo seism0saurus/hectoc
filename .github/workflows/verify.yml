@@ -1,6 +1,3 @@
-# This workflow will test the current version of the Hectoc Challenger webapp.
-# Runs only, if the main pom.xml was changes (dependencies) or the shared library was changed or the webapp itself.
-
 name: Verify repository code
 
 on:
