@@ -16,9 +16,10 @@ TBD...
 
 #### Verify
 
-There is a GitHub [action](../.github/workflows/webapp-verify.yml), that runs the maven `verify` step for each event,
-that changes the main [pom.xml](../pom.xml), the [shared library](../shared) or this webapp.
-
+There is a GitHub [action](../.github/workflows/verify.yml), that runs the maven `verify` step for each event,
+that changes the main branch like a push or a successful merge.
 
 #### Build and deploy
-TBD
+
+There is a GitHub [action](../.github/workflows/build-and-deploy.yml), that builds the java projects,
+creates a containerimage with it and redeploys it at the configured server.
