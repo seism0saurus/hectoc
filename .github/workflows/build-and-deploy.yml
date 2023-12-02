@@ -48,11 +48,13 @@ jobs:
           key: maven
       - name: Build the bot
         run: mvn --batch-mode --update-snapshots install --file bot/pom.xml
+      - name: Copy jar
+        run: cp /home/runner/work/hectoc/hectoc/bot/target/bot-*.jar bot.jar
       - name: Archive bot jar
         uses: actions/upload-artifact@v3
         with:
           name: bot
-          path: /home/runner/work/hectoc/hectoc/bot/target/bot-${VERSION}.jar
+          path: bot.jar
           retention-days: 1
 
   create-image-bot:
