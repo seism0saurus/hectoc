@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: bot
-          path: bot/target/bot-${VERSION}.jar
+          path: /home/runner/work/hectoc/hectoc/bot/target/bot-${VERSION}.jar
           retention-days: 1
 
   create-image-bot:
