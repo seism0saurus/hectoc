@@ -105,7 +105,8 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ vars.SSH_HOST }}
-        run: ssh -i ssh.key -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} -C "echo hi"
+        run: ssh -i ssh.key -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} -C "/usr/local/bin/upgrade-hectoc-bot.sh"
+
 
   build-webapp:
     runs-on: ubuntu-latest
@@ -141,6 +142,56 @@ jobs:
           name: webapp
           path: webapp.jar
           retention-days: 1
+
+  create-image-webapp:
+    runs-on: ubuntu-latest
+    needs: build-webapp
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v3
+        with:
+          name: webapp
+          path: webapp/containerimage
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/seism0saurus/hectoc-webapp
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: webapp/containerimage/.
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deploy-webapp:
+    runs-on: ubuntu-latest
+    needs: create-image-bot
+    environment: hectoc.seism0saurus.de
+    steps:
+      - name: Prepare ssh
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+        run: |
+          echo "${SSH_KEY}" > ssh.key
+          chmod 600 ssh.key
+          mkdir ~/.ssh
+          echo "${KNOWN_HOSTS}" > ~/.ssh/known_hosts
+      - name: Restart docker-compose
+        env:
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ vars.SSH_HOST }}
+        run: ssh -i ssh.key -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} -C "/usr/local/bin/upgrade-hectoc-webapp.sh"
+
 
   build-bruteforcer:
     runs-on: ubuntu-latest
