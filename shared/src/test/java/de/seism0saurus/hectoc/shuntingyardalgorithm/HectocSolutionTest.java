@@ -165,7 +165,8 @@ public class HectocSolutionTest {
                 Arguments.of(new HectocChallenge("284354"), "(-2+8-4+3)*5*4"),
                 Arguments.of(new HectocChallenge("193476"), "1+9+3*4*7+6"),
                 Arguments.of(new HectocChallenge("968546"), "(-9+6+8+5)*(4+6)"),
-                Arguments.of(new HectocChallenge("522712"), "5*22-(7+1+2)")
+                Arguments.of(new HectocChallenge("522712"), "5*22-(7+1+2)"),
+                Arguments.of(new HectocChallenge("461222"), "-46+12^2+2")
         );
     }
 
