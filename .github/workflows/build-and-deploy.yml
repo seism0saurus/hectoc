@@ -99,7 +99,7 @@ jobs:
         env:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_HOST: ${{ vars.SSH_HOST }}
         run: ssh -I ssh.key -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} -C "echo hi"
 
   build-webapp:
