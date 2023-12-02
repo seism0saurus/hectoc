@@ -8,6 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            bot:
+              - 'bot/**'
+            bruteforcer:
+              - 'bruteforcer/**'
+            webapp:
+              - 'webapp/**'
+            shared:
+              - 'shared/**'
+            parent:
+              - 'pom.xml'
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -15,21 +29,28 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Verify the shared part of the project
+        if: steps.filter.outputs.shared == 'true'
         run: mvn --batch-mode --update-snapshots verify --file shared/pom.xml
       - name: Install the shared part of the project
+        if: steps.filter.outputs.shared == 'true'
         run: mvn --batch-mode install --file shared/pom.xml
 
       - name: Verify the bot
+        if: steps.filter.outputs.bot == 'true'
         run: mvn --batch-mode --update-snapshots verify --file bot/pom.xml
 
       - name: Verify the bruteforcer
+        if: steps.filter.outputs.bruteforcer == 'true'
         run: mvn --batch-mode --update-snapshots verify --file bruteforcer/pom.xml
 
       - name: Install Node
+        if: steps.filter.outputs.webapp == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 18.13.0
       - name: npm dependencies and Angular cli
+        if: steps.filter.outputs.webapp == 'true'
         run: cd webapp/angular && npm install -g @angular/cli@17
       - name: Verify the webapp
+        if: steps.filter.outputs.webapp == 'true'
         run: mvn --batch-mode --update-snapshots verify --file webapp/pom.xml

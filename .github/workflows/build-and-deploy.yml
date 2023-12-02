@@ -30,8 +30,35 @@ jobs:
           path: ~/.m2/repository
           key: maven
 
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      bot: ${{ steps.filter.outputs.bot }}
+      bruteforcer: ${{ steps.filter.outputs.bruteforcer }}
+      webapp: ${{ steps.filter.outputs.webapp }}
+      shared: ${{ steps.filter.outputs.shared }}
+      pom: ${{ steps.filter.outputs.pom }}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            bot:
+              - 'bot/**'
+            bruteforcer:
+              - 'bruteforcer/**'
+            webapp:
+              - 'webapp/**'
+            shared:
+              - 'shared/**'
+            parent:
+              - 'pom.xml'
+
   build-bot:
     runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.bot == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
     needs: build-shared
     permissions: write-all
     steps:
@@ -110,6 +137,7 @@ jobs:
 
   build-webapp:
     runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.webapp == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
     needs: build-shared
     steps:
       - uses: actions/checkout@v4
@@ -195,6 +223,7 @@ jobs:
 
   build-bruteforcer:
     runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.bruteforcer == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
     needs: build-shared
     steps:
       - uses: actions/checkout@v4
