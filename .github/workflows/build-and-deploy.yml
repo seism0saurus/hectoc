@@ -94,7 +94,7 @@ jobs:
       - name: Prepare ssh
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: printf "${SSH_KEY}" > ssh.key
+        run: echo "${SSH_KEY}" > ssh.key
       - name: Restart docker-compose
         env:
           SSH_PORT: ${{ secrets.SSH_PORT }}
