@@ -1,11 +1,37 @@
-name: Verify repository code
+name: "Verify the code"
 
 on:
   push
 
 jobs:
-  verify:
+  build-shared:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build the shared part of the project
+        run: mvn --batch-mode install --file shared/pom.xml
+      - name: Cache local Maven repository
+        uses: actions/cache/save@v3
+        with:
+          path: ~/.m2/repository
+          key: maven
+
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      bot: ${{ steps.filter.outputs.bot }}
+      bruteforcer: ${{ steps.filter.outputs.bruteforcer }}
+      webapp: ${{ steps.filter.outputs.webapp }}
+      shared: ${{ steps.filter.outputs.shared }}
+      pom: ${{ steps.filter.outputs.pom }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v2
@@ -22,35 +48,92 @@ jobs:
               - 'shared/**'
             parent:
               - 'pom.xml'
+
+  verify-bot:
+    runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.bot == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
+    needs: build-shared
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
-      - name: Verify the shared part of the project
-        if: steps.filter.outputs.shared == 'true'
-        run: mvn --batch-mode --update-snapshots verify --file shared/pom.xml
-      - name: Install the shared part of the project
-        if: steps.filter.outputs.shared == 'true'
-        run: mvn --batch-mode install --file shared/pom.xml
-
+      - name: Get cache for local Maven repository
+        uses: actions/cache/restore@v3
+        with:
+          path: ~/.m2/repository
+          key: maven
       - name: Verify the bot
-        if: steps.filter.outputs.bot == 'true'
         run: mvn --batch-mode --update-snapshots verify --file bot/pom.xml
 
-      - name: Verify the bruteforcer
-        if: steps.filter.outputs.bruteforcer == 'true'
-        run: mvn --batch-mode --update-snapshots verify --file bruteforcer/pom.xml
-
+  verify-webapp:
+    runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.webapp == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
+    needs: build-shared
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Get cache for local Maven repository
+        uses: actions/cache/restore@v3
+        with:
+          path: ~/.m2/repository
+          key: maven
       - name: Install Node
-        if: steps.filter.outputs.webapp == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 18.13.0
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
       - name: npm dependencies and Angular cli
-        if: steps.filter.outputs.webapp == 'true'
         run: cd webapp/angular && npm install -g @angular/cli@17
-      - name: Verify the webapp
-        if: steps.filter.outputs.webapp == 'true'
+      - name: Build the webapp
         run: mvn --batch-mode --update-snapshots verify --file webapp/pom.xml
+
+  verify-bruteforcer:
+    runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.bruteforcer == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
+    needs: build-shared
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Get cache for local Maven repository
+        uses: actions/cache/restore@v3
+        with:
+          path: ~/.m2/repository
+          key: maven
+      - name: Verify the bruteforcer
+        run: mvn --batch-mode --update-snapshots verify --file bruteforcer/pom.xml
+
+  verify-shared:
+    runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
+    needs: build-shared
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Get cache for local Maven repository
+        uses: actions/cache/restore@v3
+        with:
+          path: ~/.m2/repository
+          key: maven
+      - name: Verify shared
+        run: mvn --batch-mode --update-snapshots verify --file shared/pom.xml
