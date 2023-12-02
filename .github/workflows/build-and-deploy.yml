@@ -33,6 +33,7 @@ jobs:
   build-bot:
     runs-on: ubuntu-latest
     needs: build-shared
+    permissions: write-all
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 21
@@ -112,7 +113,7 @@ jobs:
       - name: Build the webapp
         run: mvn --batch-mode --update-snapshots install --file webapp/pom.xml
       - name: Copy jar
-        run: cp /home/runner/work/hectoc/hectoc/webapp/target/bot-*.jar webapp.jar
+        run: cp /home/runner/work/hectoc/hectoc/webapp/target/webapp-*.jar webapp.jar
       - name: Archive webapp jar
         uses: actions/upload-artifact@v3
         with:
