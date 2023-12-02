@@ -71,10 +71,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "hectoc:build:production"
+              "buildTarget": "hectoc:build:production"
             },
             "development": {
-              "browserTarget": "hectoc:build:development"
+              "buildTarget": "hectoc:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +82,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "hectoc:build"
+            "buildTarget": "hectoc:build"
           }
         },
         "test": {
