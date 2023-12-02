@@ -8,6 +8,9 @@ on:
     branches: [ "main" ]
     types: [ "closed" ]
 
+env:
+  VERSION: 0.0.1-SNAPSHOT
+
 jobs:
   build-shared:
     runs-on: ubuntu-latest
@@ -21,11 +24,17 @@ jobs:
           cache: maven
       - name: Build the shared part of the project
         run: mvn --batch-mode install --file shared/pom.xml
+      - name: Archive shared pom
+        uses: actions/upload-artifact@v3
+        with:
+          name: shared.pom
+          path: shared/.flattened-pom.xml
+          retention-days: 1
       - name: Archive shared jar
         uses: actions/upload-artifact@v3
         with:
           name: shared.jar
-          path: /shared/target/shared-0.0.1-SNAPSHOT.jar
+          path: shared/target/shared-${VERSION}.jar
           retention-days: 1
 
   build-bot:
@@ -39,17 +48,25 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+      - name: Download shared pom
+        uses: actions/download-artifact@v3
+        with:
+          name: shared.pom
       - name: Download shared jar
         uses: actions/download-artifact@v3
         with:
           name: shared.jar
+      - name: Copy shared to maven
+        run: |
+          cp shared/.flattened-pom.xml /home/runner/.m2/repository/de/seism0saurus/hectoc/shared/${VERSION}/shared-${VERSION}.pom
+          cp shared/target/shared-${VERSION}.jar to /home/runner/.m2/repository/de/seism0saurus/hectoc/shared/${VERSION}/shared-${VERSION}.jar
       - name: Build the bot
         run: mvn --batch-mode --update-snapshots install --file bot/pom.xml
       - name: Archive bot jar
         uses: actions/upload-artifact@v3
         with:
           name: bot.jar
-          path: /bot/target/bot-0.0.1-SNAPSHOT.jar
+          path: /bot/target/bot-${VERSION}.jar
           retention-days: 1
 
   build-webapp:
@@ -81,7 +98,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: bot.jar
-          path: /webapp/target/webapp-0.0.1-SNAPSHOT.jar
+          path: /webapp/target/webapp-${VERSION}.jar
           retention-days: 1
 
   build-bruteforcer:
