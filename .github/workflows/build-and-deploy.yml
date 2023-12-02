@@ -64,8 +64,24 @@ jobs:
         with:
           name: bot.jar
           path: bot/containerimage
-      - name: Build the bot
-        run: ls -lah bot/containerimage
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/seism0saurus/hectoc-bot
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: bot/containerimage/.
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
   build-webapp:
     runs-on: ubuntu-latest
