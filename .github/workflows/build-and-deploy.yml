@@ -111,11 +111,13 @@ jobs:
         run: cd webapp/angular && npm install -g @angular/cli@15.2.10
       - name: Build the webapp
         run: mvn --batch-mode --update-snapshots install --file webapp/pom.xml
+      - name: Copy jar
+        run: cp /home/runner/work/hectoc/hectoc/webapp/target/bot-*.jar webapp.jar
       - name: Archive webapp jar
         uses: actions/upload-artifact@v3
         with:
           name: webapp
-          path: webapp/target/webapp-${VERSION}.jar
+          path: webapp.jar
           retention-days: 1
 
   build-bruteforcer:
