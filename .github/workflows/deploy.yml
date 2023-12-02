@@ -22,7 +22,7 @@ jobs:
       - name: Build the shared part of the project
         run: mvn --batch-mode install --file shared/pom.xml
       - name: Archive shared jar
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: shared.jar
           path: /shared/target/shared-0.0.1-SNAPSHOT.jar
@@ -40,13 +40,13 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Download shared jar
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: shared.jar
       - name: Build the bot
         run: mvn --batch-mode --update-snapshots install --file bot/pom.xml
       - name: Archive bot jar
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: bot.jar
           path: /bot/target/bot-0.0.1-SNAPSHOT.jar
@@ -64,7 +64,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Download shared jar
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: shared.jar
       - name: Install Node
@@ -78,7 +78,7 @@ jobs:
       - name: Build the webapp
         run: mvn --batch-mode --update-snapshots install --file webapp/pom.xml
       - name: Archive webapp jar
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: bot.jar
           path: /webapp/target/webapp-0.0.1-SNAPSHOT.jar
@@ -96,7 +96,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Download shared jar
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: shared.jar
       - name: Build the bruteforcer
