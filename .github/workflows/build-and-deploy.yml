@@ -91,9 +91,15 @@ jobs:
     needs: create-image-bot
     steps:
       - name: Prepare ssh
-        run: printf ${{secrets.SSH_KEY}} > ssh.key
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: printf "${SSH_KEY}" > ssh.key
       - name: Restart docker-compose
-        run: ssh -I ssh.key -p ${{secrets.SSH_PORT}} ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} -C "echo hi"
+        env:
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: ssh -I ssh.key -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} -C "echo hi"
 
   build-webapp:
     runs-on: ubuntu-latest
