@@ -1,6 +1,6 @@
 FROM eclipse-temurin:21-jre
 
-ARG JAR_FILE=webapp-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=webapp.jar
 ARG VERSION=0.0.1
 ARG GIT_REVISION=5ede76a285c195fe0c9e6c8624c9254742600b7f
 
