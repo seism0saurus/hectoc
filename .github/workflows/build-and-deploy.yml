@@ -131,7 +131,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
       - name: npm dependencies and Angular cli
-        run: cd webapp/angular && npm install -g @angular/cli@15.2.10
+        run: cd webapp/angular && npm install -g @angular/cli@17
       - name: Build the webapp
         run: mvn --batch-mode --update-snapshots install --file webapp/pom.xml
       - name: Copy jar
