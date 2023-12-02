@@ -89,7 +89,7 @@ jobs:
   deploy-bot:
     runs-on: ubuntu-latest
     needs: create-image-bot
-    environment: hectoc.seism0saurus.de
+    environment: hourlyhectoc.seism0saurus.de
     steps:
       - name: Prepare ssh
         env:
