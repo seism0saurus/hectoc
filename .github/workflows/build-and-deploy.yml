@@ -94,7 +94,11 @@ jobs:
       - name: Prepare ssh
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: echo "${SSH_KEY}" > ssh.key
+          KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+        run: |
+          echo "${SSH_KEY}" > ssh.key
+          mkdir ~/.ssh
+          echo "${KNOWN_HOSTS}" > ~/.ssh/known_hosts
       - name: Restart docker-compose
         env:
           SSH_PORT: ${{ secrets.SSH_PORT }}
