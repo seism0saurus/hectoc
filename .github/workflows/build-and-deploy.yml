@@ -86,10 +86,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-
   deploy-bot:
     runs-on: ubuntu-latest
-    needs: build-bot
+    needs: create-image-bot
     steps:
       - name: Prepare ssh
         run: printf $SSH_KEY > ssh.key
