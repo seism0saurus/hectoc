@@ -24,18 +24,11 @@ jobs:
           cache: maven
       - name: Build the shared part of the project
         run: mvn --batch-mode install --file shared/pom.xml
-      - name: Archive shared pom
-        uses: actions/upload-artifact@v3
+      - name: Cache local Maven repository
+        uses: actions/cache/save@v3
         with:
-          name: shared.pom
-          path: shared/.flattened-pom.xml
-          retention-days: 1
-      - name: Archive shared jar
-        uses: actions/upload-artifact@v3
-        with:
-          name: shared.jar
-          path: /home/runner/work/hectoc/hectoc/shared/target/shared-${VERSION}.jar
-          retention-days: 1
+          path: ~/.m2/repository
+          key: maven
 
   build-bot:
     runs-on: ubuntu-latest
@@ -48,18 +41,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
-      - name: Download shared pom
-        uses: actions/download-artifact@v3
+      - name: Get cache for local Maven repository
+        uses: actions/cache/restore@v3
         with:
-          name: shared.pom
-      - name: Download shared jar
-        uses: actions/download-artifact@v3
-        with:
-          name: shared.jar
-      - name: Copy shared to maven
-        run: |
-          cp shared/.flattened-pom.xml /home/runner/.m2/repository/de/seism0saurus/hectoc/shared/${VERSION}/shared-${VERSION}.pom
-          cp shared/target/shared-${VERSION}.jar to /home/runner/.m2/repository/de/seism0saurus/hectoc/shared/${VERSION}/shared-${VERSION}.jar
+          path: ~/.m2/repository
+          key: maven
       - name: Build the bot
         run: mvn --batch-mode --update-snapshots install --file bot/pom.xml
       - name: Archive bot jar
@@ -80,10 +66,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
-      - name: Download shared jar
-        uses: actions/download-artifact@v3
+      - name: Get cache for local Maven repository
+        uses: actions/cache/restore@v3
         with:
-          name: shared.jar
+          path: ~/.m2/repository
+          key: maven
       - name: Install Node
         uses: actions/setup-node@v4
         with:
@@ -112,9 +99,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
-      - name: Download shared jar
-        uses: actions/download-artifact@v3
+      - name: Get cache for local Maven repository
+        uses: actions/cache/restore@v3
         with:
-          name: shared.jar
+          path: ~/.m2/repository
+          key: maven
       - name: Build the bruteforcer
         run: mvn --batch-mode --update-snapshots install --file bruteforcer/pom.xml
