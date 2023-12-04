@@ -107,7 +107,7 @@ jobs:
         with:
           images: ghcr.io/seism0saurus/hectoc-bot
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: bot/containerimage/.
           push: true
@@ -193,7 +193,7 @@ jobs:
         with:
           images: ghcr.io/seism0saurus/hectoc-webapp
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: webapp/containerimage/.
           push: true
