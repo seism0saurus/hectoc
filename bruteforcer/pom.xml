@@ -9,7 +9,7 @@
         <version>${revision}</version>
     </parent>
 
-    <groupId>de.seism0saurus</groupId>
+    <groupId>de.seism0saurus.hectoc</groupId>
     <artifactId>bruteforcer</artifactId>
 
     <properties>
@@ -42,4 +42,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+        </plugins>
+    </build>
 </project>
