@@ -1,10 +1,13 @@
 package de.seism0saurus.hectoc.bot;
 
+import de.seism0saurus.hectoc.bot.db.NotificationPdo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -126,5 +129,34 @@ public class TextGenerator {
                 + wrongSolution + ": "
                 + result.toString() + "\n\n"
                 + bugreport;
+    }
+
+    public String getReportText(List<NotificationPdo> answers) {
+        Random rand = new Random();
+        final String randomGreeting = greetings.get(rand.nextInt(greetings.size()));
+        long totalAnswers = answers.size();
+        long correctAnswers = answers.stream().filter(n -> n.isCorrect()).count();
+        long wrongAnswers = totalAnswers - correctAnswers;
+        long participants = answers.stream().map(n -> n.getAuthor()).distinct().count();
+        Optional<Map.Entry<String, Long>> mostActiveParticipant = answers.stream()
+                .filter(n -> n.isCorrect())
+                .collect(Collectors.groupingBy(n -> n.getAuthor(), Collectors.counting()))
+                .entrySet()
+                .stream()
+                .sorted((m1,m2) -> Long.compare(m1.getValue(),m2.getValue()))
+                .findFirst();
+        String mostActive = "";
+        if (mostActiveParticipant.isPresent()){
+            mostActive = "The paricipant with the most correct solutions was: " + mostActiveParticipant.get().getKey() + ". Congratulations!\n\n";
+        }
+
+        final String tagLine = tags.stream().map( s -> "#" + s).collect(Collectors.joining(" "));
+        return randomGreeting + "\n"
+                + "In the last month we had " + totalAnswers + " total answers from " + participants + " participants. \n"
+                + "From these proposed solutions " + correctAnswers + " where correct. Only " + wrongAnswers + " were wrong.\n"
+                + "Maybe there were some I couldn't understand. \n"
+                + mostActive
+                + salutation + "\n\n"
+                + tagLine;
     }
 }

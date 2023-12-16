@@ -1,0 +1,66 @@
+databaseChangeLog:
+- changeSet:
+    id:  003-prepare-report-001-add-date-to-challenges
+    author:  seism0saurus
+    comment: Add a column for the date to the challenges
+    changes:
+      - addColumn:
+          tableName:  challenges
+          columns:
+            -  column:
+                 name:  date
+                 type:  DATETIME
+      - update:
+          tableName: challenges
+          columns:
+            - column:
+                name: date
+                value: '2023-11-01 00:00:00'
+- changeSet:
+    id:  003-prepare-report-002-add-date-to-notifications
+    author:  seism0saurus
+    comment: Add a columns for the date and correctness to the notifications
+    changes:
+      - addColumn:
+          tableName:  notifications
+          columns:
+            -  column:
+                 name:  date
+                 type:  DATETIME
+            -  column:
+                 name:  correct
+                 type:  BOOLEAN
+                 defaultValueBoolean: false
+                 constraints:
+                   nullable: false
+      - update:
+          tableName: notifications
+          columns:
+            - column:
+                name: date
+                value: '2023-11-01 00:00:00'
+      - customChange:  {
+          "class": "de.seism0saurus.hectoc.bot.db.CorrectFieldCustomChange"
+        }
+- changeSet:
+    id:  003-prepare-report-003-create-table-report
+    author:  seism0saurus
+    comment: Create the table for the reports
+    changes:
+      - createTable:
+          tableName:  reports
+          columns:
+            -  column:
+                 name:  id
+                 type:  UUID
+                 defaultValueComputed: UUID()
+                 constraints:
+                   primaryKey:  true
+            -  column:
+                 name:  status_id
+                 type:  varchar(255)
+                 constraints:
+                   nullable: false
+            -  column:
+                 name:  date
+                 type:  DATETIME

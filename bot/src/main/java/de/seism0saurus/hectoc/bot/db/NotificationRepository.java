@@ -3,6 +3,8 @@ package de.seism0saurus.hectoc.bot.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -35,4 +37,12 @@ public interface NotificationRepository extends JpaRepository<NotificationPdo, U
      * @see NotificationPdo#getId()
      */
     boolean existsByStatusId(String statusId);
+
+    /**
+     * Fetches all {@link de.seism0saurus.hectoc.bot.db.NotificationPdo NotificationPdo} between the given dates.
+     * @param from The date from which on we are fetching pdos.
+     * @param to The data until we are fetching pdos.
+     * @return The list of pdos between the given dates.
+     */
+    List<NotificationPdo> findAllByDateBetween(ZonedDateTime from, ZonedDateTime to);
 }
