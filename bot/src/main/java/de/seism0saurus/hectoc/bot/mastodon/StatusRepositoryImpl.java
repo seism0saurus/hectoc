@@ -69,8 +69,29 @@ public class StatusRepositoryImpl implements StatusRepository {
     };
 
     public Status postStatus(final String statusText) throws BigBoneRequestException {
+        return getStatus(statusText, Visibility.PUBLIC);
+    };
+
+    public Status postPrivateStatus(final String statusText) throws BigBoneRequestException {
+        return getStatus(statusText, Visibility.PRIVATE);
+    }
+
+    /**
+     * Creates a new toot on mastodon for test purpose.
+     * The toot will be of the of given visibility, in english and without sensitivity warning or spoiler text.
+     *
+     * @param statusText The text of the new toot.
+     * @param visibility The visibility of the new toot.
+     * @return The newly posted {@link Status Status}.
+     * @throws BigBoneRequestException Throws an exception,
+     * if there is a communication error with the configured mastodon instance or the contend is invalid.
+     * E.g. it could be to long.
+     *
+     * @see <a href="https://docs.joinmastodon.org/methods/statuses/#create">Mastodon API Post a new status</a>
+     * @see social.bigbone.api.method.StatusMethods#postStatus
+     */
+    private Status getStatus(final String statusText, final Visibility visibility) throws BigBoneRequestException {
         LOGGER.debug("Post new Status");
-        final Visibility visibility = Visibility.PUBLIC;
         final String inReplyToId = null;
         final boolean sensitive = false;
         final String spoilerText = null;
@@ -78,7 +99,9 @@ public class StatusRepositoryImpl implements StatusRepository {
         final List<String> mediaIds = List.of();
         Status status = client.statuses().postStatus(statusText, mediaIds, visibility, inReplyToId, sensitive, spoilerText, language).execute();
         return status;
-    };
+    }
+
+    ;
 
     public Status replyToStatus(final String statusText, final String inReplyToId) throws BigBoneRequestException {
         LOGGER.debug("Answer status " + inReplyToId);

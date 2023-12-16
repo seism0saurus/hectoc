@@ -13,6 +13,11 @@ import org.springframework.stereotype.Service;
 import social.bigbone.api.entity.Status;
 import social.bigbone.api.exception.BigBoneRequestException;
 
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+
 /**
  * The ChallengeScheduler is responsible for scheduling toots with a new hectoc challenge.
  *
@@ -80,11 +85,13 @@ public class ChallengeScheduler {
         LOGGER.info("Text will be: " + statusText);
         try {
             Status status = this.statusRepository.postStatus(statusText);
-            LOGGER.info("New challenge has id: " + status.getId());
+            ZonedDateTime creationDateUtc = status.getCreatedAt().mostPreciseInstantOrNull().atZone(ZoneOffset.UTC);
+            LOGGER.info("New challenge with id " + status.getId() + " created at " + creationDateUtc);
 
             ChallengePdo challengePdo = ChallengePdo.builder()
                     .statusId(status.getId())
                     .challenge(challenge.toString())
+                    .date(creationDateUtc)
                     .build();
             this.repo.save(challengePdo);
             LOGGER.info("Challenge " + status.getId() + " saved to repository");

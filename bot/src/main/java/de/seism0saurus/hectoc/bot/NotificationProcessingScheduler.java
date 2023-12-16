@@ -19,6 +19,7 @@ import social.bigbone.api.entity.Status;
 import social.bigbone.api.exception.BigBoneRequestException;
 
 import java.math.BigDecimal;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -140,16 +141,21 @@ public class NotificationProcessingScheduler {
                         if (correctSolutionSubmitted) {
                             LOGGER.info("Solution in status " + pdo.getStatusId() + " ist correct");
                             favouriteStatusWithCorrectSolution(pdo);
+                            pdo.setCorrect(true);
                         } else {
                             LOGGER.info("Solution in status " + pdo.getStatusId() + " ist wrong");
                             sendWrongSolutionAnswerStatus(pdo, solution.getResultOfSolution(solutionString));
+                            pdo.setCorrect(false);
                         }
                     } catch (IllegalArgumentException e){
                         LOGGER.info("Solution in status " + pdo.getStatusId() + " ist syntactically wrong or couldn't be found: " + e.getMessage());
                         sendCouldNotParseStatus(pdo);
+                        pdo.setCorrect(false);
                     }
                 }
         );
+        // Store if the proposed solutions were correct or false
+        this.notificationRepo.saveAll(pdos);
     }
 
     /**
@@ -308,6 +314,8 @@ public class NotificationProcessingScheduler {
                                 .challenge(challenge)
                                 .solution(m.getStatus().getContent())
                                 .author(m.getStatus().getAccount().getAcct())
+                                .correct(false)
+                                .date(m.getStatus().getCreatedAt().mostPreciseInstantOrNull().atZone(ZoneOffset.UTC))
                                 .build();
                     }
                     // Dismiss if the post was no answer to a challenge

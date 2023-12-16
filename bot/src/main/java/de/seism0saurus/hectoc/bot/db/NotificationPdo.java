@@ -13,6 +13,8 @@ import org.hibernate.validator.constraints.Length;
 import org.jetbrains.annotations.Nullable;
 import social.bigbone.api.entity.Status;
 
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -116,7 +118,19 @@ public class NotificationPdo {
     private ChallengePdo challenge;
 
     /**
-     * Extracts a solition from the given text and sets the solution of this class to that value.
+     * The creation date of the toot challenge.
+     */
+    @Column
+    private ZonedDateTime date;
+
+    /**
+     * Is this proposed solution correct.
+     */
+    @Column
+    private boolean correct;
+
+    /**
+     * Extracts a solution from the given text and sets the solution of this class to that value.
      * Solution will be set to null, if no solution could be found in the provided text.
      * @param text The text of a toot.
      */
@@ -140,7 +154,7 @@ public class NotificationPdo {
         private String solution;
 
         /**
-         * Extracts a solition from the given text and sets the solution of this class to that value.
+         * Extracts a solution from the given text and sets the solution of this class to that value.
          * Solution will be set to null, if no solution could be found in the provided text.
          * @param text The text of a toot.
          */

@@ -57,6 +57,21 @@ public interface StatusRepository {
     public Status postStatus(final String statusText) throws BigBoneRequestException;
 
     /**
+     * Creates a new private toot on mastodon for test purpose.
+     * The toot will be private, in english and without sensitivity warning or spoiler text.
+     *
+     * @param statusText The text of the new toot.
+     * @return The newly posted {@link Status Status}.
+     * @throws BigBoneRequestException Throws an exception,
+     * if there is a communication error with the configured mastodon instance or the contend is invalid.
+     * E.g. it could be to long.
+     *
+     * @see <a href="https://docs.joinmastodon.org/methods/statuses/#create">Mastodon API Post a new status</a>
+     * @see social.bigbone.api.method.StatusMethods#postStatus
+     */
+    public Status postPrivateStatus(final String statusText) throws BigBoneRequestException;
+
+    /**
      * Creates a new replay to a toot on mastodon.
      * The toot will be {@link social.bigbone.api.entity.data.Visibility#DIRECT direct}, in english and without sensitivity warning or spoiler text.
      *
