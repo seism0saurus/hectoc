@@ -131,6 +131,14 @@ public class TextGenerator {
                 + bugreport;
     }
 
+    /**
+     * Creates a complete text for a report.
+     * The report contains the total number of answers, correct and false ones.
+     * Also, the number of participants ist counted and the participant with the most correct answers is calculated.
+     *
+     * @param answers The list of proposed solutions.
+     * @return A complete text for a report.
+     */
     public String getReportText(List<NotificationPdo> answers) {
         Random rand = new Random();
         final String randomGreeting = greetings.get(rand.nextInt(greetings.size()));
