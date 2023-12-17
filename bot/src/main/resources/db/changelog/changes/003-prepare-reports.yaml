@@ -20,6 +20,16 @@ databaseChangeLog:
     id:  003-prepare-report-002-add-date-to-notifications
     author:  seism0saurus
     comment: Add a columns for the date and correctness to the notifications
+    preConditions:
+      - onFail: MARK_RAN
+      - not:
+          - and:
+              - columnExists:
+                  tableName: notifications
+                  columnName: date
+              - columnExists:
+                  tableName: notifications
+                  columnName: correct
     changes:
       - addColumn:
           tableName:  notifications
@@ -39,11 +49,16 @@ databaseChangeLog:
             - column:
                 name: date
                 value: '2023-11-01 00:00:00'
+- changeSet:
+    id: 003-prepare-report-003-add-values-to-correct
+    author: seism0saurus
+    comment: Calculate the correct field of the notifications
+    changes:
       - customChange:  {
           "class": "de.seism0saurus.hectoc.bot.db.CorrectFieldCustomChange"
         }
 - changeSet:
-    id:  003-prepare-report-003-create-table-report
+    id:  003-prepare-report-004-create-table-report
     author:  seism0saurus
     comment: Create the table for the reports
     changes:
