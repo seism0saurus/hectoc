@@ -59,8 +59,10 @@ jobs:
 
   build-bot:
     runs-on: ubuntu-latest
-    if: ${{ needs.changes.outputs.bot == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
-    needs: build-shared
+    if: needs.changes.outputs.bot == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true'
+    needs:
+      - build-shared
+      - changes
     permissions: write-all
     steps:
       - uses: actions/checkout@v4
@@ -138,8 +140,10 @@ jobs:
 
   build-webapp:
     runs-on: ubuntu-latest
-    if: ${{ needs.changes.outputs.webapp == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
-    needs: build-shared
+    if: needs.changes.outputs.webapp == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true'
+    needs:
+      - build-shared
+      - changes
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 21
@@ -224,8 +228,10 @@ jobs:
 
   build-bruteforcer:
     runs-on: ubuntu-latest
-    if: ${{ needs.changes.outputs.bruteforcer == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true' }}
-    needs: build-shared
+    if: needs.changes.outputs.bruteforcer == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true'
+    needs:
+      - build-shared
+      - changes
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 21
