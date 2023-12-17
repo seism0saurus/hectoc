@@ -29,7 +29,7 @@ public class CorrectFieldCustomChange implements CustomTaskChange {
              ResultSet resultSet = statement.executeQuery(sqlSelect)) {
 
             while (resultSet.next()) {
-                UUID id = (UUID) resultSet.getObject("id");
+                UUID id = UUID.fromString(resultSet.getString("id"));
                 String challenge = resultSet.getString("challenge");
                 String proposedSolution = resultSet.getString("solution");
                 boolean correct = false;
