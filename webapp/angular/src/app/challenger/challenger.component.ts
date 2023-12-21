@@ -101,7 +101,7 @@ export class ChallengerComponent {
   }
 
   openDialog(data: HectocDialogDto): void {
-    const dialogRef = this.dialog.open(AppDialog, {
+    this.dialog.open(AppDialog, {
       data: data,
     });
   }

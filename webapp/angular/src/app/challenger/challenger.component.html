@@ -3,7 +3,7 @@
     <div class="hectoc">
       {{ hectoc }}
     </div>
-    <button mat-fab extended id="refresh" name="refresh" aria-label="refresh" (click)="newHectoc()">
+    <button mat-fab id="refresh" name="refresh" aria-label="refresh" (click)="newHectoc()">
       <mat-icon>refresh</mat-icon>
       New challenge
     </button>
@@ -18,7 +18,7 @@
       </button>
       <!-- <mat-error *ngIf="solution.errors?.['solveFailed']">{{errorSolve}}</mat-error> -->
     </mat-form-field>
-    <button mat-fab extended color="primary" id="solve" name="solve" aria-label="solve" (click)="solve()">
+    <button mat-fab color="primary" id="solve" name="solve" aria-label="solve" (click)="solve()">
       <mat-icon>calculate</mat-icon>
       Check
     </button>

@@ -18,7 +18,6 @@ describe('AppComponent', () => {
 
   it(`should have as title 'hectoc'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
     expect('app.title').toEqual('hectoc');
   });
 
