@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -153,7 +154,7 @@ public class TextGenerator {
                 .collect(Collectors.groupingBy(NotificationPdo::getAuthor, Collectors.counting()))
                 .entrySet()
                 .stream()
-                .sorted((m1, m2) -> Long.compare(m1.getValue(), m2.getValue()))
+                .sorted(Comparator.comparingLong(Map.Entry::getValue))
                 .toList();
         String topParticipants = "";
         if (mostActiveParticipants.size() >= 3) {
