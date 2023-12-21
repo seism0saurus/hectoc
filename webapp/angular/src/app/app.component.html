@@ -1,52 +1,67 @@
-<div>
-  <h1>Hectoc Challenger</h1>
+<mat-toolbar>
+  <button mat-icon-button
+          *ngIf="sidenav.mode === 'over'"
+          (click)="sidenav.toggle()"
+  >
+    <mat-icon *ngIf="!sidenav.opened"> menu</mat-icon>
+    <mat-icon *ngIf="sidenav.opened"> close</mat-icon>
+  </button>
+</mat-toolbar>
 
-  <div class="challenge">
-    <h2>Your challenge</h2>
-    <div class="hectoc">
-      {{hectoc}}
+<mat-sidenav-container>
+  <mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
+    <img
+      class="avatar mat-elevation-z8"
+      src="assets/images/seism0saurus.jpg"
+    />
+    <h1 class="project">Hectoc Project</h1>
+    <p class="author">by <a href="https://seism0saurus.de">seism0saurus</a></p>
+
+    <mat-divider></mat-divider>
+
+    <button mat-button [routerLink]="'home'" routerLinkActive="active-link" class="menu-button">
+      <mat-icon svgIcon="numbers" aria-hidden="false" aria-label="goto hectoc explanation"></mat-icon>
+      <span>Hectoc</span>
+    </button>
+    <button mat-button [routerLink]="'howto'" routerLinkActive="active-link" class="menu-button">
+      <mat-icon svgIcon="rocket" aria-hidden="false" aria-label="goto howto solve"></mat-icon>
+      <span>Howto Solve</span>
+    </button>
+    <button mat-button [routerLink]="'challenger'" routerLinkActive="active-link" class="menu-button">
+      <mat-icon svgIcon="challenge" aria-hidden="false" aria-label="goto hectoc challenges"></mat-icon>
+      <span>Challenges</span>
+    </button>
+    <button mat-button [routerLink]="'bot'" routerLinkActive="active-link" class="menu-button">
+      <mat-icon svgIcon="mastodon" aria-hidden="false" aria-label="goto mastodon bot"></mat-icon>
+      <span>Hourly Hectoc Bot</span>
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <button mat-button [routerLink]="'bug'" routerLinkActive="active-link" class="menu-button">
+      <mat-icon svgIcon="bug" aria-hidden="false" aria-label="goto bug reports"></mat-icon>
+      <span>Report Bugs</span>
+    </button>
+    <button mat-button [routerLink]="'participate'" routerLinkActive="active-link" class="menu-button">
+      <mat-icon svgIcon="participate" aria-hidden="false" aria-label="goto participation"></mat-icon>
+      <span>Participate</span>
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <button mat-button [routerLink]="'legal-notice'" routerLinkActive="active-link" class="menu-button">
+      <mat-icon svgIcon="law" aria-hidden="false" aria-label="goto legal notice"></mat-icon>
+      <span>Legal Notice</span>
+    </button>
+    <button mat-button [routerLink]="'data-protection'" routerLinkActive="active-link" class="menu-button">
+      <mat-icon svgIcon="cookie" aria-hidden="false" aria-label="Goto data protection"></mat-icon>
+      <span>Data Protection</span>
+    </button>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="content mat-elevation-z8">
+      <router-outlet></router-outlet>
     </div>
-    <button mat-fab extended id="refresh" name="refresh" aria-label="refresh" (click)="newHectoc()">
-      <mat-icon>refresh</mat-icon>
-      New challenge
-    </button>
-  </div>
-
-  <form class="solution" (ngSubmit)="solve()">
-    <mat-form-field appearance="fill">
-      <mat-label>Solution</mat-label>
-      <input matInput id="equotation" name="equotation" required [(ngModel)]="solution">
-      <button matSuffix mat-icon-button id="close" name="close" aria-label="close" (click)="this.solution=''">
-        <mat-icon>close</mat-icon>
-      </button>
-      <!-- <mat-error *ngIf="solution.errors?.['solveFailed']">{{errorSolve}}</mat-error> -->
-    </mat-form-field>
-    <button mat-fab extended color="primary" id="solve" name="solve" aria-label="solve" (click)="solve()">
-      <mat-icon>calculate</mat-icon>
-      Check
-    </button>
-  </form>
-
-  <div class="tutorial">
-    <p>Solve hectoc challenges.
-      Hectocs are mathematical challenges developed by <a href="https://en.wikipedia.org/wiki/Yusnier_Viera">Yusnier
-        Viera</a>.
-      More infos at <a href="https://wir-rechnen.de/hectoc">https://wir-rechnen.de/hectoc</a>
-    </p>
-    <p>
-      The goal is to combine the 6 numbers to a total of 100.
-      You can use the mathematical operations + - * / ^ and the parenthesis ()
-      Numbers can be combined but you have to use all 6 of them.
-    </p>
-    <p>
-      For example: 991347 can be solved with "99+1-(3+4-7)".
-    </p>
-    <p>
-      This site is a private project from <a href="https://seism0saurus.de">seism0saurus.de</a>.
-      The algorithm to check your solution is experimental, so please help me to improve it.
-      Please open <a href="https://github.com/seism0saurus/hectoc/issues">issues</a> on the <a
-      href="https://github.com/seism0saurus/hectoc">GitHub repo</a>
-      or send errors to <a href="mailto:hectoc@seism0saurus.de">hectoc&#64;seism0saurus.de</a> if you don't have an account.
-    </p>
-  </div>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

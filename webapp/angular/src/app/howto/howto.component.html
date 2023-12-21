@@ -1,0 +1,93 @@
+<h2>Howto Solve Hectocs</h2>
+<h3>Introduction</h3>
+Of course you can tinker around and try to add the allowed mathematical operations at any place you want.
+You could also try to brute force a challenge similar to brute-forcing a combination lock.
+But you will get faster results, if you follow some strategies.<br/>
+As far as I have experienced, everyone has some favorite strategy.
+But there may be some challenges there your strategy does not work.
+So don't try to hard and look at the other possibilities.<br/>
+Try the strategies from <a href="https://wir-rechnen.de/loesungsstrategien-hectoc">Wir rechnen e.V.</a>,
+if you understand German. They're much more experienced than me.
+
+<h3>10 * 10</h3>
+The first strategy I want to show is a multiplication. Try to combine the numbers to <b>10 * 10</b>.
+
+<h4>Example 1</h4>
+The hectoc is <b>821251</b>.<br/>
+Let's try to build us two 10s. We get the first one with <b>8+2*1 = 10</b>.
+The second one is <b>2*5*1 = 10</b>.
+Now we have <b>(8+2*1) * (2*5*1) = 100</b>.
+
+<h4>Example 2</h4>
+The hectoc is <b>559781</b>.<br/>
+Again, let's try to build us two 10s. The first one is quite easy <b>5+5 = 10</b>.
+The second one is <b>9-7+8*1 = 10</b>.
+Now we have <b>(5+5) * (9-7+8*1) = 100</b>.
+
+<h4>Example 3</h4>
+The hectoc is <b>913352</b>.<br/>
+Once again. The first part is <b>9+1 = 10</b>.
+The second one is <b>5*2 = 10</b>.
+But what do we do with <b>33</b>? There are two possibilities to eliminate those two unwanted numbers.
+We can use <b>3/3</b> to get <b>1</b> and use it as neutral element of the multiplication.
+That looks like the following: <b>(9+1) * (3/3) * (5*2) = 100</b>.
+Or we use <b>3-3</b> to get <b>0</b> and use that as the neutral element of the addition or subtraction.
+That gives us <b>((9+1) + (3-3)) * (5*2) = 100</b>.
+
+<h3>5 * 20</h3>
+The second strategy I often use is also a multiplication. Try to combine the numbers to <b>5 * 20</b> or vise versa.
+
+<h4>Example 1</h4>
+The hectoc is <b>546461</b>.<br/>
+Let's try to build us a 5 and a 20. We can simple use the 5 one the left side: <b>5 = 5</b>.
+Now we have to combine the rest to get a 20: <b>4+6+4+6*1 = 20</b>.
+The complete solution is <b>5 * (4+6+4+6*1) = 100</b>.
+
+<h4>Example 2</h4>
+The hectoc is <b>334115</b>.<br/>
+We want to find a 5 and a 20 again. Because of the commutative law the 5 can be at the end too,
+so we can simple use the 5 at the end of the challenge: <b>5 = 5</b>.
+So the first five numbers need to become 20: <b>(3+3+4) * (1+1) = 20</b>.
+Now we have <b>((3+3+4) * (1+1)) * 5 = 100</b>.
+The 5 remained at the end of the solutions, since we are not allowed to change the order.
+It was only the first number, that was directly recognizable.
+So it was easier to start with that, than to find a 20 in the other numbers.
+
+<h4>Example 3</h4>
+The hectoc is <b>294583</b>.<br/>
+One last time we are looking for a 5 and a 20.
+Let's begin by trying to get the 29 down to a 20: <b>29-4-5 = 20</b>.
+Now get a 5 by subtraction: <b>8-3 = 5</b>.
+The solution is <b>(29-4-5) * (8-3) = 100</b>.
+
+<h3>Big numbers</h3>
+This strategy is not as clear as the other ones.
+You have to spot a number that is relatively near the <b>100</b> and then add or subtract the other numbers
+to get exactly <b>100</b>.
+The big number can be smaller than 100 or bigger.
+
+<h4>Example 1</h4>
+The hectoc is <b>125499</b>.<br/>
+The big number is <b>99</b>. Now we have to find a way to combine the other numbers to <b>1</b>,
+so it sums up to <b>100</b>.
+One possibility is: <b>(-1+2) * (5-4) = 1</b>.
+The solution is <b>((-1+2) * (5-4)) + 99 = 100</b>.
+
+<h4>Example 2</h4>
+The hectoc is <b>649332</b>.<br/>
+The big number does not have to appear at the beginning or the end of the challenge.
+This time the big number is <b>93</b>. Now we have to find a way to combine the other numbers to <b>7</b>,
+so it sums up to <b>100</b>.
+To the left we have <b>6-4 = 2</b> and to the right we have <b>3+2 = 5</b>. Together that's <b>7</b>.
+So one solution is <b>(6-4) + 93 + (3+2) = 100</b>.
+
+<h4>Example 3</h4>
+The hectoc is <b>121153</b>.<br/>
+The big number can be bigger than 100. Here we could use <115>.
+Now we have to subtract <b>15</b> by combining the other numbers.
+On the left side we have <b>12 = 12</b>.
+On the right side there is only one number , so <b>3 = 3</b>
+That becomes this solution <b>(-12) + 115 - 3 = 100</b>.
+
+<h3>More Strategies</h3>
+There are more strategies. I will write about them later.

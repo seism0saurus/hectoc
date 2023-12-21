@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {HectocChallengeDto} from "./dto/hectoc.challenge";
 import {HectocResultDto} from "./dto/hectoc.result";
 import {HectocSolutionDto} from "./dto/hectoc.solution";
-import {environment} from '../environments/environment';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

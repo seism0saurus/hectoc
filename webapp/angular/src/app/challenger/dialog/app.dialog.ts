@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {HectocDialogDto} from './dto/hectoc.dialog';
+import {HectocDialogDto} from '../../hectoc-service/dto/hectoc.dialog';
 
 @Component({
   selector: 'app-dialog',

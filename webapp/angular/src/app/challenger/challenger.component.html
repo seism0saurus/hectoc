@@ -1,0 +1,25 @@
+  <div class="challenge">
+    <h2>Your challenge</h2>
+    <div class="hectoc">
+      {{ hectoc }}
+    </div>
+    <button mat-fab extended id="refresh" name="refresh" aria-label="refresh" (click)="newHectoc()">
+      <mat-icon>refresh</mat-icon>
+      New challenge
+    </button>
+  </div>
+
+  <form class="solution" (ngSubmit)="solve()">
+    <mat-form-field appearance="fill">
+      <mat-label>Solution</mat-label>
+      <input matInput id="equotation" name="equotation" required [(ngModel)]="solution">
+      <button matSuffix mat-icon-button id="close" name="close" aria-label="close" (click)="this.solution=''">
+        <mat-icon>close</mat-icon>
+      </button>
+      <!-- <mat-error *ngIf="solution.errors?.['solveFailed']">{{errorSolve}}</mat-error> -->
+    </mat-form-field>
+    <button mat-fab extended color="primary" id="solve" name="solve" aria-label="solve" (click)="solve()">
+      <mat-icon>calculate</mat-icon>
+      Check
+    </button>
+  </form>

@@ -12,6 +12,9 @@ Numbers can be combined, but you have to use all 6 of them and are not allowed t
 
 For example: 991347 can be solved with "99+1-(3+4-7)".
 
+## Website
+The deployed instance of the website and web application can be found under [hectoc.seism0saurus.de](https://hectoc.seism0saurus.de).
+
 ## Projects
 
 This repository contains multiple subprojects that are grouped around the Hectoc theme.
