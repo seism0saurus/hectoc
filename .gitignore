@@ -34,4 +34,5 @@ build/
 ### VS Code ###
 .vscode/
 /.mvn/
-/.mvn/
+/webapp/src/main/resources/static/main.*.js
+/webapp/src/main/resources/static/styles.*.css
