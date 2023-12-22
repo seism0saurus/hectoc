@@ -156,7 +156,7 @@ public class TextGenerator {
                 .collect(Collectors.groupingBy(NotificationPdo::getAuthor, Collectors.counting()))
                 .entrySet()
                 .stream()
-                .sorted(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()))
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .sorted()
                 .toList();
         String topParticipants = "";
