@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.reverseOrder;
+
 /**
  * A generator for texts for toots on mastodon.
  *
@@ -154,7 +156,8 @@ public class TextGenerator {
                 .collect(Collectors.groupingBy(NotificationPdo::getAuthor, Collectors.counting()))
                 .entrySet()
                 .stream()
-                .sorted(Comparator.comparingLong(Map.Entry::getValue))
+                .sorted(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()))
+                .sorted()
                 .toList();
         String topParticipants = "";
         if (mostActiveParticipants.size() >= 3) {
