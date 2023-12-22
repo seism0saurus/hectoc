@@ -77,7 +77,7 @@ public class ChallengeScheduler {
      *
      * Exceptions are logged as errors and suppresed. No further error handling is applied.
      */
-    @Scheduled(cron = "0 0 0/1 * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void postHectoc() {
         LOGGER.info("Going to post new hectoc challenge");
         HectocChallenge challenge = HectocGenerator.generate();
