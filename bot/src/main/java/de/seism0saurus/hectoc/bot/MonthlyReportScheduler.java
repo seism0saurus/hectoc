@@ -102,7 +102,7 @@ public class MonthlyReportScheduler {
         final String statusText = generator.getReportText(allByDateBetween);
         LOGGER.info("Text will be: " + statusText);
         try {
-            Status status = this.statusRepository.postPrivateStatus(statusText);
+            Status status = this.statusRepository.postStatus(statusText);
             ZonedDateTime creationDateUtc = status.getCreatedAt().mostPreciseInstantOrNull().atZone(ZoneOffset.UTC);
             LOGGER.info("New report with id " + status.getId() + " created at " + creationDateUtc);
 

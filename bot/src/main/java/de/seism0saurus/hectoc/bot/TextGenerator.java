@@ -162,22 +162,22 @@ public class TextGenerator {
             Map.Entry<String, Long> secondMostActiveParticipant = mostActiveParticipants.get(1);
             Map.Entry<String, Long> thirdMostActiveParticipant = mostActiveParticipants.get(2);
             topParticipants = "The top three participants of this month are:\n" +
-                    " 1.) " + mostActiveParticipant.getKey() + " with " + mostActiveParticipant.getValue() + " correct solutions" +
-                    " 2.) " + secondMostActiveParticipant.getKey() + " with " + secondMostActiveParticipant.getValue() + " correct solutions" +
-                    " 3.) " + thirdMostActiveParticipant.getKey() + " with " + thirdMostActiveParticipant.getValue() + " correct solutions" +
-                    "\n\nCongratulations!\n\n";
+                    " 1.) " + mostActiveParticipant.getKey() + " with " + mostActiveParticipant.getValue() + " correct solutions\n" +
+                    " 2.) " + secondMostActiveParticipant.getKey() + " with " + secondMostActiveParticipant.getValue() + " correct solutions\n" +
+                    " 3.) " + thirdMostActiveParticipant.getKey() + " with " + thirdMostActiveParticipant.getValue() + " correct solutions\n" +
+                    "\nCongratulations!\n\n";
         } else if (mostActiveParticipants.size() == 2) {
             Map.Entry<String, Long> mostActiveParticipant = mostActiveParticipants.get(0);
             Map.Entry<String, Long> secondMostActiveParticipant = mostActiveParticipants.get(1);
             topParticipants = "The top two participants of this month are:\n" +
-                    " 1.) " + mostActiveParticipant.getKey() + " with " + mostActiveParticipant.getValue() + " correct solutions" +
-                    " 2.) " + secondMostActiveParticipant.getKey() + " with " + secondMostActiveParticipant.getValue() + " correct solutions" +
-                    "\n\nCongratulations!\n\n";
+                    " 1.) " + mostActiveParticipant.getKey() + " with " + mostActiveParticipant.getValue() + " correct solutions\n" +
+                    " 2.) " + secondMostActiveParticipant.getKey() + " with " + secondMostActiveParticipant.getValue() + " correct solutions\n" +
+                    "\nCongratulations!\n\n";
         } else if (mostActiveParticipants.size() == 1) {
             Map.Entry<String, Long> mostActiveParticipant = mostActiveParticipants.getFirst();
             topParticipants = "The top participant of this month is:\n" +
-                    " " + mostActiveParticipant.getKey() + " with " + mostActiveParticipant.getValue() + " correct solutions" +
-                    "\n\nCongratulations!\n\n";
+                    " " + mostActiveParticipant.getKey() + " with " + mostActiveParticipant.getValue() + " correct solutions\n" +
+                    "\nCongratulations!\n\n";
         }
 
         final String tagLine = tags.stream().map(s -> "#" + s).collect(Collectors.joining(" "));
