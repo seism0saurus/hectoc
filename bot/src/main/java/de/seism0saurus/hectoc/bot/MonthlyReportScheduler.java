@@ -16,6 +16,7 @@ import social.bigbone.api.exception.BigBoneRequestException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
@@ -86,13 +87,13 @@ public class MonthlyReportScheduler {
      * <p>
      * Exceptions are logged as errors and suppressed. No further error handling is applied.
      */
-    @Scheduled(cron = "0 0 0 1 * ?")
+    @Scheduled(cron = "59 59 23 * * ?")
     public void postReport() {
-        final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        ZonedDateTime lastDayOfMont = now.with(TemporalAdjusters.lastDayOfMonth());
-        if (now != lastDayOfMont) {
+        final ZonedDateTime date = ZonedDateTime.now(ZoneOffset.UTC).minus(1, ChronoUnit.HOURS);
+        ZonedDateTime lastDayOfMont = date.with(TemporalAdjusters.lastDayOfMonth());
+        if (date.getDayOfMonth() != lastDayOfMont.getDayOfMonth()) {
             LOGGER.info("Not the last day of the month. Skipping report.");
-//            return;
+            return;
         }
         LOGGER.info("Last day of the month. Going to post new report.");
         ZonedDateTime lastSecondOfMonth = lastDayOfMont.with(ChronoField.NANO_OF_DAY, 86400L * 1000_000_000L - 1);
