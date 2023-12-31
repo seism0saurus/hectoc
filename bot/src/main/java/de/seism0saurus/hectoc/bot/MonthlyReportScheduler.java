@@ -100,7 +100,7 @@ public class MonthlyReportScheduler {
             LOGGER.info("Not the last day of the month. Skipping report.");
 //            return;
         }
-        LOGGER.info("Last day of the month. Going to post new report");
+        LOGGER.info("Last day of the month. Going to post new report.");
         ZonedDateTime lastSecondOfMonth = lastDayOfMont.with(ChronoField.NANO_OF_DAY,86400L * 1000_000_000L - 1);
         ZonedDateTime firstSecondOfMonth = lastSecondOfMonth.with(TemporalAdjusters.firstDayOfMonth()).with(ChronoField.NANO_OF_DAY,0);
         List<NotificationPdo> allByDateBetween = this.notificationRepository.findAllByDateBetween(firstSecondOfMonth, lastSecondOfMonth);
