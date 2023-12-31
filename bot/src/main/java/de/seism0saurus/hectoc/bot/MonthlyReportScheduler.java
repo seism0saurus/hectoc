@@ -86,7 +86,7 @@ public class MonthlyReportScheduler {
      * <p>
      * Exceptions are logged as errors and suppressed. No further error handling is applied.
      */
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void postReport() {
         final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         ZonedDateTime lastDayOfMont = now.with(TemporalAdjusters.lastDayOfMonth());
