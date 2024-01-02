@@ -106,7 +106,7 @@ public class MonthlyReportScheduler {
             this.repo.save(reportPdo);
             LOGGER.info("Report " + status.getId() + " saved to repository");
         } catch (BigBoneRequestException e) {
-            LOGGER.error("An error occured. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+            LOGGER.error("An error occurred. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
         }
     }
 
@@ -131,7 +131,7 @@ public class MonthlyReportScheduler {
      * @return True, if the report was already sent. False otherwise.
      */
     private boolean isReportAlreadySent(ZonedDateTime now) {
-        List<NotificationPdo> allOnDay = this.repo.findAllOnDay(now);
+        List<ReportPdo> allOnDay = this.repo.findAllOnDay(now);
         if (!allOnDay.isEmpty()){
             LOGGER.info("Report is already present for today. Skipping report.");
             return true;

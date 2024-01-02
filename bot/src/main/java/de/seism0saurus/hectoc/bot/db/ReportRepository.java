@@ -21,7 +21,7 @@ public interface ReportRepository extends JpaRepository<ReportPdo, UUID> {
      * @param day The date on which day the reports should be fetched.
      * @return The list of pdos on the day of the given date.
      */
-    default List<NotificationPdo> findAllOnDay(final ZonedDateTime day) {
+    default List<ReportPdo> findAllOnDay(final ZonedDateTime day) {
         final ZonedDateTime morning = day.with(ChronoField.NANO_OF_DAY, 0);
         final ZonedDateTime evening = day.with(ChronoField.NANO_OF_DAY, 86400L * 1000_000_000L - 1);
         return findAllByDateBetween(morning, evening);
@@ -34,5 +34,5 @@ public interface ReportRepository extends JpaRepository<ReportPdo, UUID> {
      * @param to   The data until we are fetching pdos.
      * @return The list of pdos between the given dates.
      */
-    List<NotificationPdo> findAllByDateBetween(ZonedDateTime from, ZonedDateTime to);
+    List<ReportPdo> findAllByDateBetween(ZonedDateTime from, ZonedDateTime to);
 }
