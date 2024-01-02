@@ -86,7 +86,7 @@ public class MonthlyReportScheduler {
      * <p>
      * Exceptions are logged as errors and suppressed. No further error handling is applied.
      */
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void postReport() {
         final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         if (isUnwantedDay(now)) return;
@@ -134,8 +134,6 @@ public class MonthlyReportScheduler {
         List<ReportPdo> allOnDay = this.repo.findAllOnDay(now);
         if (!allOnDay.isEmpty()){
             LOGGER.info("Report is already present for today. Skipping report.");
-            LOGGER.info("Size: " + allOnDay.size());
-            allOnDay.stream().forEach(pdo -> LOGGER.info("Pdo: " + pdo));
             return true;
         }
         return false;
@@ -150,8 +148,7 @@ public class MonthlyReportScheduler {
         final ZonedDateTime firstDayOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
         if (now.getDayOfMonth() != firstDayOfMonth.getDayOfMonth()) {
             LOGGER.info("Not the first day of the month. Skipping report.");
-            return false; // Only for test
-//            return true;
+            return true;
         }
         return false;
     }
