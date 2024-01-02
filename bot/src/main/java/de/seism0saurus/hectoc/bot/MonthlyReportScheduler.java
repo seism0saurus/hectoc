@@ -134,6 +134,8 @@ public class MonthlyReportScheduler {
         List<ReportPdo> allOnDay = this.repo.findAllOnDay(now);
         if (!allOnDay.isEmpty()){
             LOGGER.info("Report is already present for today. Skipping report.");
+            LOGGER.info("Size: " + allOnDay.size());
+            allOnDay.stream().forEach(pdo -> LOGGER.info("Pdo: " + pdo));
             return true;
         }
         return false;
