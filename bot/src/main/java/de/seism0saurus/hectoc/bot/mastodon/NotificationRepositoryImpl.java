@@ -37,7 +37,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
      * The sole constructor for this class.
      * The needed classes are provided by Spring {@link org.springframework.beans.factory.annotation.Value Values}.
      *
-     * @param instance The mastodon instance for this repository. Can be configured in the <code>application.properties</code>.
+     * @param instance    The mastodon instance for this repository. Can be configured in the <code>application.properties</code>.
      * @param accessToken The access token for this repository.
      *                    You get an access token on the instance of your bot at the {@link <a href="https://docs.joinmastodon.org/spec/oauth/#token">Token Endpoint</a>} of your bot's instance or in the GUI.
      *                    Can be configured in the <code>application.properties</code>.
@@ -47,6 +47,8 @@ public class NotificationRepositoryImpl implements NotificationRepository {
             @Value(value = "${mastodon.accessToken}") String accessToken) {
         this.client = new MastodonClient.Builder(instance)
                 .accessToken(accessToken)
+                .setReadTimeoutSeconds(180)
+                .setWriteTimeoutSeconds(180)
                 .build();
         LOGGER.info("NotificationRepositoryImpl for mastodon instance " + instance + " created");
     }
@@ -67,9 +69,9 @@ public class NotificationRepositoryImpl implements NotificationRepository {
      * Dismisses all {@link Notification Notifications}, that are not {@link social.bigbone.api.entity.Notification.NotificationType#MENTION mentions}
      * and returns only the mentions from the list.
      * Mentions are answers to postet toots. Other
+     *
      * @param notifications The <code>list</code> of <code>Notifications</code> to process.
      * @return A filtered <code>list</code> of <code>Notifications</code>, that only contains mentions.
-     *
      * @see <a href="https://docs.joinmastodon.org/entities/Notification/#type">Mastodon API Notification type</a>
      * @see social.bigbone.api.method.NotificationMethods#dismissNotification(String)
      */
@@ -77,8 +79,8 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         Map<Boolean, List<Notification>> groupedNotifications = notifications.stream()
                 .collect(Collectors.partitioningBy(n -> Notification.NotificationType.MENTION == n.getType() && n.getStatus().getInReplyToId() != null));
         groupedNotifications.get(false).stream()
-                .map( n -> n.getId())
-                .forEach( id -> {
+                .map(n -> n.getId())
+                .forEach(id -> {
                     try {
                         LOGGER.info("Going to dismiss notification " + id);
                         this.dismissNotification(id);

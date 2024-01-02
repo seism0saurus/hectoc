@@ -41,7 +41,7 @@ public class StatusRepositoryImpl implements StatusRepository {
      * The sole constructor for this class.
      * The needed classes are provided by Spring {@link org.springframework.beans.factory.annotation.Value Values}.
      *
-     * @param instance The mastodon instance for this repository. Can be configured in the <code>application.properties</code>.
+     * @param instance    The mastodon instance for this repository. Can be configured in the <code>application.properties</code>.
      * @param accessToken The access token for this repository.
      *                    You get an access token on the instance of your bot at the {@link <a href="https://docs.joinmastodon.org/spec/oauth/#token">Token Endpoint</a>} of your bot's instance or in the GUI.
      *                    Can be configured in the <code>application.properties</code>.
@@ -51,6 +51,8 @@ public class StatusRepositoryImpl implements StatusRepository {
             @Value(value = "${mastodon.accessToken}") String accessToken) {
         this.client = new MastodonClient.Builder(instance)
                 .accessToken(accessToken)
+                .setReadTimeoutSeconds(240)
+                .setReadTimeoutSeconds(240)
                 .build();
         LOGGER.info("StatusInterfaceImpl for mastodon instance " + instance + " created");
     }
@@ -59,21 +61,27 @@ public class StatusRepositoryImpl implements StatusRepository {
         LOGGER.debug("Fetch Context for statusID " + statusId + " created");
         Context context = this.client.statuses().getContext(statusId).execute();
         return context;
-    };
+    }
+
+    ;
 
     public String getChallenge(final String statusId) throws BigBoneRequestException {
         LOGGER.debug("Fetch content of Status with id " + statusId);
         String content = this.client.statuses().getStatus(statusId).execute().getContent();
         String challenge = extractChallenge(content);
         return challenge;
-    };
+    }
+
+    ;
 
     public Status postStatus(final String statusText) throws BigBoneRequestException {
         return getStatus(statusText, Visibility.PUBLIC);
-    };
+    }
 
-    public Status postPrivateStatus(final String statusText) throws BigBoneRequestException {
-        return getStatus(statusText, Visibility.PRIVATE);
+    ;
+
+    public Status postDirectStatus(final String statusText) throws BigBoneRequestException {
+        return getStatus(statusText, Visibility.DIRECT);
     }
 
     /**
@@ -84,9 +92,8 @@ public class StatusRepositoryImpl implements StatusRepository {
      * @param visibility The visibility of the new toot.
      * @return The newly posted {@link Status Status}.
      * @throws BigBoneRequestException Throws an exception,
-     * if there is a communication error with the configured mastodon instance or the contend is invalid.
-     * E.g. it could be to long.
-     *
+     *                                 if there is a communication error with the configured mastodon instance or the contend is invalid.
+     *                                 E.g. it could be to long.
      * @see <a href="https://docs.joinmastodon.org/methods/statuses/#create">Mastodon API Post a new status</a>
      * @see social.bigbone.api.method.StatusMethods#postStatus
      */
@@ -112,26 +119,32 @@ public class StatusRepositoryImpl implements StatusRepository {
         final List<String> mediaIds = List.of();
         Status status = client.statuses().postStatus(statusText, mediaIds, visibility, inReplyToId, sensitive, spoilerText, language).execute();
         return status;
-    };
+    }
+
+    ;
 
     public Status favouriteStatus(final String statusId) throws BigBoneRequestException {
         LOGGER.debug("Favour status " + statusId);
         Status status = this.client.statuses().favouriteStatus(statusId).execute();
         return status;
-    };
+    }
+
+    ;
 
     public List<Account> getFavouritedBy(final String statusId) throws BigBoneRequestException {
         LOGGER.debug("Get list of favourites for status " + statusId);
         List<Account> accounts = this.client.statuses().getFavouritedBy(statusId).execute().getPart();
         return accounts;
-    };
+    }
+
+    ;
 
     @Nullable
-    private String extractChallenge(final String status){
+    private String extractChallenge(final String status) {
         String solution = null;
         Pattern p = Pattern.compile("<(br|p)>([123456789]{6})");
         Matcher matcher = p.matcher(status);
-        if (matcher.find()){
+        if (matcher.find()) {
             solution = matcher.group(2);
         }
         return solution;

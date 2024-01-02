@@ -16,7 +16,6 @@ import social.bigbone.api.exception.BigBoneRequestException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
@@ -87,23 +86,16 @@ public class MonthlyReportScheduler {
      * <p>
      * Exceptions are logged as errors and suppressed. No further error handling is applied.
      */
-    @Scheduled(cron = "59 59 23 * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void postReport() {
-        final ZonedDateTime date = ZonedDateTime.now(ZoneOffset.UTC).minus(1, ChronoUnit.HOURS);
-        ZonedDateTime lastDayOfMont = date.with(TemporalAdjusters.lastDayOfMonth());
-        if (date.getDayOfMonth() != lastDayOfMont.getDayOfMonth()) {
-            LOGGER.info("Not the last day of the month. Skipping report.");
-            return;
-        }
-        LOGGER.info("Last day of the month. Going to post new report.");
-        ZonedDateTime lastSecondOfMonth = lastDayOfMont.with(ChronoField.NANO_OF_DAY, 86400L * 1000_000_000L - 1);
-        ZonedDateTime firstSecondOfMonth = lastSecondOfMonth.with(TemporalAdjusters.firstDayOfMonth()).with(ChronoField.NANO_OF_DAY, 0);
-        List<NotificationPdo> allByDateBetween = this.notificationRepository.findAllByDateBetween(firstSecondOfMonth, lastSecondOfMonth);
-
-        final String statusText = generator.getReportText(allByDateBetween);
+        final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        if (isUnwantedDay(now)) return;
+        if (isReportAlreadySent(now)) return;
+        LOGGER.info("First day of the month and no previous reports. Going to post new report.");
+        final String statusText = getReportText(now);
         LOGGER.info("Text will be: " + statusText);
         try {
-            Status status = this.statusRepository.postStatus(statusText);
+            Status status = this.statusRepository.postDirectStatus(statusText);
             ZonedDateTime creationDateUtc = status.getCreatedAt().mostPreciseInstantOrNull().atZone(ZoneOffset.UTC);
             LOGGER.info("New report with id " + status.getId() + " created at " + creationDateUtc);
 
@@ -116,6 +108,50 @@ public class MonthlyReportScheduler {
         } catch (BigBoneRequestException e) {
             LOGGER.error("An error occured. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
         }
+    }
+
+    /**
+     * Prepares a report text by fetching the needed data from the repository and formatting the results.
+     * @param now The first day of the wanted month.
+     * @return A formatted text for the report.
+     */
+    private String getReportText(ZonedDateTime now) {
+        final ZonedDateTime lastDayOfPreviousMonth = now.minusDays(1);
+        final ZonedDateTime lastSecondOfMonth = lastDayOfPreviousMonth.with(ChronoField.NANO_OF_DAY, 86400L * 1000_000_000L - 1);
+        final ZonedDateTime firstSecondOfMonth = lastSecondOfMonth.with(TemporalAdjusters.firstDayOfMonth()).with(ChronoField.NANO_OF_DAY, 0);
+        List<NotificationPdo> allByDateBetween = this.notificationRepository.findAllByDateBetween(firstSecondOfMonth, lastSecondOfMonth);
+
+        final String statusText = generator.getReportText(allByDateBetween);
+        return statusText;
+    }
+
+    /**
+     * Checks if the report for this month is already sent.
+     * @param now The first day of the wanted month.
+     * @return True, if the report was already sent. False otherwise.
+     */
+    private boolean isReportAlreadySent(ZonedDateTime now) {
+        List<NotificationPdo> allOnDay = this.repo.findAllOnDay(now);
+        if (!allOnDay.isEmpty()){
+            LOGGER.info("Report is already present for today. Skipping report.");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the current day is not the first day of the month but one of the others.
+     * @param now The current date.
+     * @return True, if the date is NOT the first day of the month. False, if it is the first day of the month.
+     */
+    private static boolean isUnwantedDay(ZonedDateTime now) {
+        final ZonedDateTime firstDayOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
+        if (now.getDayOfMonth() != firstDayOfMonth.getDayOfMonth()) {
+            LOGGER.info("Not the first day of the month. Skipping report.");
+            return false; // Only for test
+//            return true;
+        }
+        return false;
     }
 
 }

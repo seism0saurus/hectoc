@@ -69,7 +69,7 @@ public interface StatusRepository {
      * @see <a href="https://docs.joinmastodon.org/methods/statuses/#create">Mastodon API Post a new status</a>
      * @see social.bigbone.api.method.StatusMethods#postStatus
      */
-    public Status postPrivateStatus(final String statusText) throws BigBoneRequestException;
+    public Status postDirectStatus(final String statusText) throws BigBoneRequestException;
 
     /**
      * Creates a new replay to a toot on mastodon.
