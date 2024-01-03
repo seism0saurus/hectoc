@@ -121,8 +121,7 @@ public class MonthlyReportScheduler {
         final ZonedDateTime firstSecondOfMonth = lastSecondOfMonth.with(TemporalAdjusters.firstDayOfMonth()).with(ChronoField.NANO_OF_DAY, 0);
         List<NotificationPdo> allByDateBetween = this.notificationRepository.findAllByDateBetween(firstSecondOfMonth, lastSecondOfMonth);
 
-        final String statusText = generator.getReportText(allByDateBetween);
-        return statusText;
+        return generator.getReportText(allByDateBetween);
     }
 
     /**
