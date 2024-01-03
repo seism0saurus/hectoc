@@ -99,9 +99,9 @@ public class NotificationPdo {
 
     /**
      * The read status of the notification.
-     * Dissmissed is true, if the notification was acknowledged at mastodon.
+     * Dismissed is true, if the notification was acknowledged at mastodon.
      * It will not show up again.
-     * Dissmissed is false, if the notification is unread.
+     * Dismissed is false, if the notification is unread.
      */
     @Column
     @Builder.Default

@@ -56,7 +56,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     public List<Notification> getNotifications() throws BigBoneRequestException {
         LOGGER.debug("Fetch all notifications");
         List<Notification> notifications = this.client.notifications().getAllNotifications().execute().getPart();
-        notifications = dismissExcpectMentions(notifications);
+        notifications = dismissExceptMentions(notifications);
         return notifications;
     }
 
@@ -75,7 +75,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
      * @see <a href="https://docs.joinmastodon.org/entities/Notification/#type">Mastodon API Notification type</a>
      * @see social.bigbone.api.method.NotificationMethods#dismissNotification(String)
      */
-    private List<Notification> dismissExcpectMentions(List<Notification> notifications) {
+    private List<Notification> dismissExceptMentions(List<Notification> notifications) {
         Map<Boolean, List<Notification>> groupedNotifications = notifications.stream()
                 .collect(Collectors.partitioningBy(n -> Notification.NotificationType.MENTION == n.getType() && n.getStatus().getInReplyToId() != null));
         groupedNotifications.get(false).stream()

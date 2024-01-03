@@ -63,8 +63,6 @@ public class StatusRepositoryImpl implements StatusRepository {
         return context;
     }
 
-    ;
-
     public String getChallenge(final String statusId) throws BigBoneRequestException {
         LOGGER.debug("Fetch content of Status with id " + statusId);
         String content = this.client.statuses().getStatus(statusId).execute().getContent();
@@ -72,16 +70,30 @@ public class StatusRepositoryImpl implements StatusRepository {
         return challenge;
     }
 
-    ;
-
     public Status postStatus(final String statusText) throws BigBoneRequestException {
         return getStatus(statusText, Visibility.PUBLIC);
     }
 
-    ;
-
     public Status postDirectStatus(final String statusText) throws BigBoneRequestException {
         return getStatus(statusText, Visibility.DIRECT);
+    }
+
+    public Status replyToStatus(final String statusText, final String inReplyToId) throws BigBoneRequestException {
+        LOGGER.debug("Answer status " + inReplyToId);
+        final Visibility visibility = Visibility.DIRECT;
+        return getStatus(statusText, visibility, inReplyToId);
+    }
+
+    public Status favouriteStatus(final String statusId) throws BigBoneRequestException {
+        LOGGER.debug("Favour status " + statusId);
+        Status status = this.client.statuses().favouriteStatus(statusId).execute();
+        return status;
+    }
+
+    public List<Account> getFavouritedBy(final String statusId) throws BigBoneRequestException {
+        LOGGER.debug("Get list of favourites for status " + statusId);
+        List<Account> accounts = this.client.statuses().getFavouritedBy(statusId).execute().getPart();
+        return accounts;
     }
 
     /**
@@ -100,6 +112,10 @@ public class StatusRepositoryImpl implements StatusRepository {
     private Status getStatus(final String statusText, final Visibility visibility) throws BigBoneRequestException {
         LOGGER.debug("Post new Status");
         final String inReplyToId = null;
+        return getStatus(statusText, visibility, inReplyToId);
+    }
+
+    private Status getStatus(String statusText, Visibility visibility, String inReplyToId) throws BigBoneRequestException {
         final boolean sensitive = false;
         final String spoilerText = null;
         final String language = "en";
@@ -108,36 +124,6 @@ public class StatusRepositoryImpl implements StatusRepository {
         return status;
     }
 
-    ;
-
-    public Status replyToStatus(final String statusText, final String inReplyToId) throws BigBoneRequestException {
-        LOGGER.debug("Answer status " + inReplyToId);
-        final Visibility visibility = Visibility.DIRECT;
-        final boolean sensitive = false;
-        final String spoilerText = null;
-        final String language = "en";
-        final List<String> mediaIds = List.of();
-        Status status = client.statuses().postStatus(statusText, mediaIds, visibility, inReplyToId, sensitive, spoilerText, language).execute();
-        return status;
-    }
-
-    ;
-
-    public Status favouriteStatus(final String statusId) throws BigBoneRequestException {
-        LOGGER.debug("Favour status " + statusId);
-        Status status = this.client.statuses().favouriteStatus(statusId).execute();
-        return status;
-    }
-
-    ;
-
-    public List<Account> getFavouritedBy(final String statusId) throws BigBoneRequestException {
-        LOGGER.debug("Get list of favourites for status " + statusId);
-        List<Account> accounts = this.client.statuses().getFavouritedBy(statusId).execute().getPart();
-        return accounts;
-    }
-
-    ;
 
     @Nullable
     private String extractChallenge(final String status) {

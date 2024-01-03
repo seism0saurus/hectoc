@@ -9,7 +9,7 @@ import social.bigbone.api.exception.BigBoneRequestException;
 import java.util.List;
 
 /**
- * The repository to access and malipulate {@link social.bigbone.api.entity.Notification Notifications}.
+ * The repository to access and manipulate {@link social.bigbone.api.entity.Notification Notifications}.
  *
  * @author seism0saurus
  */

@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * The NotificationProcessingScheduler is responsible for scheduling the processing of respones to challenges.
+ * The NotificationProcessingScheduler is responsible for scheduling the processing of responses to challenges.
  *
  * @author seism0saurus
  */
@@ -99,10 +99,10 @@ public class NotificationProcessingScheduler {
      * Schedules the processing of new mastodon notifications.
      * processNotifications will be run according to the {@link org.springframework.scheduling.annotation.Scheduled Scheduled annotation}.
      * This fetches all notifications from mastodon via the {@link de.seism0saurus.hectoc.bot.mastodon.NotificationRepository NotificationRepository}.
-     * Then the notifications are processed and answers to previous challenges are extraced and stored.
-     * The answers are parsed and depending on the proped solution they will be favourite or answered.
+     * Then the notifications are processed and answers to previous challenges are extracted and stored.
+     * The answers are parsed and depending on the probed solution they will be favourite or answered.
      *
-     * Exceptions are logged as errors and suppresed. No further error handling is applied.
+     * Exceptions are logged as errors and suppressed. No further error handling applies.
      */
     @Scheduled(cron = "0 */5 0/1 * * ?")
     public void processNotifications(){
@@ -118,15 +118,15 @@ public class NotificationProcessingScheduler {
             processSolutions(pdos);
             LOGGER.info("All notifications processed");
         } catch (BigBoneRequestException e) {
-            LOGGER.error("An error occured. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+            LOGGER.error("An error occurred. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
         }
     }
 
     /**
-     * Parses the prepared notifications and answers favourites or answeres the toots.
+     * Parses the prepared notifications and answers favourites or answers the toots.
      * Correct answers are favourited.
      * Unreadable answered with an error message, that they could not be parsed.
-     * Wrong answeres are answered with an error message, that they are wrong.
+     * Wrong answers are answered with an error message, that they are wrong.
      *
      * @param pdos The <code>list</code> of {@link NotificationPdo NotificationPdos}
      */
@@ -261,7 +261,7 @@ public class NotificationProcessingScheduler {
                     LOGGER.info("Status " + pdo.getStatusId() + " successfully answered with " + status.getId());
                     dismissNotification(pdo);
                 } catch (BigBoneRequestException e) {
-                    LOGGER.error("An error occured. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+                    LOGGER.error("An error occurred. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
                 }
             }
         } catch (BigBoneRequestException e) {

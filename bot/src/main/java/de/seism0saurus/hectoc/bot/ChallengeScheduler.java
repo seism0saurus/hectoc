@@ -75,7 +75,7 @@ public class ChallengeScheduler {
      * It generates a new hectoc challenge and creates a new toot on mastodon via the {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository}.
      * The result of the call to mastodon is transformed and stored to the {@link de.seism0saurus.hectoc.bot.db.ChallengeRepository ChallengeRepository}.
      *
-     * Exceptions are logged as errors and suppresed. No further error handling is applied.
+     * Exceptions are logged as errors and suppressed. No further error handling is applied.
      */
     @Scheduled(cron = "0 0 * * * ?")
     public void postHectoc() {
@@ -96,7 +96,7 @@ public class ChallengeScheduler {
             this.repo.save(challengePdo);
             LOGGER.info("Challenge " + status.getId() + " saved to repository");
         } catch (BigBoneRequestException e) {
-            LOGGER.error("An error occured. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+            LOGGER.error("An error occurred. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
         }
     }
 }
