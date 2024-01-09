@@ -172,14 +172,13 @@ public class TextGenerator {
      * Returns a sorted list with mappings from the users to their number of correct answers
      */
     private static List<Map.Entry<String, Long>> getTopParticipants(List<NotificationPdo> answers) {
-        List<Map.Entry<String, Long>> mostActiveParticipants = answers.stream()
+        return answers.stream()
                 .filter(NotificationPdo::isCorrect)
                 .collect(Collectors.groupingBy(NotificationPdo::getAuthor, Collectors.counting()))
                 .entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .toList();
-        return mostActiveParticipants;
     }
 
     @NotNull
