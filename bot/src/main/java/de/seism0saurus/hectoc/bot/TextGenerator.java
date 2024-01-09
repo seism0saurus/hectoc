@@ -1,6 +1,7 @@
 package de.seism0saurus.hectoc.bot;
 
 import de.seism0saurus.hectoc.bot.db.NotificationPdo;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -140,47 +141,20 @@ public class TextGenerator {
      * Also, the number of participants ist counted and the participant with the most correct answers is calculated.
      *
      * @param answers The list of proposed solutions.
+     * @param publicPost The participants will be directly addressed, if it is a public post. So they will get a notification about their score.
      * @return A complete text for a report.
      */
-    public String getReportText(List<NotificationPdo> answers) {
+    public String getReportText(List<NotificationPdo> answers, final boolean publicPost) {
         Random rand = new Random();
         final String randomGreeting = greetings.get(rand.nextInt(greetings.size()));
         long totalAnswers = answers.size();
         long correctAnswers = answers.stream().filter(NotificationPdo::isCorrect).count();
         long wrongAnswers = totalAnswers - correctAnswers;
         long participants = answers.stream().map(NotificationPdo::getAuthor).distinct().count();
-        List<Map.Entry<String, Long>> mostActiveParticipants = answers.stream()
-                .filter(NotificationPdo::isCorrect)
-                .collect(Collectors.groupingBy(NotificationPdo::getAuthor, Collectors.counting()))
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .toList();
-        String topParticipants = "";
-        if (mostActiveParticipants.size() >= 3) {
-            Map.Entry<String, Long> mostActiveParticipant = mostActiveParticipants.get(0);
-            Map.Entry<String, Long> secondMostActiveParticipant = mostActiveParticipants.get(1);
-            Map.Entry<String, Long> thirdMostActiveParticipant = mostActiveParticipants.get(2);
-            topParticipants = "The top three participants of this month are:\n" +
-                    " 1.) " + mostActiveParticipant.getKey() + " with " + mostActiveParticipant.getValue() + " correct solutions\n" +
-                    " 2.) " + secondMostActiveParticipant.getKey() + " with " + secondMostActiveParticipant.getValue() + " correct solutions\n" +
-                    " 3.) " + thirdMostActiveParticipant.getKey() + " with " + thirdMostActiveParticipant.getValue() + " correct solutions\n" +
-                    "\nCongratulations!\n\n";
-        } else if (mostActiveParticipants.size() == 2) {
-            Map.Entry<String, Long> mostActiveParticipant = mostActiveParticipants.get(0);
-            Map.Entry<String, Long> secondMostActiveParticipant = mostActiveParticipants.get(1);
-            topParticipants = "The top two participants of this month are:\n" +
-                    " 1.) " + mostActiveParticipant.getKey() + " with " + mostActiveParticipant.getValue() + " correct solutions\n" +
-                    " 2.) " + secondMostActiveParticipant.getKey() + " with " + secondMostActiveParticipant.getValue() + " correct solutions\n" +
-                    "\nCongratulations!\n\n";
-        } else if (mostActiveParticipants.size() == 1) {
-            Map.Entry<String, Long> mostActiveParticipant = mostActiveParticipants.getFirst();
-            topParticipants = "The top participant of this month is:\n" +
-                    " " + mostActiveParticipant.getKey() + " with " + mostActiveParticipant.getValue() + " correct solutions\n" +
-                    "\nCongratulations!\n\n";
-        }
-
+        final List<Map.Entry<String, Long>> mostActiveParticipants = getTopParticipants(answers);
+        final String topParticipants = getTopParticipantsText(mostActiveParticipants, publicPost);
         final String tagLine = tags.stream().map(s -> "#" + s).collect(Collectors.joining(" "));
+
         return randomGreeting + "\n"
                 + "In the last month we had " + totalAnswers + " total answers from " + participants + " participants. \n"
                 + "From these proposed solutions " + correctAnswers + " where correct. Only " + wrongAnswers + " were wrong.\n"
@@ -188,5 +162,69 @@ public class TextGenerator {
                 + topParticipants
                 + salutation + "\n\n"
                 + tagLine;
+    }
+
+    @NotNull
+    /*
+     * Creates a list with the participants sorted by the most correct answers.
+     *
+     * answers The list with the proposed solutions
+     * Returns a sorted list with mappings from the users to their number of correct answers
+     */
+    private static List<Map.Entry<String, Long>> getTopParticipants(List<NotificationPdo> answers) {
+        List<Map.Entry<String, Long>> mostActiveParticipants = answers.stream()
+                .filter(NotificationPdo::isCorrect)
+                .collect(Collectors.groupingBy(NotificationPdo::getAuthor, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .toList();
+        return mostActiveParticipants;
+    }
+
+    @NotNull
+    /*
+     * Make a text out of the list of most active participants and address them if it is a public post.
+     *
+     * mostActiveParticipants The list of mappings of participants and their number of correct answers
+     * publicPost The participants will be directly addressed, if it is a public post, so they get a notification about their score
+     *
+     * Returns a ready to use text about the top participants
+     */
+    private static String getTopParticipantsText(final List<Map.Entry<String, Long>> mostActiveParticipants, final boolean publicPost) {
+        String topParticipants = "";
+        if (mostActiveParticipants.size() >= 3) {
+            Map.Entry<String, Long> mostActiveParticipant = mostActiveParticipants.get(0);
+            Map.Entry<String, Long> secondMostActiveParticipant = mostActiveParticipants.get(1);
+            Map.Entry<String, Long> thirdMostActiveParticipant = mostActiveParticipants.get(2);
+            topParticipants = "The top three participants of this month are:\n" +
+                    getParticipantLine(mostActiveParticipant, 1, publicPost) +
+                    getParticipantLine(secondMostActiveParticipant, 2, publicPost) +
+                    getParticipantLine(thirdMostActiveParticipant, 3, publicPost) +
+                    "\nCongratulations!\n\n";
+        } else if (mostActiveParticipants.size() == 2) {
+            Map.Entry<String, Long> mostActiveParticipant = mostActiveParticipants.get(0);
+            Map.Entry<String, Long> secondMostActiveParticipant = mostActiveParticipants.get(1);
+            topParticipants = "The top two participants of this month are:\n" +
+                    getParticipantLine(mostActiveParticipant, 1, publicPost) +
+                    getParticipantLine(secondMostActiveParticipant, 2, publicPost) +
+                    "\nCongratulations!\n\n";
+        } else if (mostActiveParticipants.size() == 1) {
+            Map.Entry<String, Long> mostActiveParticipant = mostActiveParticipants.getFirst();
+            topParticipants = "The top participant of this month is:\n" +
+                    getParticipantLine(mostActiveParticipant, 1, publicPost) +
+                    "\nCongratulations!\n\n";
+        }
+        return topParticipants;
+    }
+
+    @NotNull
+    private static String getParticipantLine(final Map.Entry<String, Long> participant, final int place, final boolean publicPost) {
+        String result = " " + place + ".) ";
+        result += publicPost ? "@" : "";
+        result += participant.getKey();
+        result += " with " + participant.getValue();
+        result += " correct solutions\n";
+        return result;
     }
 }

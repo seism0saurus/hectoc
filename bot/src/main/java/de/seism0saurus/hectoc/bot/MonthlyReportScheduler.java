@@ -89,13 +89,22 @@ public class MonthlyReportScheduler {
     @Scheduled(cron = "0 0 * * * ?")
     public void postReport() {
         final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        if (isUnwantedDay(now)) return;
         if (isReportAlreadySent(now)) return;
-        LOGGER.info("First day of the month and no previous reports. Going to post new report.");
-        final String statusText = getReportText(now);
-        LOGGER.info("Text will be: " + statusText);
+        LOGGER.info("No previous reports. Going to post new report.");
+
         try {
-            Status status = this.statusRepository.postDirectStatus(statusText);
+            Status status;
+            if (isReportDay(now)) {
+                // Send public report
+                final String statusText = getReportText(now, true);
+                LOGGER.info("Text will be: " + statusText);
+                status = this.statusRepository.postStatus(statusText);
+            } else {
+                // Send private report
+                final String statusText = getReportText(now, false);
+                LOGGER.info("Text will be: " + statusText);
+                status = this.statusRepository.postDirectStatus(statusText);
+            }
             ZonedDateTime creationDateUtc = status.getCreatedAt().mostPreciseInstantOrNull().atZone(ZoneOffset.UTC);
             LOGGER.info("New report with id " + status.getId() + " created at " + creationDateUtc);
 
@@ -115,13 +124,13 @@ public class MonthlyReportScheduler {
      * @param now The first day of the wanted month.
      * @return A formatted text for the report.
      */
-    private String getReportText(ZonedDateTime now) {
+    private String getReportText(final ZonedDateTime now, final boolean publicPost) {
         final ZonedDateTime lastDayOfPreviousMonth = now.minusDays(1);
         final ZonedDateTime lastSecondOfMonth = lastDayOfPreviousMonth.with(ChronoField.NANO_OF_DAY, 86400L * 1000_000_000L - 1);
         final ZonedDateTime firstSecondOfMonth = lastSecondOfMonth.with(TemporalAdjusters.firstDayOfMonth()).with(ChronoField.NANO_OF_DAY, 0);
         List<NotificationPdo> allByDateBetween = this.notificationRepository.findAllByDateBetween(firstSecondOfMonth, lastSecondOfMonth);
 
-        return generator.getReportText(allByDateBetween);
+        return generator.getReportText(allByDateBetween, publicPost);
     }
 
     /**
@@ -139,17 +148,17 @@ public class MonthlyReportScheduler {
     }
 
     /**
-     * Checks if the current day is not the first day of the month but one of the others.
+     * Checks if the current day is the first day of the month.
      * @param now The current date.
-     * @return True, if the date is NOT the first day of the month. False, if it is the first day of the month.
+     * @return True, if the date is the first day of the month. False, if it is NOT the first day of the month.
      */
-    private static boolean isUnwantedDay(ZonedDateTime now) {
+    private static boolean isReportDay(ZonedDateTime now) {
         final ZonedDateTime firstDayOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
         if (now.getDayOfMonth() != firstDayOfMonth.getDayOfMonth()) {
-            LOGGER.info("Not the first day of the month. Skipping report.");
-            return true;
+            LOGGER.info("Not the first day of the month.");
+            return false;
         }
-        return false;
+        return true;
     }
 
 }
