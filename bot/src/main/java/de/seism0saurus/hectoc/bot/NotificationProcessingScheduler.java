@@ -141,6 +141,7 @@ public class NotificationProcessingScheduler {
                         if (correctSolutionSubmitted) {
                             LOGGER.info("Solution in status " + pdo.getStatusId() + " ist correct");
                             favouriteStatusWithCorrectSolution(pdo);
+                            sendCorrectSolutionAnswerStatus(pdo);
                             pdo.setCorrect(true);
                         } else {
                             LOGGER.info("Solution in status " + pdo.getStatusId() + " ist wrong");
@@ -218,6 +219,32 @@ public class NotificationProcessingScheduler {
     }
 
     /**
+     * Send an answer with encouragement to the author.
+     * The {@link NotificationPdo notification} is dismissed afterward.
+     * An exception in the communication with mastodon is caught and logged.
+     * No further error handling is applied.
+     *
+     * @param pdo The notification of the toot with the solution.
+     */
+    private void sendCorrectSolutionAnswerStatus(NotificationPdo pdo) {
+        try {
+            LOGGER.info("Check if " + pdo.getStatusId() + " is already answered");
+            Context context = this.statusRepository.getContext(pdo.getStatusId());
+            if (wasNotAnsweredByBot(context)){
+                try {
+                    Status status = this.statusRepository.replyToStatus(generator.correctAnswer(pdo.getAuthor()), pdo.getStatusId());
+                    LOGGER.info("Status " + pdo.getStatusId() + " successfully answered with " + status.getId());
+                    dismissNotification(pdo);
+                } catch (BigBoneRequestException e) {
+                    LOGGER.error("An error occurred. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+                }
+            }
+        } catch (BigBoneRequestException e) {
+            LOGGER.error("Could reply to status. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+        }
+    }
+
+    /**
      * Send an answer with the calculated result of the proposed solution to the author.
      * The {@link NotificationPdo notification} is dismissed afterward.
      * An exception in the communication with mastodon is caught and logged.
@@ -239,7 +266,7 @@ public class NotificationProcessingScheduler {
                 }
             }
         } catch (BigBoneRequestException e) {
-            LOGGER.error("Could not favourite status. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+            LOGGER.error("Could not reply status. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
         }
     }
 

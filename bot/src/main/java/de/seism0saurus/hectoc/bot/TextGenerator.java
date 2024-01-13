@@ -80,6 +80,13 @@ public class TextGenerator {
     private String wrongSolution;
 
     /**
+     * A list of replies for correct solutions.
+     * Can be configured in the <code>application.properties</code>.
+     */
+    @Value("#{'${mastodon.text.correct-solutions}'.split(';')}")
+    private List<String> correctSolutions;
+
+    /**
      * A list of hashtags.
      * Add more to give the bot more range. But keep it simple and precise.
      * Can be configured in the <code>application.properties</code>.
@@ -225,5 +232,22 @@ public class TextGenerator {
         result += " with " + participant.getValue();
         result += " correct solutions\n";
         return result;
+    }
+
+    /**
+     * Creates a complete text for a response, there the solution is wrong.
+     *
+     * @param username The username to respond to.
+     * @return A complete text for an answer.
+     */
+    public String correctAnswer(final String username) {
+        Random rand = new Random();
+        final String correctSolution = correctSolutions.get(rand.nextInt(correctSolutions.size()));
+        final String tagLine = tags.stream().map(s -> "#" + s).collect(Collectors.joining(" "));
+
+        return directGreeting
+                + username + "\n\n"
+                + correctSolution + "\n\n"
+                + tagLine;
     }
 }
