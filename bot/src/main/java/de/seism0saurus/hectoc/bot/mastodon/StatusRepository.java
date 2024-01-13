@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author seism0saurus
  */
-interface StatusRepository {
+public interface StatusRepository {
 
     /**
      * Fetches the {@link social.bigbone.api.entity.Context Context} of a status from mastodon.

@@ -25,7 +25,7 @@ import java.util.List;
  * @author seism0saurus
  */
 @Service
-public class MonthlyReportScheduler {
+public class ReportScheduler {
 
     /**
      * The {@link Logger Logger} for this class.
@@ -33,7 +33,7 @@ public class MonthlyReportScheduler {
      *
      * @see "src/main/ressources/logback.xml"
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(MonthlyReportScheduler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportScheduler.class);
 
     /**
      * The {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository} of this class.
@@ -63,12 +63,12 @@ public class MonthlyReportScheduler {
      * The sole constructor for this class.
      * The needed classes are {@link org.springframework.beans.factory.annotation.Autowired autowired} by Spring.
      *
-     * @param generator              The {@link de.seism0saurus.hectoc.bot.TextGenerator TextGenerator} of this class. Will be stored to {@link de.seism0saurus.hectoc.bot.MonthlyReportScheduler#generator generator}.
-     * @param repo                   The {@link de.seism0saurus.hectoc.bot.db.ReportRepository ReportRepository} of this class. Will be stored to {@link de.seism0saurus.hectoc.bot.MonthlyReportScheduler#repo repo}.
-     * @param statusRepository       The {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository} of this class. Will be stored to {@link de.seism0saurus.hectoc.bot.MonthlyReportScheduler#statusRepository statusRepository}.
-     * @param notificationRepository The {@link de.seism0saurus.hectoc.bot.db.NotificationRepository NotificationRepository} of this class. Will be stored to {@link de.seism0saurus.hectoc.bot.MonthlyReportScheduler#notificationRepository notificationRepository}.
+     * @param generator              The {@link de.seism0saurus.hectoc.bot.TextGenerator TextGenerator} of this class. Will be stored to {@link ReportScheduler#generator generator}.
+     * @param repo                   The {@link de.seism0saurus.hectoc.bot.db.ReportRepository ReportRepository} of this class. Will be stored to {@link ReportScheduler#repo repo}.
+     * @param statusRepository       The {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository} of this class. Will be stored to {@link ReportScheduler#statusRepository statusRepository}.
+     * @param notificationRepository The {@link de.seism0saurus.hectoc.bot.db.NotificationRepository NotificationRepository} of this class. Will be stored to {@link ReportScheduler#notificationRepository notificationRepository}.
      */
-    public MonthlyReportScheduler(
+    public ReportScheduler(
             @Autowired TextGenerator generator,
             @Autowired ReportRepository repo,
             @Autowired StatusRepository statusRepository,
@@ -81,8 +81,8 @@ public class MonthlyReportScheduler {
 
     /**
      * Schedules the posting of a report with the number of challenges and the best participants.
-     * postReport will be run according to the {@link org.springframework.scheduling.annotation.Scheduled Scheduled annotation}.
-     * It generates a new report and creates a new toot on mastodon via the {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository}.
+     * postReport will be run according to the {@link Scheduled Scheduled annotation}.
+     * It generates a new report and creates a new toot on mastodon via the {@link StatusRepository StatusRepository}.
      * <p>
      * Exceptions are logged as errors and suppressed. No further error handling is applied.
      */
@@ -142,6 +142,8 @@ public class MonthlyReportScheduler {
         List<ReportPdo> allOnDay = this.repo.findAllOnDay(now);
         if (!allOnDay.isEmpty()){
             LOGGER.info("Report is already present for today. Skipping report.");
+            allOnDay.stream()
+                    .forEach(r -> LOGGER.info("Report: " + r));
             return true;
         }
         return false;
