@@ -258,7 +258,7 @@ public class NotificationProcessingScheduler {
             Context context = this.statusRepository.getContext(pdo.getStatusId());
             if (wasNotAnsweredByBot(context)){
                 try {
-                    Status status = this.statusRepository.replyToStatus(generator.wrongAnswer(result, pdo.getAuthor()), pdo.getStatusId());
+                    Status status = this.statusRepository.replyDirectToStatus(generator.wrongAnswer(result, pdo.getAuthor()), pdo.getStatusId());
                     LOGGER.info("Status " + pdo.getStatusId() + " successfully answered with " + status.getId());
                     dismissNotification(pdo);
                 } catch (BigBoneRequestException e) {
@@ -284,7 +284,7 @@ public class NotificationProcessingScheduler {
             Context context = this.statusRepository.getContext(pdo.getStatusId());
             if (wasNotAnsweredByBot(context)){
                 try {
-                    Status status = statusRepository.replyToStatus(generator.notFound(pdo.getAuthor()), pdo.getStatusId());
+                    Status status = statusRepository.replyDirectToStatus(generator.notFound(pdo.getAuthor()), pdo.getStatusId());
                     LOGGER.info("Status " + pdo.getStatusId() + " successfully answered with " + status.getId());
                     dismissNotification(pdo);
                 } catch (BigBoneRequestException e) {

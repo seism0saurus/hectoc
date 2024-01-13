@@ -78,9 +78,15 @@ public class StatusRepositoryImpl implements StatusRepository {
         return getStatus(statusText, Visibility.DIRECT);
     }
 
-    public Status replyToStatus(final String statusText, final String inReplyToId) throws BigBoneRequestException {
+    public Status replyDirectToStatus(final String statusText, final String inReplyToId) throws BigBoneRequestException {
         LOGGER.debug("Answer status " + inReplyToId);
         final Visibility visibility = Visibility.DIRECT;
+        return getStatus(statusText, visibility, inReplyToId);
+    }
+
+    public Status replyToStatus(final String statusText, final String inReplyToId) throws BigBoneRequestException {
+        LOGGER.debug("Answer status " + inReplyToId);
+        final Visibility visibility = Visibility.PUBLIC;
         return getStatus(statusText, visibility, inReplyToId);
     }
 
