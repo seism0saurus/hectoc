@@ -23,7 +23,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "challenges")
+@Table(name = "reports")
 public class ReportPdo {
 
     /**

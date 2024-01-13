@@ -7,7 +7,6 @@ import de.seism0saurus.hectoc.bot.db.ReportRepository;
 import de.seism0saurus.hectoc.bot.mastodon.StatusRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import social.bigbone.api.entity.Status;
@@ -57,24 +56,24 @@ public class ReportScheduler {
      * The {@link de.seism0saurus.hectoc.bot.db.ReportPdo ReportPdo} of this class.
      * The repository is used to store newly posted reports for further reference.
      */
-    private final ReportRepository repo;
+    private final ReportRepository reportRepository;
 
     /**
      * The sole constructor for this class.
      * The needed classes are {@link org.springframework.beans.factory.annotation.Autowired autowired} by Spring.
      *
      * @param generator              The {@link de.seism0saurus.hectoc.bot.TextGenerator TextGenerator} of this class. Will be stored to {@link ReportScheduler#generator generator}.
-     * @param repo                   The {@link de.seism0saurus.hectoc.bot.db.ReportRepository ReportRepository} of this class. Will be stored to {@link ReportScheduler#repo repo}.
+     * @param reportRepository                   The {@link de.seism0saurus.hectoc.bot.db.ReportRepository ReportRepository} of this class. Will be stored to {@link ReportScheduler#reportRepository repo}.
      * @param statusRepository       The {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository} of this class. Will be stored to {@link ReportScheduler#statusRepository statusRepository}.
      * @param notificationRepository The {@link de.seism0saurus.hectoc.bot.db.NotificationRepository NotificationRepository} of this class. Will be stored to {@link ReportScheduler#notificationRepository notificationRepository}.
      */
     public ReportScheduler(
-            @Autowired TextGenerator generator,
-            @Autowired ReportRepository repo,
-            @Autowired StatusRepository statusRepository,
-            @Autowired NotificationRepository notificationRepository) {
+            TextGenerator generator,
+            ReportRepository reportRepository,
+            StatusRepository statusRepository,
+            NotificationRepository notificationRepository) {
         this.generator = generator;
-        this.repo = repo;
+        this.reportRepository = reportRepository;
         this.statusRepository = statusRepository;
         this.notificationRepository = notificationRepository;
     }
@@ -112,7 +111,7 @@ public class ReportScheduler {
                     .statusId(status.getId())
                     .date(creationDateUtc)
                     .build();
-            this.repo.save(reportPdo);
+            this.reportRepository.save(reportPdo);
             LOGGER.info("Report " + status.getId() + " saved to repository");
         } catch (BigBoneRequestException e) {
             LOGGER.error("An error occurred. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
@@ -139,7 +138,7 @@ public class ReportScheduler {
      * @return True, if the report was already sent. False otherwise.
      */
     private boolean isReportAlreadySent(ZonedDateTime now) {
-        List<ReportPdo> allOnDay = this.repo.findAllOnDay(now);
+        List<ReportPdo> allOnDay = this.reportRepository.findAllOnDay(now);
         if (!allOnDay.isEmpty()){
             LOGGER.info("Report is already present for today. Skipping report.");
             allOnDay.forEach(r -> LOGGER.info("Report: " + r));
