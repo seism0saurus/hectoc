@@ -24,7 +24,7 @@ public class HectocService {
         HectocChallenge challenge = new HectocChallenge(hectoc);
         HectocSolution solution = new HectocSolution(challenge);
         boolean valid = solution.checkSolution(solutionDto.getSolution());
-        BigDecimal result = solution.result();
+        BigDecimal result = solution.getResult();
         return new HectocResultDto(valid, result.intValue());
     }
 }
