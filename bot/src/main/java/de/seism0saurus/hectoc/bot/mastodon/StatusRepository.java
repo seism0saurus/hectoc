@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author seism0saurus
  */
-public interface StatusRepository {
+interface StatusRepository {
 
     /**
      * Fetches the {@link social.bigbone.api.entity.Context Context} of a status from mastodon.
@@ -25,7 +25,7 @@ public interface StatusRepository {
      * @see <a href="https://docs.joinmastodon.org/entities/Context/">Mastodon API Context</a>
      * @see social.bigbone.api.method.StatusMethods#getContext(String)
      */
-    public Context getContext(final String statusId) throws BigBoneRequestException;
+    Context getContext(final String statusId) throws BigBoneRequestException;
 
     /**
      * Fetches a status from mastodon and extracts a challenge as <code>String</code>.
@@ -39,7 +39,7 @@ public interface StatusRepository {
      * @see social.bigbone.api.method.StatusMethods#getStatus(String)
      */
     @Nullable
-    public String getChallenge(final String statusId) throws BigBoneRequestException;
+    String getChallenge(final String statusId) throws BigBoneRequestException;
 
     /**
      * Creates a new toot on mastodon.
@@ -54,7 +54,7 @@ public interface StatusRepository {
      * @see <a href="https://docs.joinmastodon.org/methods/statuses/#create">Mastodon API Post a new status</a>
      * @see social.bigbone.api.method.StatusMethods#postStatus
      */
-    public Status postStatus(final String statusText) throws BigBoneRequestException;
+    Status postStatus(final String statusText) throws BigBoneRequestException;
 
     /**
      * Creates a new private toot on mastodon for test purpose.
@@ -69,7 +69,7 @@ public interface StatusRepository {
      * @see <a href="https://docs.joinmastodon.org/methods/statuses/#create">Mastodon API Post a new status</a>
      * @see social.bigbone.api.method.StatusMethods#postStatus
      */
-    public Status postDirectStatus(final String statusText) throws BigBoneRequestException;
+    Status postDirectStatus(final String statusText) throws BigBoneRequestException;
 
     /**
      * Creates a new replay to a toot on mastodon.
@@ -85,7 +85,7 @@ public interface StatusRepository {
      * @see <a href="https://docs.joinmastodon.org/methods/statuses/#create">Mastodon API Post a new status</a>
      * @see social.bigbone.api.method.StatusMethods#postStatus
      */
-    public Status replyToStatus(final String statusText, final String inReplyToId) throws BigBoneRequestException;
+    Status replyToStatus(final String statusText, final String inReplyToId) throws BigBoneRequestException;
 
     /**
      * Creates a new replay to a toot on mastodon with direct visibility.
@@ -101,7 +101,7 @@ public interface StatusRepository {
      * @see <a href="https://docs.joinmastodon.org/methods/statuses/#create">Mastodon API Post a new status</a>
      * @see social.bigbone.api.method.StatusMethods#postStatus
      */
-    public Status replyDirectToStatus(final String statusText, final String inReplyToId) throws BigBoneRequestException;
+    Status replyDirectToStatus(final String statusText, final String inReplyToId) throws BigBoneRequestException;
 
 
     /**
@@ -115,7 +115,7 @@ public interface StatusRepository {
      * @see <a href="https://docs.joinmastodon.org/entities/Status">Mastodon API Status</a>
      * @see social.bigbone.api.method.StatusMethods#favouriteStatus(String)
      */
-    public Status favouriteStatus(final String statusId) throws BigBoneRequestException;
+    Status favouriteStatus(final String statusId) throws BigBoneRequestException;
 
     /**
      * Gets a complete list of all accounts, that favoured a status on mastodon.
@@ -129,5 +129,5 @@ public interface StatusRepository {
      * @see <a href="https://docs.joinmastodon.org/entities/Status">Mastodon API Status</a>
      * @see social.bigbone.api.method.StatusMethods#getFavouritedBy
      */
-    public List<Account> getFavouritedBy(final String statusId) throws BigBoneRequestException;
+    List<Account> getFavouritedBy(final String statusId) throws BigBoneRequestException;
 }

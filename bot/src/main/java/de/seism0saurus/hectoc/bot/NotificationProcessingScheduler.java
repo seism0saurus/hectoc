@@ -170,7 +170,7 @@ public class NotificationProcessingScheduler {
         try {
             LOGGER.info("Check if " + pdo.getStatusId() + " is already favoured");
             List<Account> accounts = this.statusRepository.getFavouritedBy(pdo.getStatusId());
-            if (accounts.isEmpty() || !accounts.contains("")){
+            if (accounts.isEmpty()){
                 LOGGER.info("Going to favour status " + pdo.getStatusId());
                 statusRepository.favouriteStatus(pdo.getStatusId());
                 LOGGER.info("Status " + pdo.getStatusId() + " successfully favoured");
@@ -322,9 +322,9 @@ public class NotificationProcessingScheduler {
      * @return Returns a <code>list</code> of <code>notification pdos</code>.
      */
     private List<NotificationPdo> convertToNotificationPdos(List<Notification> mentions) {
-        List<NotificationPdo> pdos = mentions.stream()
+        return mentions.stream()
                 .map(m -> {
-                    ChallengePdo challenge = null;
+                    ChallengePdo challenge;
                     String replyId = m.getStatus().getInReplyToId();
                     if (challengeRepo.existsByStatusId(replyId)){
                         challenge = challengeRepo.findByStatusId(replyId);
@@ -354,7 +354,6 @@ public class NotificationProcessingScheduler {
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        return pdos;
     }
 
     /**

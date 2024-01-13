@@ -59,15 +59,13 @@ public class StatusRepositoryImpl implements StatusRepository {
 
     public Context getContext(final String statusId) throws BigBoneRequestException {
         LOGGER.debug("Fetch Context for statusID " + statusId + " created");
-        Context context = this.client.statuses().getContext(statusId).execute();
-        return context;
+        return this.client.statuses().getContext(statusId).execute();
     }
 
     public String getChallenge(final String statusId) throws BigBoneRequestException {
         LOGGER.debug("Fetch content of Status with id " + statusId);
         String content = this.client.statuses().getStatus(statusId).execute().getContent();
-        String challenge = extractChallenge(content);
-        return challenge;
+        return extractChallenge(content);
     }
 
     public Status postStatus(final String statusText) throws BigBoneRequestException {
@@ -92,14 +90,12 @@ public class StatusRepositoryImpl implements StatusRepository {
 
     public Status favouriteStatus(final String statusId) throws BigBoneRequestException {
         LOGGER.debug("Favour status " + statusId);
-        Status status = this.client.statuses().favouriteStatus(statusId).execute();
-        return status;
+        return this.client.statuses().favouriteStatus(statusId).execute();
     }
 
     public List<Account> getFavouritedBy(final String statusId) throws BigBoneRequestException {
         LOGGER.debug("Get list of favourites for status " + statusId);
-        List<Account> accounts = this.client.statuses().getFavouritedBy(statusId).execute().getPart();
-        return accounts;
+        return this.client.statuses().getFavouritedBy(statusId).execute().getPart();
     }
 
     /**
@@ -126,8 +122,7 @@ public class StatusRepositoryImpl implements StatusRepository {
         final String spoilerText = null;
         final String language = "en";
         final List<String> mediaIds = List.of();
-        Status status = client.statuses().postStatus(statusText, mediaIds, visibility, inReplyToId, sensitive, spoilerText, language).execute();
-        return status;
+        return client.statuses().postStatus(statusText, mediaIds, visibility, inReplyToId, sensitive, spoilerText, language).execute();
     }
 
 
