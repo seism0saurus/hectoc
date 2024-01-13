@@ -1,7 +1,8 @@
 name: "Verify the code"
 
 on:
-  push
+  push:
+    branches: [ "!main" ]
 
 jobs:
   build-shared:
