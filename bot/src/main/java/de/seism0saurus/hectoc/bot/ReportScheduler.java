@@ -142,8 +142,7 @@ public class ReportScheduler {
         List<ReportPdo> allOnDay = this.repo.findAllOnDay(now);
         if (!allOnDay.isEmpty()){
             LOGGER.info("Report is already present for today. Skipping report.");
-            allOnDay.stream()
-                    .forEach(r -> LOGGER.info("Report: " + r));
+            allOnDay.forEach(r -> LOGGER.info("Report: " + r));
             return true;
         }
         return false;
