@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static de.seism0saurus.hectoc.bruteforcer.PossibleSolutionGenerator.*;
 import static de.seism0saurus.hectoc.generator.HectocGenerator.UNSOLVABLE_HECTOCS;
 
 public class BruteForceApplication {
@@ -32,7 +33,7 @@ public class BruteForceApplication {
 
         UNSOLVABLE_HECTOCS.parallelStream()
                 .filter(challenge -> !Files.exists(Path.of("./results/" + challenge.toString() + ".finished")))
-                .forEach(challenge -> findSolutions(challenge));
+                .forEach(BruteForceApplication::findSolutions);
     }
 
     /**
@@ -70,10 +71,10 @@ public class BruteForceApplication {
         NumberBlockPermutator.createPermutationsOfBlocksOfNumbers(getChallengeAsStack(challenge))
                 .parallelStream()
                 .map(
-                        s -> NegativeNumberPermutator.createPermutationsOfNegativeNumbers(s)
+                        NegativeNumberPermutator::createPermutationsOfNegativeNumbers
                 ).flatMap(List::parallelStream)
                 .map(
-                        s -> PossibleSolutionGenerator.createRpnStacks(s)
+                        s -> createRpnStacks(s)
                 ).flatMap(Set::parallelStream)
                 .peek(s -> solutions.incrementAndGet())
                 .filter(s -> notCheckedYet(challenge, s))

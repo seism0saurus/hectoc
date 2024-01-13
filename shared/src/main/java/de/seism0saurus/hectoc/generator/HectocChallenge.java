@@ -69,7 +69,6 @@ public class HectocChallenge {
     }
 
     public String toString() {
-        String builder = String.valueOf(firstDigit) + secondDigit + thirdDigit + fourthDigit + fifthDigit + sixthDigit;
-        return builder;
+        return String.valueOf(firstDigit) + secondDigit + thirdDigit + fourthDigit + fifthDigit + sixthDigit;
     }
 }

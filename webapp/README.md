@@ -1,6 +1,6 @@
 # Hectoc Challenger
 
-The Hectoc Challenger in the [webapp](./webapp) folder is a webapplication, that creates challenges and checks your answer.
+The Hectoc Challenger in the [webapp](../webapp) folder is a webapplication, that creates challenges and checks your answer.
 
 ## Build
 

@@ -101,7 +101,7 @@ public class NotificationProcessingScheduler {
      * This fetches all notifications from mastodon via the {@link de.seism0saurus.hectoc.bot.mastodon.NotificationRepository NotificationRepository}.
      * Then the notifications are processed and answers to previous challenges are extracted and stored.
      * The answers are parsed and depending on the probed solution they will be favourite or answered.
-     *
+     * <p>
      * Exceptions are logged as errors and suppressed. No further error handling applies.
      */
     @Scheduled(cron = "0 */5 0/1 * * ?")

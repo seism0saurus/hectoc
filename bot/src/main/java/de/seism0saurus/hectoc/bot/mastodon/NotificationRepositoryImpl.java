@@ -79,7 +79,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         Map<Boolean, List<Notification>> groupedNotifications = notifications.stream()
                 .collect(Collectors.partitioningBy(n -> Notification.NotificationType.MENTION == n.getType() && n.getStatus().getInReplyToId() != null));
         groupedNotifications.get(false).stream()
-                .map(n -> n.getId())
+                .map(Notification::getId)
                 .forEach(id -> {
                     try {
                         LOGGER.info("Going to dismiss notification " + id);

@@ -1,15 +1,11 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
 import de.seism0saurus.hectoc.generator.HectocChallenge;
-import de.seism0saurus.hectoc.generator.HectocGenerator;
-import de.seism0saurus.hectoc.shuntingyardalgorithm.HectocSolution;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.math.BigDecimal;
-import java.util.Stack;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,8 +103,8 @@ public class HectocSolutionTest {
      * The test pairs are taken from the mastodon account of the bot
      * and are manually checked for validity.
      *
-     * @param challenge
-     * @param proposedSolution
+     * @param challenge The hectoc challenge
+     * @param proposedSolution The proposed solution for the challenge
      */
     @ParameterizedTest
     @MethodSource("provideHectocsWithCorrectSolutions")
@@ -175,8 +171,8 @@ public class HectocSolutionTest {
      * The test pairs are taken from the mastodon account of the bot
      * and are manually checked for validity.
      *
-     * @param challenge
-     * @param proposedSolution
+     * @param challenge The hectoc challenge
+     * @param proposedSolution The proposed solution for the challenge
      */
     @ParameterizedTest
     @MethodSource("provideHectocsWithWrongSolutions")

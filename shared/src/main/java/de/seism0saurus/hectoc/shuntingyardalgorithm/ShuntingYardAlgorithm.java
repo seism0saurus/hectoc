@@ -1,6 +1,7 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
 import ch.obermuhlner.math.big.BigDecimalMath;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -8,16 +9,17 @@ import java.util.Stack;
 
 import static java.math.MathContext.DECIMAL32;
 
+@Getter
 public class ShuntingYardAlgorithm {
 
     public static final MathContext CONTEXT = DECIMAL32;
     private final BigDecimal solution;
-    private final HectocTokenizer hectocTokenizer = new HectocTokenizer();
 
     public ShuntingYardAlgorithm(final String equotation) {
         if (equotation == null || equotation.isEmpty()) {
             throw new IllegalArgumentException("Please provide an equotation");
         }
+        HectocTokenizer hectocTokenizer = new HectocTokenizer();
         Stack<StackElement> tokens = hectocTokenizer.tokenize(equotation);
         Stack<StackElement> rpn = createRpn(tokens);
         this.solution = calculateRpn(rpn);
@@ -80,6 +82,7 @@ public class ShuntingYardAlgorithm {
     public static BigDecimal calculateRpn(final Stack<StackElement> rpn) throws ArithmeticException {
         return calculateRpn(rpn, CONTEXT);
     }
+
     public static BigDecimal calculateRpn(final Stack<StackElement> rpn, MathContext context) throws ArithmeticException {
         Stack<StackElement> rpnClone = (Stack<StackElement>) rpn.clone();
         final Stack<BigDecimal> stack = new Stack<>();
@@ -111,7 +114,4 @@ public class ShuntingYardAlgorithm {
         return stack.pop();
     }
 
-    public BigDecimal getSolution() {
-        return solution;
-    }
 }

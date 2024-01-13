@@ -113,16 +113,14 @@ public class StatusRepositoryImpl implements StatusRepository {
      */
     private Status getStatus(final String statusText, final Visibility visibility) throws BigBoneRequestException {
         LOGGER.debug("Post new Status");
-        final String inReplyToId = null;
-        return getStatus(statusText, visibility, inReplyToId);
+        return getStatus(statusText, visibility, null);
     }
 
     private Status getStatus(String statusText, Visibility visibility, String inReplyToId) throws BigBoneRequestException {
         final boolean sensitive = false;
-        final String spoilerText = null;
         final String language = "en";
         final List<String> mediaIds = List.of();
-        return client.statuses().postStatus(statusText, mediaIds, visibility, inReplyToId, sensitive, spoilerText, language).execute();
+        return client.statuses().postStatus(statusText, mediaIds, visibility, inReplyToId, sensitive, null, language).execute();
     }
 
 

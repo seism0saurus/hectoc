@@ -197,7 +197,7 @@ public class HectocGenerator {
     /**
      * Generates a random digit between {@link HectocChallenge#MIN MIN} and {@link HectocChallenge#MAX MAX}.
      * This method is used to generate each of the six digits of a hectoc.
-     * @return
+     * @return A random number between {@link HectocChallenge#MIN MIN} and {@link HectocChallenge#MAX MAX}
      */
     private static int generateDigit() {
         return prg.nextInt(HectocChallenge.MAX - HectocChallenge.MIN + 1) + HectocChallenge.MIN;

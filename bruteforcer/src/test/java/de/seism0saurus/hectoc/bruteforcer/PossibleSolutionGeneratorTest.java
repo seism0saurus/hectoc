@@ -339,7 +339,7 @@ public class PossibleSolutionGeneratorTest {
 
         Set<Stack<StackElement>> actual = PossibleSolutionGenerator.createRpnStacks(stack);
 
-        actual.stream().forEach(s -> assertEquals(expected, s.size()));
+        actual.forEach(s -> assertEquals(expected, s.size()));
     }
 
     @Test
@@ -352,7 +352,7 @@ public class PossibleSolutionGeneratorTest {
 
         Set<Stack<StackElement>> actual = PossibleSolutionGenerator.createRpnStacks(stack);
 
-        actual.stream().forEach(s -> {
+        actual.forEach(s -> {
             int numberOfNumbers = 0;
             int numberOfOperators = 0;
             for (int i = 0; i < s.size(); i++) {
@@ -381,6 +381,6 @@ public class PossibleSolutionGeneratorTest {
 
         Set<Stack<StackElement>> actual = PossibleSolutionGenerator.createRpnStacks(stack);
 
-        actual.stream().forEach(s -> assertEquals(expected, s.size()));
+        actual.forEach(s -> assertEquals(expected, s.size()));
     }
 }

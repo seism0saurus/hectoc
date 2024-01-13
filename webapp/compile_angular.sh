@@ -1,4 +1,4 @@
 #!/bin/bash
-cd angular
+cd angular || exit
 npm install
 ng build --configuration "production" --optimization true --aot --output-path ../src/main/resources/static

@@ -10,7 +10,7 @@ public class Number implements StackElement {
         this.number = number;
     }
 
-    public static final Number of(final int number) {
+    public static Number of(final int number) {
         return new Number(number);
     }
 

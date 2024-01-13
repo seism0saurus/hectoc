@@ -51,9 +51,8 @@ public class PossibleSolutionGenerator {
             List<Stack<StackElement>> tmpStacks = new ArrayList<>();
             for (int nthElement = 0; nthElement < size; nthElement++) {
                 final List<Stack<StackElement>> newTmpStacks = new ArrayList<>();
-                final int numberOfOperands = nthElement;
                 final int startOperandsIndex = maxPositionsForOperator(nthElement);
-                final int endOperandsIndex = startOperandsIndex + numberOfOperands;
+                final int endOperandsIndex = startOperandsIndex + nthElement;
                 final Number number = stack.elementAt(nthElement);
 
                 if (nthElement == 0) {
@@ -79,13 +78,13 @@ public class PossibleSolutionGenerator {
                                 // stack of operators
                                 permutationOfOperators.forEach(
                                         os -> {
-                                            Stack<StackElement> newStack = (Stack) s.clone();
+                                            Stack<StackElement> newStack = (Stack<StackElement>) s.clone();
                                             newStack.addAll(os);
 
                                             int numNumbers = 0;
                                             int numOperators = 0;
-                                            for (int i = 0; i < newStack.size(); i++) {
-                                                if (newStack.get(i) instanceof Number) {
+                                            for (StackElement stackElement : newStack) {
+                                                if (stackElement instanceof Number) {
                                                     numNumbers++;
                                                 } else {
                                                     numOperators++;
@@ -123,7 +122,7 @@ public class PossibleSolutionGenerator {
      * @param stackSize The size of the stack
      * @return The number of positions of operators for a stack of size @stackSize
      */
-    protected static final int maxPositionsForOperator(final int stackSize) {
+    protected static int maxPositionsForOperator(final int stackSize) {
         return stackSize * (stackSize - 1) / 2;
     }
 }

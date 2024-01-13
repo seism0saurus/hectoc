@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import social.bigbone.api.entity.Status;
 import social.bigbone.api.exception.BigBoneRequestException;
 
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
@@ -56,8 +54,8 @@ public class ChallengeScheduler {
      * The sole constructor for this class.
      * The needed classes are {@link org.springframework.beans.factory.annotation.Autowired autowired} by Spring.
      *
-     * @param generator The {@link de.seism0saurus.hectoc.bot.TextGenerator TextGenerator} of this class. Will be stored to {@link de.seism0saurus.hectoc.bot.ChallengeScheduler#generator generator}.
-     * @param repo The {@link de.seism0saurus.hectoc.bot.db.ChallengeRepository ChallengeRepository} of this class. Will be stored to {@link de.seism0saurus.hectoc.bot.ChallengeScheduler#repo repo}.
+     * @param generator        The {@link de.seism0saurus.hectoc.bot.TextGenerator TextGenerator} of this class. Will be stored to {@link de.seism0saurus.hectoc.bot.ChallengeScheduler#generator generator}.
+     * @param repo             The {@link de.seism0saurus.hectoc.bot.db.ChallengeRepository ChallengeRepository} of this class. Will be stored to {@link de.seism0saurus.hectoc.bot.ChallengeScheduler#repo repo}.
      * @param statusRepository The {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository} of this class. Will be stored to {@link de.seism0saurus.hectoc.bot.ChallengeScheduler#statusRepository statusRepository}.
      */
     public ChallengeScheduler(
@@ -74,7 +72,7 @@ public class ChallengeScheduler {
      * postHectoc will be run according to the {@link org.springframework.scheduling.annotation.Scheduled Scheduled annotation}.
      * It generates a new hectoc challenge and creates a new toot on mastodon via the {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository}.
      * The result of the call to mastodon is transformed and stored to the {@link de.seism0saurus.hectoc.bot.db.ChallengeRepository ChallengeRepository}.
-     *
+     * <p>
      * Exceptions are logged as errors and suppressed. No further error handling is applied.
      */
     @Scheduled(cron = "0 0 * * * ?")

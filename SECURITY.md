@@ -3,10 +3,10 @@
 ## Supported Versions
 Only the main branch receives security updates.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| main    | :white_check_mark: |
-| other branches   | :x:                |
+| Version        | Supported          |
+|----------------|--------------------|
+| main           | :white_check_mark: |
+| other branches | :x:                |
 
 ## Reporting a Vulnerability
 

@@ -17,7 +17,7 @@ public class OperatorPermutatorTest {
         List<Stack<StackElement>> operators = OperatorPermutator.createPermutationOfOperators(1);
 
         OperatorPermutator.validOperators.forEach(
-                v -> assertTrue(operators.stream().filter(o -> o.get(0).equals(v)).count() > 0)
+                v -> assertTrue(operators.stream().anyMatch(o -> o.getFirst().equals(v)))
         );
     }
 
@@ -36,22 +36,20 @@ public class OperatorPermutatorTest {
     public void createPermutationOfOperators_TWO_EachToupleIsCreated() {
         List<Stack<StackElement>> expected = new ArrayList<>();
         OperatorPermutator.validOperators.forEach(
-                o1 -> {
-                    OperatorPermutator.validOperators.forEach(
-                            o2 -> {
-                                Stack<StackElement> s = new Stack<>();
-                                s.push(o1);
-                                s.push(o2);
-                                expected.add(s);
-                            }
-                    );
-                }
+                o1 -> OperatorPermutator.validOperators.forEach(
+                        o2 -> {
+                            Stack<StackElement> s = new Stack<>();
+                            s.push(o1);
+                            s.push(o2);
+                            expected.add(s);
+                        }
+                )
         );
 
         List<Stack<StackElement>> actual = OperatorPermutator.createPermutationOfOperators(2);
 
         expected.forEach(
-                s1 -> assertTrue(actual.stream().filter(s2 -> s1.equals(s2)).count() > 0)
+                s1 -> assertTrue(actual.stream().anyMatch(s1::equals))
         );
     }
 
@@ -69,27 +67,25 @@ public class OperatorPermutatorTest {
     public void createPermutationOfOperators_THREE_EachTripleIsCreated() {
         List<Stack<StackElement>> expected = new ArrayList<>();
         OperatorPermutator.validOperators.forEach(
-                o1 -> {
-                    OperatorPermutator.validOperators.forEach(
-                            o2 -> {
-                                OperatorPermutator.validOperators.forEach(
-                                        o3 -> {
-                                            Stack<StackElement> s = new Stack<>();
-                                            s.push(o1);
-                                            s.push(o2);
-                                            s.push(o3);
-                                            expected.add(s);
-                                        }
-                                );
-                            }
-                    );
-                }
+                o1 -> OperatorPermutator.validOperators.forEach(
+                        o2 -> {
+                            OperatorPermutator.validOperators.forEach(
+                                    o3 -> {
+                                        Stack<StackElement> s = new Stack<>();
+                                        s.push(o1);
+                                        s.push(o2);
+                                        s.push(o3);
+                                        expected.add(s);
+                                    }
+                            );
+                        }
+                )
         );
 
         List<Stack<StackElement>> actual = OperatorPermutator.createPermutationOfOperators(3);
 
         expected.forEach(
-                s1 -> assertTrue(actual.stream().filter(s2 -> s1.equals(s2)).count() > 0)
+                s1 -> assertTrue(actual.stream().anyMatch(s1::equals))
         );
     }
 
@@ -107,32 +103,30 @@ public class OperatorPermutatorTest {
     public void createPermutationOfOperators_FOURTH_EachQuadroupleIsCreated() {
         List<Stack<StackElement>> expected = new ArrayList<>();
         OperatorPermutator.validOperators.forEach(
-                o1 -> {
-                    OperatorPermutator.validOperators.forEach(
-                            o2 -> {
-                                OperatorPermutator.validOperators.forEach(
-                                        o3 -> {
-                                            OperatorPermutator.validOperators.forEach(
-                                                    o4 -> {
-                                                        Stack<StackElement> s = new Stack<>();
-                                                        s.push(o1);
-                                                        s.push(o2);
-                                                        s.push(o3);
-                                                        s.push(o4);
-                                                        expected.add(s);
-                                                    }
-                                            );
-                                        }
-                                );
-                            }
-                    );
-                }
+                o1 -> OperatorPermutator.validOperators.forEach(
+                        o2 -> {
+                            OperatorPermutator.validOperators.forEach(
+                                    o3 -> {
+                                        OperatorPermutator.validOperators.forEach(
+                                                o4 -> {
+                                                    Stack<StackElement> s = new Stack<>();
+                                                    s.push(o1);
+                                                    s.push(o2);
+                                                    s.push(o3);
+                                                    s.push(o4);
+                                                    expected.add(s);
+                                                }
+                                        );
+                                    }
+                            );
+                        }
+                )
         );
 
         List<Stack<StackElement>> actual = OperatorPermutator.createPermutationOfOperators(4);
 
         expected.forEach(
-                s1 -> assertTrue(actual.stream().filter(s2 -> s1.equals(s2)).count() > 0)
+                s1 -> assertTrue(actual.stream().anyMatch(s1::equals))
         );
     }
 
@@ -150,37 +144,35 @@ public class OperatorPermutatorTest {
     public void createPermutationOfOperators_FIVE_EachQuintupleIsCreated() {
         List<Stack<StackElement>> expected = new ArrayList<>();
         OperatorPermutator.validOperators.forEach(
-                o1 -> {
-                    OperatorPermutator.validOperators.forEach(
-                            o2 -> {
-                                OperatorPermutator.validOperators.forEach(
-                                        o3 -> {
-                                            OperatorPermutator.validOperators.forEach(
-                                                    o4 -> {
-                                                        OperatorPermutator.validOperators.forEach(
-                                                                o5 -> {
-                                                                    Stack<StackElement> s = new Stack<>();
-                                                                    s.push(o1);
-                                                                    s.push(o2);
-                                                                    s.push(o3);
-                                                                    s.push(o4);
-                                                                    s.push(o5);
-                                                                    expected.add(s);
-                                                                }
-                                                        );
-                                                    }
-                                            );
-                                        }
-                                );
-                            }
-                    );
-                }
+                o1 -> OperatorPermutator.validOperators.forEach(
+                        o2 -> {
+                            OperatorPermutator.validOperators.forEach(
+                                    o3 -> {
+                                        OperatorPermutator.validOperators.forEach(
+                                                o4 -> {
+                                                    OperatorPermutator.validOperators.forEach(
+                                                            o5 -> {
+                                                                Stack<StackElement> s = new Stack<>();
+                                                                s.push(o1);
+                                                                s.push(o2);
+                                                                s.push(o3);
+                                                                s.push(o4);
+                                                                s.push(o5);
+                                                                expected.add(s);
+                                                            }
+                                                    );
+                                                }
+                                        );
+                                    }
+                            );
+                        }
+                )
         );
 
         List<Stack<StackElement>> actual = OperatorPermutator.createPermutationOfOperators(5);
 
         expected.forEach(
-                s1 -> assertTrue(actual.stream().filter(s2 -> s1.equals(s2)).count() > 0)
+                s1 -> assertTrue(actual.stream().anyMatch(s1::equals))
         );
     }
 
@@ -198,42 +190,40 @@ public class OperatorPermutatorTest {
     public void createPermutationOfOperators_SIX_EachSixtupleIsCreated() {
         List<Stack<StackElement>> expected = new ArrayList<>();
         OperatorPermutator.validOperators.forEach(
-                o1 -> {
-                    OperatorPermutator.validOperators.forEach(
-                            o2 -> {
-                                OperatorPermutator.validOperators.forEach(
-                                        o3 -> {
-                                            OperatorPermutator.validOperators.forEach(
-                                                    o4 -> {
-                                                        OperatorPermutator.validOperators.forEach(
-                                                                o5 -> {
-                                                                    OperatorPermutator.validOperators.forEach(
-                                                                            o6 -> {
-                                                                                Stack<StackElement> s = new Stack<>();
-                                                                                s.push(o1);
-                                                                                s.push(o2);
-                                                                                s.push(o3);
-                                                                                s.push(o4);
-                                                                                s.push(o5);
-                                                                                s.push(o6);
-                                                                                expected.add(s);
-                                                                            }
-                                                                    );
-                                                                }
-                                                        );
-                                                    }
-                                            );
-                                        }
-                                );
-                            }
-                    );
-                }
+                o1 -> OperatorPermutator.validOperators.forEach(
+                        o2 -> {
+                            OperatorPermutator.validOperators.forEach(
+                                    o3 -> {
+                                        OperatorPermutator.validOperators.forEach(
+                                                o4 -> {
+                                                    OperatorPermutator.validOperators.forEach(
+                                                            o5 -> {
+                                                                OperatorPermutator.validOperators.forEach(
+                                                                        o6 -> {
+                                                                            Stack<StackElement> s = new Stack<>();
+                                                                            s.push(o1);
+                                                                            s.push(o2);
+                                                                            s.push(o3);
+                                                                            s.push(o4);
+                                                                            s.push(o5);
+                                                                            s.push(o6);
+                                                                            expected.add(s);
+                                                                        }
+                                                                );
+                                                            }
+                                                    );
+                                                }
+                                        );
+                                    }
+                            );
+                        }
+                )
         );
 
         List<Stack<StackElement>> actual = OperatorPermutator.createPermutationOfOperators(6);
 
         expected.forEach(
-                s1 -> assertTrue(actual.stream().filter(s2 -> s1.equals(s2)).count() > 0)
+                s1 -> assertTrue(actual.stream().anyMatch(s1::equals))
         );
     }
 

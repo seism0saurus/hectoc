@@ -9,7 +9,6 @@
         <version>${revision}</version>
     </parent>
 
-    <groupId>de.seism0saurus.hectoc</groupId>
     <artifactId>bot</artifactId>
 
     <properties>

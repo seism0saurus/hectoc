@@ -1,17 +1,17 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
 import de.seism0saurus.hectoc.generator.HectocChallenge;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 
 /**
  * A HectocSolution is a solution for a hectoc represented by a {@link HectocChallenge HectocChallenge}.
- *
+ * <p>
  * An instance of this class is always relative to a challenge and can answer the question,
  * if the proposed solution is a valid solution to that challenge.
  *
@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 public class HectocSolution {
 
     public static final List<Character> ALLOWED_CHARS = List.of('1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '^', '(', ')');
+    @Getter
     private BigDecimal result = BigDecimal.ZERO;
+    @Getter
     private boolean valid = false;
     final HectocChallenge challenge;
 
@@ -54,12 +56,11 @@ public class HectocSolution {
                 .mapToObj(c -> (char) c)
                 .filter(c -> !ALLOWED_CHARS.contains(c))
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
 
         if (!illegalChars.isEmpty()) {
             StringBuilder builder = new StringBuilder();
-            illegalChars.stream()
-                    .forEach(c -> builder.append(c));
+            illegalChars.forEach(builder::append);
             throw new IllegalArgumentException("Detected an invalid character(s): " + builder + ". Please use only +, -, *, /, (, ) and ^ and the six digits from your Hectoc.");
         }
     }
@@ -105,13 +106,5 @@ public class HectocSolution {
             throw new IllegalArgumentException(
                     "The first digit is wrong. Please use only +, -, *, /, (, ) and ^ and the six digits from your Hectoc in unchanged order.");
         }
-    }
-
-    public boolean isValid() {
-        return this.valid;
-    }
-
-    public BigDecimal result() {
-        return this.result;
     }
 }

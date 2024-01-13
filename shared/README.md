@@ -1,6 +1,6 @@
 # Hectoc Library
 
-The Hectoc library in the [shared](.shared) folder contains some Java classes to generate Hectocs
+The Hectoc library in the [shared](../shared) folder contains some Java classes to generate Hectocs
 and check solutions with a modified version of a [Shunting Yard Algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm)
 and stacks.
 

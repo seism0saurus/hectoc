@@ -18,7 +18,7 @@ public class HectocTokenizer {
      * @return A <code>Stack</code> of elements.
      */
     public Stack<StackElement> tokenize(final String calculation) {
-        final Stack<StackElement> tokens = new Stack<StackElement>();
+        final Stack<StackElement> tokens = new Stack<>();
         calculation.codePoints().mapToObj(c -> (char) c)
                 .forEach(c -> {
                     switch (c) {
