@@ -18,7 +18,7 @@ jobs:
       - name: Build the shared part of the project
         run: mvn --batch-mode install --file shared/pom.xml
       - name: Cache local Maven repository
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
         with:
           path: ~/.m2/repository
           key: maven-verify
@@ -64,7 +64,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Get cache for local Maven repository
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: ~/.m2/repository
           key: maven-verify
@@ -84,7 +84,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Get cache for local Maven repository
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: ~/.m2/repository
           key: maven-verify
@@ -112,7 +112,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Get cache for local Maven repository
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: ~/.m2/repository
           key: maven-verify
