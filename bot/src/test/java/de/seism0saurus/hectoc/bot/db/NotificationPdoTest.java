@@ -1,12 +1,20 @@
 package de.seism0saurus.hectoc.bot.db;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * The Tests for the NotificationPdo.
@@ -73,9 +81,135 @@ public class NotificationPdoTest {
                 Arguments.of("<br>(-2+8-4+3)*5*4<br>", "(-2+8-4+3)*5*4"),
                 Arguments.of("<br>1+9+3*4*7+6<br>", "1+9+3*4*7+6"),
                 Arguments.of("<br>(-9+6+8+5)*(4+6)<br>", "(-9+6+8+5)*(4+6)"),
-                Arguments.of("<br>5*22-(7+1+2)<br><br>", "5*22-(7+1+2)")
+                Arguments.of("<br>5*22-(7+1+2)<br><br>", "5*22-(7+1+2)"),
+                Arguments.of("5*22", null)
         );
+    }
+
+    @Test
+    public void testEqualsTrue(){
+        ZonedDateTime now = ZonedDateTime.now();
+        ChallengePdo challengePdo = ChallengePdo.builder()
+                .challenge("533712")
+                .date(now)
+                .statusId("5678")
+                .build();
+        NotificationPdo notificationPdo1 = NotificationPdo.builder()
+                .date(now)
+                .challenge(challengePdo)
+                .solution("<br>5*22-(7+1+2)<br><br>")
+                .author("Cthulhu")
+                .correct(true)
+                .statusId("123456")
+                .dismissed(true)
+                .notificationId("98765")
+                .build();
+        NotificationPdo notificationPdo2 =  new NotificationPdo();
+                notificationPdo2.setDate(now);
+                notificationPdo2.setChallenge(challengePdo);
+                notificationPdo2.setSolution("doesntworkcorrectnext");
+                notificationPdo2.setSolution("<br>5*22-(7+1+2)<br><br>");
+                notificationPdo2.setAuthor("Cthulhu");
+                notificationPdo2.setCorrect(true);
+                notificationPdo2.setStatusId("123456");
+                notificationPdo2.setDismissed(true);
+                notificationPdo2.setNotificationId("98765");
+
+        assertTrue(notificationPdo1.equals(notificationPdo2));
+        assertTrue(notificationPdo2.equals(notificationPdo1));
+    }
+
+    @Test
+    public void testEqualsFalse(){
+        ZonedDateTime now = ZonedDateTime.now();
+        ChallengePdo challengePdo = ChallengePdo.builder()
+                .challenge("533712")
+                .date(now)
+                .statusId("5678")
+                .build();
+        NotificationPdo notificationPdo1 = NotificationPdo.builder()
+                .date(now)
+                .challenge(challengePdo)
+                .solution("<br>5*22-(7+1+2)<br><br>")
+                .author("Cthulhu")
+                .correct(true)
+                .statusId("123456")
+                .dismissed(true)
+                .notificationId("98765")
+                .build();
+        NotificationPdo notificationPdo2 =  new NotificationPdo();
+                notificationPdo2.setDate(now);
+                notificationPdo2.setChallenge(challengePdo);
+                notificationPdo2.setSolution("doesntworkcorrectnext");
+                notificationPdo2.setAuthor("Cthulhu");
+                notificationPdo2.setCorrect(true);
+                notificationPdo2.setStatusId("123456");
+                notificationPdo2.setDismissed(true);
+                notificationPdo2.setNotificationId("98765");
+
+        assertFalse(notificationPdo1.equals(notificationPdo2));
+        assertFalse(notificationPdo2.equals(notificationPdo1));
+    }
+
+    @Test
+    public void testHashCode() {
+        ZonedDateTime now = ZonedDateTime.now();
+        ChallengePdo challengePdo = ChallengePdo.builder()
+                .challenge("533712")
+                .date(now)
+                .statusId("5678")
+                .build();
+        NotificationPdo notificationPdo1 = NotificationPdo.builder()
+                .date(now)
+                .challenge(challengePdo)
+                .solution("<br>5*22-(7+1+2)<br><br>")
+                .author("Cthulhu")
+                .correct(true)
+                .statusId("123456")
+                .dismissed(true)
+                .notificationId("98765")
+                .build();
+        NotificationPdo notificationPdo2 = new NotificationPdo();
+        notificationPdo2.setDate(now);
+        notificationPdo2.setChallenge(challengePdo);
+        notificationPdo2.setSolution("doesntworkcorrectnext");
+        notificationPdo2.setAuthor("Cthulhu");
+        notificationPdo2.setCorrect(true);
+        notificationPdo2.setStatusId("123456");
+        notificationPdo2.setDismissed(true);
+        notificationPdo2.setNotificationId("98765");
+
+        assertNotEquals(notificationPdo1.hashCode(), notificationPdo2.hashCode());
+    }
+
+    @Test
+    public void testToString() {
+        Clock clockMock = mock(Clock.class);
+        when(clockMock.instant()).thenReturn(Instant.ofEpochSecond(10000l));
+        when(clockMock.getZone()).thenReturn(ZoneId.of("UTC"));
+        ZonedDateTime now = ZonedDateTime.now(clockMock);
+        ChallengePdo challengePdo = ChallengePdo.builder()
+                .challenge("533712")
+                .date(now)
+                .statusId("5678")
+                .build();
+        NotificationPdo notificationPdo = NotificationPdo.builder()
+                .date(now)
+                .challenge(challengePdo)
+                .solution("<br>5*22-(7+1+2)<br><br>")
+                .author("Cthulhu")
+                .correct(true)
+                .statusId("123456")
+                .dismissed(true)
+                .notificationId("98765")
+                .build();
+        String expected = "NotificationPdo(id=null, notificationId=98765, statusId=123456, author=Cthulhu, solution=5*22-(7+1+2), dismissed=true, challenge=ChallengePdo(id=null, challenge=533712, statusId=5678, date=1970-01-01T02:46:40Z[UTC]), date=1970-01-01T02:46:40Z[UTC], correct=true)";
+
+        String actual = notificationPdo.toString();
+
+        assertEquals(expected, actual);
     }
 }
 
 
+;

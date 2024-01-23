@@ -149,9 +149,10 @@ public class TextGenerator {
      *
      * @param answers The list of proposed solutions.
      * @param publicPost The participants will be directly addressed, if it is a public post. So they will get a notification about their score.
+     * @param timerange
      * @return A complete text for a report.
      */
-    public String getReportText(List<NotificationPdo> answers, final boolean publicPost) {
+    public String getReportText(List<NotificationPdo> answers, final boolean publicPost, String timerange) {
         Random rand = new Random();
         final String randomGreeting = greetings.get(rand.nextInt(greetings.size()));
         long totalAnswers = answers.size();
@@ -163,7 +164,7 @@ public class TextGenerator {
         final String tagLine = tags.stream().map(s -> "#" + s).collect(Collectors.joining(" "));
 
         return randomGreeting + "\n"
-                + "In the last month we had " + totalAnswers + " total answers from " + participants + " participants. \n"
+                + "In " + timerange + " we had " + totalAnswers + " total answers from " + participants + " participants. \n"
                 + "From these proposed solutions " + correctAnswers + " where correct. Only " + wrongAnswers + " were wrong.\n"
                 + "Maybe there were some I couldn't understand. \n"
                 + topParticipants

@@ -94,13 +94,18 @@ public class ReportScheduler {
         try {
             Status status;
             if (isReportDay(now)) {
+                final ZonedDateTime lastDayOfPreviousMonth = now.minusDays(1);
+                ZonedDateTime lastSecondOfMonth = lastDayOfPreviousMonth.with(ChronoField.NANO_OF_DAY, 86400L * 1000_000_000L - 1);
+                ZonedDateTime firstSecondOfMonth = lastDayOfPreviousMonth.with(TemporalAdjusters.firstDayOfMonth()).with(ChronoField.NANO_OF_DAY, 0);
                 // Send public report
-                final String statusText = getReportText(now, true);
+                final String statusText = getReportText(now, true, firstSecondOfMonth, lastSecondOfMonth, "the last month");
                 LOGGER.info("Text will be: " + statusText);
                 status = this.statusRepository.postStatus(statusText);
             } else {
+                ZonedDateTime lastSecondOfMonth = now.with(ChronoField.NANO_OF_DAY, 86400L * 1000_000_000L - 1);
+                ZonedDateTime firstSecondOfMonth = now.with(TemporalAdjusters.firstDayOfMonth()).with(ChronoField.NANO_OF_DAY, 0);
                 // Send private report
-                final String statusText = getReportText(now, false);
+                final String statusText = getReportText(now, false, firstSecondOfMonth, lastSecondOfMonth, "this month");
                 LOGGER.info("Text will be: " + statusText);
                 status = this.statusRepository.postDirectStatus(statusText);
             }
@@ -120,16 +125,16 @@ public class ReportScheduler {
 
     /**
      * Prepares a report text by fetching the needed data from the repository and formatting the results.
+     * @param firstSecondOfMonth
+     * @param lastSecondOfMonth
+     * @param timerange
      * @param now The first day of the wanted month.
      * @return A formatted text for the report.
      */
-    private String getReportText(final ZonedDateTime now, final boolean publicPost) {
-        final ZonedDateTime lastDayOfPreviousMonth = now.minusDays(1);
-        final ZonedDateTime lastSecondOfMonth = lastDayOfPreviousMonth.with(ChronoField.NANO_OF_DAY, 86400L * 1000_000_000L - 1);
-        final ZonedDateTime firstSecondOfMonth = lastSecondOfMonth.with(TemporalAdjusters.firstDayOfMonth()).with(ChronoField.NANO_OF_DAY, 0);
+    private String getReportText(final ZonedDateTime now, final boolean publicPost, ZonedDateTime firstSecondOfMonth, ZonedDateTime lastSecondOfMonth, String timerange) {
         List<NotificationPdo> allByDateBetween = this.notificationRepository.findAllByDateBetween(firstSecondOfMonth, lastSecondOfMonth);
 
-        return generator.getReportText(allByDateBetween, publicPost);
+        return generator.getReportText(allByDateBetween, publicPost, timerange);
     }
 
     /**

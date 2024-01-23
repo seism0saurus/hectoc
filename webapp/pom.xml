@@ -27,11 +27,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>de.seism0saurus.hectoc</groupId>
             <artifactId>shared</artifactId>
             <version>${revision}</version>
