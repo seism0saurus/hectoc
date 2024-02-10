@@ -3,34 +3,38 @@ updates:
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     reviewers:
       - "seism0saurus"
 
   - package-ecosystem: "npm"
     directory: "/webapp/angular"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     reviewers:
       - "seism0saurus"
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     reviewers:
       - "seism0saurus"
 
   - package-ecosystem: "docker"
     directory: "/bot/containerimage"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     reviewers:
       - "seism0saurus"
 
   - package-ecosystem: "docker"
     directory: "/webapp/containerimage"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     reviewers:
       - "seism0saurus"
