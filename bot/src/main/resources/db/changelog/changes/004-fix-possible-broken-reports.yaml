@@ -1,0 +1,9 @@
+databaseChangeLog:
+- changeSet:
+    id: 004-fix-possible-broken-reports-001-fix-values-in-row-correct
+    author: seism0saurus
+    comment: Verify that the correct values exist in the correct row of the notifications table
+    changes:
+      - customChange:  {
+          "class": "de.seism0saurus.hectoc.bot.db.VerifyFieldCorrectIsCorrectCustomChange"
+        }
