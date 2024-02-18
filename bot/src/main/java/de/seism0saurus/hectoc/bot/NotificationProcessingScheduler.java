@@ -9,6 +9,7 @@ import de.seism0saurus.hectoc.generator.HectocChallenge;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.HectocSolution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -136,6 +137,9 @@ public class NotificationProcessingScheduler {
                 pdo -> {
                     String challengeString = pdo.getChallenge().getChallenge();
                     String solutionString = pdo.getSolution();
+                    MDC.put("challenge", challengeString);
+                    MDC.put("solution", solutionString);
+                    MDC.put("id", pdo.getId().toString());
                     try {
                         HectocSolution solution = new HectocSolution(new HectocChallenge(challengeString));
                         boolean correctSolutionSubmitted = solution.checkSolution(solutionString);
@@ -153,11 +157,15 @@ public class NotificationProcessingScheduler {
                         LOGGER.info("Solution in status " + pdo.getStatusId() + " ist syntactically wrong or couldn't be found: " + e.getMessage());
                         sendCouldNotParseStatus(pdo);
                         pdo.setCorrect(false);
+                    } finally {
+                        // Store if the proposed solutions were correct or false
+                        this.notificationRepo.save(pdo);
+                        MDC.remove("challenge");
+                        MDC.remove("solution");
+                        MDC.remove("id");
                     }
                 }
         );
-        // Store if the proposed solutions were correct or false
-        this.notificationRepo.saveAll(pdos);
     }
 
     /**
