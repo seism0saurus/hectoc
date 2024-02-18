@@ -20,6 +20,7 @@ import social.bigbone.api.exception.BigBoneRequestException;
 
 import java.math.BigDecimal;
 import java.time.ZoneOffset;
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -148,7 +149,7 @@ public class NotificationProcessingScheduler {
                             sendWrongSolutionAnswerStatus(pdo, solution.getResultOfSolution(solutionString));
                             pdo.setCorrect(false);
                         }
-                    } catch (IllegalArgumentException e){
+                    } catch (IllegalArgumentException | EmptyStackException e){
                         LOGGER.info("Solution in status " + pdo.getStatusId() + " ist syntactically wrong or couldn't be found: " + e.getMessage());
                         sendCouldNotParseStatus(pdo);
                         pdo.setCorrect(false);
@@ -174,7 +175,6 @@ public class NotificationProcessingScheduler {
                 LOGGER.info("Going to favour status " + pdo.getStatusId());
                 statusRepository.favouriteStatus(pdo.getStatusId());
                 LOGGER.info("Status " + pdo.getStatusId() + " successfully favoured");
-                dismissNotification(pdo);
             }
         } catch (BigBoneRequestException e) {
             LOGGER.error("Could not favourite status. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
