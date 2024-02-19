@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import social.bigbone.api.entity.Account;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  * @author seism0saurus
  */
 @Service
+@Profile("notifications")
 public class NotificationProcessingScheduler {
 
     /**
@@ -106,7 +108,7 @@ public class NotificationProcessingScheduler {
      * <p>
      * Exceptions are logged as errors and suppressed. No further error handling applies.
      */
-    @Scheduled(cron = "0 */5 0/1 * * ?")
+    @Scheduled(cron = "${schedule.notification}")
     public void processNotifications(){
         LOGGER.info("Going to fetch all notifications");
         try {

@@ -157,7 +157,6 @@ public class TextGenerator {
         final String randomGreeting = greetings.get(rand.nextInt(greetings.size()));
         long totalAnswers = answers.size();
         long correctAnswers = answers.stream().filter(NotificationPdo::isCorrect).count();
-        long wrongAnswers = totalAnswers - correctAnswers;
         long participants = answers.stream().map(NotificationPdo::getAuthor).distinct().count();
         final List<Map.Entry<String, Long>> mostActiveParticipants = getTopParticipants(answers);
         final String topParticipants = getTopParticipantsText(mostActiveParticipants, publicPost);
@@ -165,8 +164,7 @@ public class TextGenerator {
 
         return randomGreeting + "\n"
                 + "In " + timerange + " we had " + totalAnswers + " total answers from " + participants + " participants. \n"
-                + "From these proposed solutions " + correctAnswers + " where correct. Only " + wrongAnswers + " were wrong.\n"
-                + "Maybe there were some I couldn't understand. \n"
+                + "From these proposed solutions " + correctAnswers + " were correct. \n"
                 + topParticipants
                 + salutation + "\n\n"
                 + tagLine;

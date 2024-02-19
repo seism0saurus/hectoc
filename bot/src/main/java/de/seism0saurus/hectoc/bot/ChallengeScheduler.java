@@ -8,6 +8,7 @@ import de.seism0saurus.hectoc.generator.HectocGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import social.bigbone.api.entity.Status;
@@ -22,6 +23,7 @@ import java.time.ZonedDateTime;
  * @author seism0saurus
  */
 @Service
+@Profile("challenges")
 public class ChallengeScheduler {
 
     /**
@@ -75,7 +77,7 @@ public class ChallengeScheduler {
      * <p>
      * Exceptions are logged as errors and suppressed. No further error handling is applied.
      */
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "${schedule.challenge}")
     public void postHectoc() {
         LOGGER.info("Going to post new hectoc challenge");
         HectocChallenge challenge = HectocGenerator.generate();

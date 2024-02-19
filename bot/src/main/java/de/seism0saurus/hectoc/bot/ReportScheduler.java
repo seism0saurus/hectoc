@@ -7,6 +7,7 @@ import de.seism0saurus.hectoc.bot.db.ReportRepository;
 import de.seism0saurus.hectoc.bot.mastodon.StatusRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import social.bigbone.api.entity.Status;
@@ -24,6 +25,7 @@ import java.util.List;
  * @author seism0saurus
  */
 @Service
+@Profile("reports")
 public class ReportScheduler {
 
     /**
@@ -85,10 +87,10 @@ public class ReportScheduler {
      * <p>
      * Exceptions are logged as errors and suppressed. No further error handling is applied.
      */
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "${schedule.report}")
     public void postReport() {
         final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        if (isReportAlreadySent(now)) return;
+        //if (isReportAlreadySent(now)) return;
         LOGGER.info("No previous reports. Going to post new report.");
 
         try {
