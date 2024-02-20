@@ -90,7 +90,7 @@ public class ReportScheduler {
     @Scheduled(cron = "${schedule.report}")
     public void postReport() {
         final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        //if (isReportAlreadySent(now)) return;
+        if (isReportAlreadySent(now)) return;
         LOGGER.info("No previous reports. Going to post new report.");
 
         try {
