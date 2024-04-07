@@ -13,8 +13,11 @@ public enum Operator implements StackElement {
         return switch (character) {
             case '+' -> PLUS;
             case '-' -> MINUS;
+            case '−' -> MINUS;
             case '*' -> MULTIPLICATION;
+            case 'x' -> MULTIPLICATION;
             case '/' -> DIVISION;
+            case '÷' -> DIVISION;
             case '^' -> POWER;
             case '(' -> LEFTPARENTHESIS;
             case ')' -> RIGHTPARENTHESIS;

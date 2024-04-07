@@ -156,6 +156,24 @@ public class HectocTokenizerTest {
         otherOperatorsMinusNumberStack.push(Operator.POWER);
         otherOperatorsMinusNumberStack.push(Number.of(-3));
 
+        final String alternativeMathSymbolsMinusEquotation = "3−5";
+        final Stack<StackElement> alternativeMathSymbolsMinusStack = new Stack<>();
+        alternativeMathSymbolsMinusStack.push(Number.of(3));
+        alternativeMathSymbolsMinusStack.push(Operator.MINUS);
+        alternativeMathSymbolsMinusStack.push(Number.of(5));
+
+        final String alternativeMathSymbolsMultiplicationEquotation = "3x5";
+        final Stack<StackElement> alternativeMathSymbolsMultiplicationStack = new Stack<>();
+        alternativeMathSymbolsMultiplicationStack.push(Number.of(3));
+        alternativeMathSymbolsMultiplicationStack.push(Operator.MULTIPLICATION);
+        alternativeMathSymbolsMultiplicationStack.push(Number.of(5));
+
+        final String alternativeMathSymbolsDivisionEquotation = "3÷5";
+        final Stack<StackElement> alternativeMathSymbolsDivisionStack = new Stack<>();
+        alternativeMathSymbolsDivisionStack.push(Number.of(3));
+        alternativeMathSymbolsDivisionStack.push(Operator.DIVISION);
+        alternativeMathSymbolsDivisionStack.push(Number.of(5));
+
         return Stream.of(
                 Arguments.of(firstEquotation, firstStack),
                 Arguments.of(secondEquotation, secondStack),
@@ -166,7 +184,10 @@ public class HectocTokenizerTest {
                 Arguments.of(unaryMinusBeforeParenthesisAsFirstElementEquotation, unaryMinusBeforeParenthesisAsFirstElementStack),
                 Arguments.of(unaryMinusBetweenParenthesisEquotation, unaryMinusBetweenParenthesisStack),
                 Arguments.of(parenthesisMinusNumberEquotation, parenthesisMinusNumberStack),
-                Arguments.of(otherOperatorsMinusNumberEquotation, otherOperatorsMinusNumberStack)
+                Arguments.of(otherOperatorsMinusNumberEquotation, otherOperatorsMinusNumberStack),
+                Arguments.of(alternativeMathSymbolsMinusEquotation, alternativeMathSymbolsMinusStack),
+                Arguments.of(alternativeMathSymbolsMultiplicationEquotation, alternativeMathSymbolsMultiplicationStack),
+                Arguments.of(alternativeMathSymbolsDivisionEquotation, alternativeMathSymbolsDivisionStack)
         );
     }
 }
