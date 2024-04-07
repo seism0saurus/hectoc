@@ -33,8 +33,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
 /.mvn/
+/results/
+
+### static angular resources in webapp project ###
 /webapp/src/main/resources/static/main.*.js
 /webapp/src/main/resources/static/polyfills.*.js
 /webapp/src/main/resources/static/styles.*.css
-/results/
