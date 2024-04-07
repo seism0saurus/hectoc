@@ -1,9 +1,5 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
-import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
-import de.seism0saurus.hectoc.shuntingyardalgorithm.Operator;
-import de.seism0saurus.hectoc.shuntingyardalgorithm.ShuntingYardAlgorithm;
-import de.seism0saurus.hectoc.shuntingyardalgorithm.StackElement;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -241,7 +237,6 @@ public class ShuntingYardAlgorithmTest {
         unaryMinusBeforeParenthesisRpn.push(Number.of(4));
         unaryMinusBeforeParenthesisRpn.push(Operator.MULTIPLICATION);
 
-
         final BigDecimal unaryMinusBetweenParenthesisSolution = BigDecimal.valueOf(1);
         final Stack<StackElement> unaryMinusBetweenParenthesisRpn = new Stack<>();
         unaryMinusBetweenParenthesisRpn.push(Number.of(2));
@@ -280,6 +275,19 @@ public class ShuntingYardAlgorithmTest {
         bugFromHectocBotRpn.push(Operator.MINUS);
         bugFromHectocBotRpn.push(Operator.PLUS);
 
+        final BigDecimal bugNoPrecisionWantedSolution = BigDecimal.valueOf(100);
+        final Stack<StackElement> bugNoPrecisionWantedRpn = new Stack<>();
+        bugNoPrecisionWantedRpn.push(Number.of(98));
+        bugNoPrecisionWantedRpn.push(Number.of(8));
+        bugNoPrecisionWantedRpn.push(Number.of(-2));
+        bugNoPrecisionWantedRpn.push(Operator.POWER);
+        bugNoPrecisionWantedRpn.push(Number.of(2));
+        bugNoPrecisionWantedRpn.push(Number.of(7));
+        bugNoPrecisionWantedRpn.push(Operator.POWER);
+        bugNoPrecisionWantedRpn.push(Operator.MULTIPLICATION);
+        bugNoPrecisionWantedRpn.push(Operator.PLUS);
+
+
         return Stream.of(
                 Arguments.of(firstRpn, firstResult),
                 Arguments.of(secondRpn, secondResult),
@@ -287,7 +295,8 @@ public class ShuntingYardAlgorithmTest {
                 Arguments.of(unaryMinusBeforeParenthesisRpn, unaryMinusBeforeParenthesisSolution),
                 Arguments.of(unaryMinusBetweenParenthesisRpn, unaryMinusBetweenParenthesisSolution),
                 Arguments.of(tenToThePowerOfTwoPointThreeRpn, tenToThePowerOfTwoPointThreeSolution),
-                Arguments.of(bugFromHectocBotRpn, bugFromHectocBot)
+                Arguments.of(bugFromHectocBotRpn, bugFromHectocBot),
+                Arguments.of(bugNoPrecisionWantedRpn, bugNoPrecisionWantedSolution)
         );
     }
 

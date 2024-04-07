@@ -13,6 +13,7 @@ import static java.math.MathContext.DECIMAL32;
 public class ShuntingYardAlgorithm {
 
     public static final MathContext CONTEXT = DECIMAL32;
+    public static final BigDecimal BIG_DECIMAL_100 = new BigDecimal("100");
     private final BigDecimal solution;
 
     public ShuntingYardAlgorithm(final String equotation) {
@@ -84,7 +85,7 @@ public class ShuntingYardAlgorithm {
     }
 
     public static BigDecimal calculateRpn(final Stack<StackElement> rpn, MathContext context) throws ArithmeticException {
-        Stack<StackElement> rpnClone = (Stack<StackElement>) rpn.clone();
+        @SuppressWarnings("unchecked") Stack<StackElement> rpnClone = (Stack<StackElement>) rpn.clone();
         final Stack<BigDecimal> stack = new Stack<>();
         rpnClone.iterator().forEachRemaining(
                 element -> {
@@ -111,7 +112,11 @@ public class ShuntingYardAlgorithm {
                     }
                 }
         );
-        return stack.pop();
+        BigDecimal result = stack.pop();
+        if (result.compareTo(BIG_DECIMAL_100) == 0) {
+            result = BIG_DECIMAL_100;
+        }
+        return result;
     }
 
 }
