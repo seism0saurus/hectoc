@@ -174,6 +174,40 @@ public class HectocTokenizerTest {
         alternativeMathSymbolsDivisionStack.push(Operator.DIVISION);
         alternativeMathSymbolsDivisionStack.push(Number.of(5));
 
+        final String noSymbolBetweenPrenthesisAndOperandEquotation = "(4+1)2";
+        final Stack<StackElement> noSymbolBetweenPrenthesisAndOperandStack = new Stack<>();
+        noSymbolBetweenPrenthesisAndOperandStack.push(Operator.LEFTPARENTHESIS);
+        noSymbolBetweenPrenthesisAndOperandStack.push(Number.of(4));
+        noSymbolBetweenPrenthesisAndOperandStack.push(Operator.PLUS);
+        noSymbolBetweenPrenthesisAndOperandStack.push(Number.of(1));
+        noSymbolBetweenPrenthesisAndOperandStack.push(Operator.RIGHTPARENTHESIS);
+        noSymbolBetweenPrenthesisAndOperandStack.push(Operator.MULTIPLICATION);
+        noSymbolBetweenPrenthesisAndOperandStack.push(Number.of(2));
+
+        final String noSymbolBetweenOperandAndPrenthesisEquotation = "2(4+1)";
+        final Stack<StackElement> noSymbolBetweenOperandAndPrenthesisStack = new Stack<>();
+        noSymbolBetweenOperandAndPrenthesisStack.push(Number.of(2));
+        noSymbolBetweenOperandAndPrenthesisStack.push(Operator.MULTIPLICATION);
+        noSymbolBetweenOperandAndPrenthesisStack.push(Operator.LEFTPARENTHESIS);
+        noSymbolBetweenOperandAndPrenthesisStack.push(Number.of(4));
+        noSymbolBetweenOperandAndPrenthesisStack.push(Operator.PLUS);
+        noSymbolBetweenOperandAndPrenthesisStack.push(Number.of(1));
+        noSymbolBetweenOperandAndPrenthesisStack.push(Operator.RIGHTPARENTHESIS);
+
+        final String noSymbolBetweenTwoPrenthesisEquotation = "(1+2)(4+1)";
+        final Stack<StackElement> noSymbolBetweenTwoPrenthesisStack = new Stack<>();
+        noSymbolBetweenTwoPrenthesisStack.push(Operator.LEFTPARENTHESIS);
+        noSymbolBetweenTwoPrenthesisStack.push(Number.of(1));
+        noSymbolBetweenTwoPrenthesisStack.push(Operator.PLUS);
+        noSymbolBetweenTwoPrenthesisStack.push(Number.of(2));
+        noSymbolBetweenTwoPrenthesisStack.push(Operator.RIGHTPARENTHESIS);
+        noSymbolBetweenTwoPrenthesisStack.push(Operator.MULTIPLICATION);
+        noSymbolBetweenTwoPrenthesisStack.push(Operator.LEFTPARENTHESIS);
+        noSymbolBetweenTwoPrenthesisStack.push(Number.of(4));
+        noSymbolBetweenTwoPrenthesisStack.push(Operator.PLUS);
+        noSymbolBetweenTwoPrenthesisStack.push(Number.of(1));
+        noSymbolBetweenTwoPrenthesisStack.push(Operator.RIGHTPARENTHESIS);
+
         return Stream.of(
                 Arguments.of(firstEquotation, firstStack),
                 Arguments.of(secondEquotation, secondStack),
@@ -187,7 +221,10 @@ public class HectocTokenizerTest {
                 Arguments.of(otherOperatorsMinusNumberEquotation, otherOperatorsMinusNumberStack),
                 Arguments.of(alternativeMathSymbolsMinusEquotation, alternativeMathSymbolsMinusStack),
                 Arguments.of(alternativeMathSymbolsMultiplicationEquotation, alternativeMathSymbolsMultiplicationStack),
-                Arguments.of(alternativeMathSymbolsDivisionEquotation, alternativeMathSymbolsDivisionStack)
+                Arguments.of(alternativeMathSymbolsDivisionEquotation, alternativeMathSymbolsDivisionStack),
+                Arguments.of(noSymbolBetweenPrenthesisAndOperandEquotation, noSymbolBetweenPrenthesisAndOperandStack),
+                Arguments.of(noSymbolBetweenOperandAndPrenthesisEquotation, noSymbolBetweenOperandAndPrenthesisStack),
+                Arguments.of(noSymbolBetweenTwoPrenthesisEquotation, noSymbolBetweenTwoPrenthesisStack)
         );
     }
 }

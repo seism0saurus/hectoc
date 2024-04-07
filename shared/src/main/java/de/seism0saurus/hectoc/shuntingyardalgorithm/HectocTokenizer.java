@@ -29,6 +29,9 @@ public class HectocTokenizer {
                             } else if (isPreviousOperatorAnUnaryMinus(tokens)) {
                                 tokens.pop();
                                 tokens.push(Number.of(-Character.getNumericValue(c)));
+                            } else if (isNumberWithRightParenthesisBefore(c, tokens)) {
+                                tokens.push(Operator.MULTIPLICATION);
+                                tokens.push(Number.of(Character.getNumericValue(c)));
                             } else {
                                 tokens.push(Number.of(Character.getNumericValue(c)));
                             }
@@ -38,6 +41,9 @@ public class HectocTokenizer {
                                 //Throw away the minus and replace it with (-1) *
                                 tokens.pop();
                                 tokens.push(Number.of(-1));
+                                tokens.push(Operator.MULTIPLICATION);
+                                tokens.push(Operator.from(c));
+                            } else if (isOperatorALeftParenthesisWithOperandWithoutOperatorBefore(c, tokens)){
                                 tokens.push(Operator.MULTIPLICATION);
                                 tokens.push(Operator.from(c));
                             } else {
@@ -115,6 +121,35 @@ public class HectocTokenizer {
     }
 
     /**
+     * Determines if the previous operator was an operand without an operator.
+     *
+     * @param tokens The stack of already parsed elements.
+     * @return True, if the previous operator was an operand without an operator. False, otherwise.
+     */
+    boolean isPreviousOperatorAnOperandWithoutOperator(final Stack<StackElement> tokens) {
+        // If there is a right parenthesis or a number before the current element, it is an operand without an operator
+        // Otherwise it is an operator and it can't be an operand
+        if (tokens.empty()) {
+            // If there are no previous tokens, it's impossible to be an operator without an operand
+            return false;
+        } else return tokens.peek().equals(Operator.RIGHTPARENTHESIS) || tokens.peek().getClass().equals(Number.class);
+    }
+
+    /**
+     * Determines if the previous operator was a right parenthesis.
+     *
+     * @param tokens The <code>Stack</code> of already parsed elements.
+     * @return True, if the previous operator was a right parenthesis. False, otherwise.
+     */
+    boolean isPreviousOperatorARightParenthesis(final Stack<StackElement> tokens) {
+        if (tokens.empty()) {
+            // If there are no previous tokens, it's impossible to be aright parenthesis
+            return false;
+        } else return tokens.peek().equals(Operator.RIGHTPARENTHESIS);
+    }
+
+
+    /**
      * Determines if the given operator is a left parenthesis with a unary minus before it.
      *
      * @param c The operator to test.
@@ -126,5 +161,26 @@ public class HectocTokenizer {
             return isPreviousOperatorAnUnaryMinus(tokens);
         }
         return false;
+    }
+
+    /**
+     * Determines if the given operator is a left parenthesis with a operand without an operator before it.
+     *
+     * @param c The operator to test.
+     * @param tokens The <code>Stack</code> of already parsed elements.
+     * @return True, if the minus on the <code>Stack</code> is unary. False, otherwise.
+     */
+    boolean isOperatorALeftParenthesisWithOperandWithoutOperatorBefore(final char c, final Stack<StackElement> tokens) {
+        if ('(' == c) {
+            return isPreviousOperatorAnOperandWithoutOperator(tokens);
+        }
+        return false;
+    }
+
+    boolean isNumberWithRightParenthesisBefore(final char c, final Stack<StackElement> tokens) {
+        return switch (c) {
+            case '1', '2', '3', '4', '5', '6', '7', '8', '9' -> isPreviousOperatorARightParenthesis(tokens);
+            default -> false;
+        };
     }
 }
