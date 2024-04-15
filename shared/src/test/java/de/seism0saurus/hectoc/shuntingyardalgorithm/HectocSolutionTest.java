@@ -98,6 +98,22 @@ public class HectocSolutionTest {
     }
 
     @Test
+    public void testEqualInWrongPosition() {
+        final HectocChallenge challange = HectocChallenge.builder()
+                .firstDigit(5)
+                .secondDigit(1)
+                .thirdDigit(9)
+                .fourthDigit(9)
+                .fifthDigit(1)
+                .sixthDigit(5)
+                .build();
+        final HectocSolution solution = new HectocSolution(challange);
+        assertThrows(IllegalArgumentException.class,
+                () -> solution.formatAndCheckSolution("-5*1=99+1+5"));
+        assertFalse(solution.isValid());
+    }
+
+    @Test
     public void testEqual100AtEndOfSolution() {
         final HectocChallenge challange = HectocChallenge.builder()
                 .firstDigit(5)
