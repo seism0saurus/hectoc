@@ -144,7 +144,7 @@ public class NotificationProcessingScheduler {
                     MDC.put("id", pdo.getId().toString());
                     try {
                         HectocSolution solution = new HectocSolution(new HectocChallenge(challengeString));
-                        boolean correctSolutionSubmitted = solution.checkSolution(solutionString);
+                        boolean correctSolutionSubmitted = solution.formatAndCheckSolution(solutionString);
                         if (correctSolutionSubmitted) {
                             LOGGER.info("Solution in status " + pdo.getStatusId() + " ist correct");
                             favouriteStatusWithCorrectSolution(pdo);

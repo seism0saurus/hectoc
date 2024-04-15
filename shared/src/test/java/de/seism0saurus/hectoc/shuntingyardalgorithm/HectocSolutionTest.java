@@ -97,6 +97,20 @@ public class HectocSolutionTest {
         assertTrue(solution.isValid());
     }
 
+    @Test
+    public void testEqual100AtEndOfSolution() {
+        final HectocChallenge challange = HectocChallenge.builder()
+                .firstDigit(5)
+                .secondDigit(1)
+                .thirdDigit(9)
+                .fourthDigit(9)
+                .fifthDigit(1)
+                .sixthDigit(5)
+                .build();
+        final HectocSolution solution = new HectocSolution(challange);
+        assertDoesNotThrow(() -> solution.formatAndCheckSolution("-5*1+99+1+5=100"));
+        assertTrue(solution.isValid());
+    }
 
     /**
      * Test real world hectocs and their valid, proposed solutions.
