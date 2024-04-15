@@ -30,7 +30,7 @@ public class HectocService {
         LOGGER.info("Solution for {} received, trying to check {}", hectoc, solutionDto.getSolution());
         HectocChallenge challenge = new HectocChallenge(hectoc);
         HectocSolution solution = new HectocSolution(challenge);
-        boolean valid = solution.checkSolution(solutionDto.getSolution());
+        boolean valid = solution.formatAndCheckSolution(solutionDto.getSolution());
         BigDecimal result = solution.getResult();
         LOGGER.info("Solution {} for {} has validity {} and result {}", solutionDto.getSolution(), hectoc, valid, result);
         return new HectocResultDto(valid, result.intValue());

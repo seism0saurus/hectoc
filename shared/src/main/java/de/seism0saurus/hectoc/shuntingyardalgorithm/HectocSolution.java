@@ -40,6 +40,16 @@ public class HectocSolution {
         return this.valid;
     }
 
+    private String updateSolutionInCaseOfEquation(String solution) {
+        if (solution == null || solution.isEmpty()) {
+            throw new IllegalArgumentException("No equotation provided. Please use +, -, *, /, (, ) and ^ and the six digits from your Hectoc to build an equotation.");
+        }
+        if (solution.endsWith("=100")) {
+            return solution.substring(0, solution.length()-4);
+        }
+        return solution;
+    }
+
     public BigDecimal getResultOfSolution(final String solution) {
         checkIllegalCharacters(solution);
         checkFormat(solution);
@@ -52,6 +62,7 @@ public class HectocSolution {
         if (equotation == null || equotation.isEmpty()) {
             throw new IllegalArgumentException("No equotation provided. Please use +, -, *, /, (, ) and ^ and the six digits from your Hectoc to build an equotation.");
         }
+
         List<Character> illegalChars = equotation.codePoints()
                 .mapToObj(c -> (char) c)
                 .filter(c -> !ALLOWED_CHARS.contains(c))
@@ -59,8 +70,12 @@ public class HectocSolution {
                 .toList();
 
         if (!illegalChars.isEmpty()) {
+            if (illegalChars.contains('=')) {
+                throw new IllegalArgumentException("Detected an invalid use of =. Please use only +, -, *, /, (, ) and ^ and the six digits from your Hectoc.");
+            }
             StringBuilder builder = new StringBuilder();
             illegalChars.forEach(builder::append);
+
             throw new IllegalArgumentException("Detected an invalid character(s): " + builder + ". Please use only +, -, *, /, (, ) and ^ and the six digits from your Hectoc.");
         }
     }
@@ -106,5 +121,10 @@ public class HectocSolution {
             throw new IllegalArgumentException(
                     "The first digit is wrong. Please use only +, -, *, /, (, ) and ^ and the six digits from your Hectoc in unchanged order.");
         }
+    }
+
+    public boolean formatAndCheckSolution(String solution) {
+        solution = updateSolutionInCaseOfEquation(solution);
+        return checkSolution(solution);
     }
 }
