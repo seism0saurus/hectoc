@@ -34,7 +34,7 @@ You can use that library, if you want to implement your own Java apps or tools f
 
 ### Bot
 
-The Hectoc Bot in the [bot](./bot) folder is a Mastodon bot, that runs [@hourlyhectoc@botsin.space](https://botsin.space/@hourlyhectoc).
+The Hectoc Bot in the [bot](./bot) folder is a Mastodon bot, that runs [@hourlyhectoc@mastodon.seism0saurus.de](https://mastodon.seism0saurus.de/@hourlyhectoc).
 It posts a Hectoc every hour and can favorite correct answers. Wrong answers get a private commend.
 
 ### Bruteforcer

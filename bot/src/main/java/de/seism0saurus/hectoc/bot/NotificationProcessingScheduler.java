@@ -316,8 +316,8 @@ public class NotificationProcessingScheduler {
     private static boolean wasNotAnsweredByBot(Context context) {
         return context.getDescendants().stream()
                 .filter(s ->
-                        "@hourlyhectoc@botsin.space".equals(s.getAccount()
-                                .getUsername())) //getUsername is ok, because we are on the same server instance as our bot since we are the bot
+                        "@hourlyhectoc@mastodon.seism0saurus.de".equals(s.getAccount()
+                            .getUsername())) //getUsername is ok, because we are on the same server instance as our bot since we are the bot
                 .findAny()
                 .isEmpty();
     }
