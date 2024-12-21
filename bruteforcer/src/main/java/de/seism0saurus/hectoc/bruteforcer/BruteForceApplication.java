@@ -25,34 +25,5 @@ public class BruteForceApplication {
      */
     public static void main(String[] args) throws IOException {
             SpringApplication.run(BruteForceApplication.class, args);
-            countPermutations(new HectocChallenge("111111"));
-    }
-
-    private static void countPermutations(HectocChallenge challenge) {
-        AtomicInteger solutions = new AtomicInteger(0);
-        NumberBlockPermutator.createPermutationsOfBlocksOfNumbers(getChallengeAsStack(challenge))
-                .parallelStream()
-                .map(
-                        NegativeNumberPermutator::createPermutationsOfNegativeNumbers
-                ).flatMap(List::parallelStream)
-                .map(
-                        s -> createRpnStacks(s)
-                ).flatMap(Set::parallelStream)
-                .peek(s -> solutions.incrementAndGet())
-                .toList()
-        ;
-
-        String str = "Challenge: " + challenge + " - " + solutions + " possible solutions";
-    }
-    private static Stack<de.seism0saurus.hectoc.shuntingyardalgorithm.Number> getChallengeAsStack(HectocChallenge challenge) {
-        Stack<de.seism0saurus.hectoc.shuntingyardalgorithm.Number> challengeStack = new Stack<>();
-        challengeStack.push(de.seism0saurus.hectoc.shuntingyardalgorithm.Number.of(challenge.getFirstDigit()));
-        challengeStack.push(de.seism0saurus.hectoc.shuntingyardalgorithm.Number.of(challenge.getSecondDigit()));
-        challengeStack.push(de.seism0saurus.hectoc.shuntingyardalgorithm.Number.of(challenge.getThirdDigit()));
-        challengeStack.push(de.seism0saurus.hectoc.shuntingyardalgorithm.Number.of(challenge.getFourthDigit()));
-        challengeStack.push(de.seism0saurus.hectoc.shuntingyardalgorithm.Number.of(challenge.getFifthDigit()));
-        challengeStack.push(Number.of(challenge.getSixthDigit()));
-
-        return challengeStack;
     }
 }
