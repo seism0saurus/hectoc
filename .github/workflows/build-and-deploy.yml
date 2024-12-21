@@ -247,6 +247,14 @@ jobs:
           key: maven
       - name: Build the bruteforcer
         run: mvn --batch-mode --update-snapshots install --file bruteforcer/pom.xml
+      - name: Copy jar
+        run: cp /home/runner/work/hectoc/hectoc/bruteforcer/target/bruteforcer-*.jar bruteforcer.jar
+      - name: Archive bruteforcer jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: bruteforcer
+          path: bruteforcer.jar
+          retention-days: 1
 
   create-image-bruteforcer:
     runs-on: ubuntu-latest
