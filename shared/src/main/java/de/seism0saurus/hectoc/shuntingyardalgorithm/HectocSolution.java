@@ -3,6 +3,8 @@ package de.seism0saurus.hectoc.shuntingyardalgorithm;
 import de.seism0saurus.hectoc.generator.HectocChallenge;
 import lombok.Getter;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,7 +19,10 @@ import java.util.regex.Pattern;
  *
  * @author seism0saurus
  */
-public class HectocSolution {
+public class HectocSolution implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     public static final List<Character> ALLOWED_CHARS = List.of('1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '^', '(', ')');
     @Getter

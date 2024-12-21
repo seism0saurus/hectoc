@@ -1,17 +1,24 @@
 package de.seism0saurus.hectoc.generator;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 @Data
 @Builder
-public class HectocChallenge {
+public class HectocChallenge implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     public static final int MIN = 1;
     public static final int MAX = 9;
-    public static final List<Character> ALLOWED_CHARS = List.of('1', '2', '3', '4', '5', '6', '7', '8', '9');
+    public static final List<Character> ALLOWED_CHARS = new ArrayList<>(List.of('1', '2', '3', '4', '5', '6', '7', '8', '9'));
 
     private final int firstDigit;
     private final int secondDigit;
@@ -20,7 +27,13 @@ public class HectocChallenge {
     private final int fifthDigit;
     private final int sixthDigit;
 
-    protected HectocChallenge(int firstDigit, int secondDigit, int thirdDigit, int fourthDigit, int fifthDigit, int sixthDigit) {
+    @JsonCreator
+    protected HectocChallenge(@JsonProperty("firstDigit") int firstDigit,
+                              @JsonProperty("secondDigit") int secondDigit,
+                              @JsonProperty("thirdDigit") int thirdDigit,
+                              @JsonProperty("fourthDigit") int fourthDigit,
+                              @JsonProperty("fifthDigit") int fifthDigit,
+                              @JsonProperty("sixthDigit") int sixthDigit) {
         if (firstDigit < MIN || firstDigit > MAX) {
             throw new IllegalArgumentException("The first number is invalid. Please provide a number between 1 and 9");
         }

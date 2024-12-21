@@ -1,7 +1,7 @@
 # Hectoc Bruteforcer
 
 The Hectoc Bruteforcer in the [bruteforcer](../bruteforcer) is a commandline tool
-to try all possible solutions for the [unsolved challenges](https://wir-rechnen.de/hectoc/hectocs-ungeloest-unsolved).
+to try all possible solutionPdos for the [unsolved challenges](https://wir-rechnen.de/hectoc/hectocs-ungeloest-unsolved).
 
 ## Build
 

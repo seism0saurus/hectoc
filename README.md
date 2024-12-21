@@ -27,7 +27,7 @@ The Hectoc Challenger in the [webapp](./webapp) folder is a webapplication, that
 ### Library
 
 The Hectoc library in the [shared](./shared) folder contains some Java classes to generate Hectocs
-and check solutions with a modified version of a [Shunting Yard Algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm)
+and check solutionPdos with a modified version of a [Shunting Yard Algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm)
 and stacks.
 
 You can use that library, if you want to implement your own Java apps or tools for Hectocs.
@@ -40,7 +40,7 @@ It posts a Hectoc every hour and can favorite correct answers. Wrong answers get
 ### Bruteforcer
 
 The Hectoc Bruteforcer in the [bruteforcer](./bruteforcer) is a commandline tool
-to try all possible solutions for the [unsolved challenges](https://wir-rechnen.de/hectoc/hectocs-ungeloest-unsolved).
+to try all possible solutionPdos for the [unsolved challenges](https://wir-rechnen.de/hectoc/hectocs-ungeloest-unsolved).
 
 ## Build
 

@@ -1,14 +1,34 @@
-package de.seism0saurus.hectoc.bruteforcer;
+package de.seism0saurus.hectoc.bruteforcer.logic;
 
 import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.StackElement;
+import org.jobrunr.jobs.context.JobRunrDashboardLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+/**
+ * The PossibleSolutionGenerator class provides utilities for generating 
+ * Reverse Polish Notation (RPN) stacks based on an input stack of numbers.
+ * It handles the creation of valid RPN stacks, ensuring the correct number 
+ * of operators and operands in each stack.
+ */
 public class PossibleSolutionGenerator {
 
-    protected static Set<Stack<StackElement>> createRpnStacks(Stack<Number> stack) {
-        System.out.println("Creating RPN stacks for " + stack);
+    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(PossibleSolutionGenerator.class));
+
+    /**
+     * Generates a set of unique Reverse Polish Notation (RPN) stacks from a given input stack of numbers.
+     * The method evaluates all possible permutations of numbers and operators to form valid RPN stacks.
+     *
+     * @param stack the input stack containing numbers that will be used to create RPN stacks. 
+     *              Must not be null; an IllegalArgumentException will be thrown otherwise.
+     * @return a set of unique stacks where each stack represents a valid RPN configuration 
+     *         derived from the provided input stack.
+     */
+    public static Set<Stack<StackElement>> createRpnStacks(Stack<Number> stack) {
+        LOGGER.debug("Creating RPN stacks for " + stack);
 
         // Null guarding clause
         if (stack == null) {
@@ -22,14 +42,14 @@ public class PossibleSolutionGenerator {
         if (size == 0) {
             Stack<StackElement> newStack = new Stack<>();
             rpnStacks.add(newStack);
-            System.out.println("Stack " + stack + " was empty, so there is now real rpn. Returning list with empty stack.");
+            LOGGER.debug("Stack " + stack + " was empty, so there is now real rpn. Returning list with empty stack.");
             return rpnStacks;
         } else if (size == 1) {
             Stack<StackElement> newStack = new Stack<>();
             final Number number = stack.elementAt(0);
             newStack.push(number);
             rpnStacks.add(newStack);
-            System.out.println("Stack " + stack + " had only one element. So the only valid rpn ist the stack itself without any operators.");
+            LOGGER.debug("Stack " + stack + " had only one element. So the only valid rpn ist the stack itself without any operators.");
             return rpnStacks;
         }
 
@@ -103,14 +123,26 @@ public class PossibleSolutionGenerator {
             rpnStacks.addAll(tmpStacks);
         }
 
-        System.out.println(rpnStacks.size() + " unique RPN stacks created.");
+        LOGGER.debug(rpnStacks.size() + " unique RPN stacks created.");
         return rpnStacks;
     }
 
+    /**
+     * Counts the number of '1' characters in the given binary string.
+     *
+     * @param binaryString the binary string to be analyzed; must not be null
+     * @return the count of '1' characters in the binary string
+     */
     private static long countNumberOfOnes(String binaryString) {
         return binaryString.codePoints().mapToObj(c -> (char) c).filter(c -> c.equals('1')).count();
     }
 
+    /**
+     * Counts the number of '1' characters in the given binary string.
+     *
+     * @param binaryString the binary string to be analyzed; must not be null
+     * @return the count of '1' characters in the binary string
+     */
     private static long countNumberOfOnes(CharSequence binaryString) {
         return binaryString.codePoints().mapToObj(c -> (char) c).filter(c -> c.equals('1')).count();
     }

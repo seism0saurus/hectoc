@@ -1,5 +1,6 @@
 package de.seism0saurus.hectoc.bruteforcer;
 
+import de.seism0saurus.hectoc.bruteforcer.logic.NegativeNumberPermutator;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.StackElement;
 import org.hamcrest.MatcherAssert;

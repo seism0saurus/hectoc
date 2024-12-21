@@ -247,3 +247,31 @@ jobs:
           key: maven
       - name: Build the bruteforcer
         run: mvn --batch-mode --update-snapshots install --file bruteforcer/pom.xml
+
+  create-image-bruteforcer:
+    runs-on: ubuntu-latest
+    needs: build-bruteforcer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: bruteforcer
+          path: bruteforcer/containerimage
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/seism0saurus/hectoc-bruteforcer
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: bruteforcer/containerimage/.
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
