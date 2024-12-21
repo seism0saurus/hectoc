@@ -21,14 +21,14 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: java
+          cache: maven
       - name: Build the shared part of the project
         run: mvn --batch-mode install --file shared/pom.xml
       - name: Cache local Maven repository
         uses: actions/cache/save@v4
         with:
           path: ~/.m2/repository
-          key: maven
+          key: maven-repo
 
   changes:
     runs-on: ubuntu-latest
@@ -76,7 +76,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ~/.m2/repository
-          key: maven
+          key: maven-repo
       - name: Build the bot
         run: mvn --batch-mode --update-snapshots install --file bot/pom.xml
       - name: Copy jar
@@ -156,7 +156,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ~/.m2/repository
-          key: maven
+          key: maven-repo
       - name: Install Node
         uses: actions/setup-node@v4
         with:
@@ -244,7 +244,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ~/.m2/repository
-          key: maven
+          key: maven-repo
       - name: Build the bruteforcer
         run: mvn --batch-mode --update-snapshots install --file bruteforcer/pom.xml
       - name: Copy jar
