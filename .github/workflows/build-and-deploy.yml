@@ -21,7 +21,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven
+          cache: java
       - name: Build the shared part of the project
         run: mvn --batch-mode install --file shared/pom.xml
       - name: Cache local Maven repository
