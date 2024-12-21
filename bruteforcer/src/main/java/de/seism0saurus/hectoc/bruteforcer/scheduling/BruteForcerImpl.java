@@ -31,7 +31,7 @@ public class BruteForcerImpl implements BruteForcer {
 
     private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(BruteForcerImpl.class));
 
-    private static AtomicLong counter = new AtomicLong(0);
+    private static AtomicLong correctSolutions = new AtomicLong(0);
 
     private final Repository repository;
 
@@ -67,8 +67,8 @@ public class BruteForcerImpl implements BruteForcer {
      * @return True if the challenge is solvable based on the repository state; false otherwise.
      */
     private boolean findSolutions(HectocChallenge challenge, JobDashboardProgressBar progressBar) {
-        counter = new AtomicLong(0);
-        AtomicLong solutions = new AtomicLong(0);
+        correctSolutions = new AtomicLong(0);
+        AtomicLong solutionAtttempts = new AtomicLong(0);
         NumberBlockPermutator.createPermutationsOfBlocksOfNumbers(getChallengeAsStack(challenge))
                 .parallelStream()
                 .map(
@@ -77,13 +77,13 @@ public class BruteForcerImpl implements BruteForcer {
                 .map(
                         s -> createRpnStacks(s)
                 ).flatMap(Set::parallelStream)
-                .peek(s -> solutions.incrementAndGet())
+                .peek(s -> solutionAtttempts.incrementAndGet())
                 .peek(s -> this.checkResult(s, challenge))
                 .forEach(s -> progressBar.increaseByOne());
 
-        increaseTryCounter(challenge, counter.get());
+        increaseTryCounter(challenge, correctSolutions.get());
 
-        LOGGER.info("Challenge: {} - {} solutions checked. Found {} possible correct solutions", challenge, solutions, counter.get());
+        LOGGER.info("Challenge: {} - {} solutions checked. Found {} possible correct solutions", challenge, solutionAtttempts.get(), correctSolutions.get());
 
         Optional<ChallengePdo> optionalChallenge = repository.findByChallenge(challenge.toString());
         ChallengePdo challengePdo = optionalChallenge.get();
@@ -101,10 +101,10 @@ public class BruteForcerImpl implements BruteForcer {
      *         false otherwise.
      */
     private boolean checkResult(Stack<StackElement> rpn, HectocChallenge challenge) {
-        counter.incrementAndGet();
         LOGGER.debug("Checking " + rpn + " for " + challenge);
         BigDecimal result = calculateResult(rpn);
         if (BigDecimal.valueOf(100).equals(result)) {
+            correctSolutions.incrementAndGet();
             markHectocSolved(challenge, rpn.toString());
             LOGGER.info("!!!!!!!!!!!!!!!! Found solution for {}: {}", challenge, rpn);
             return true;
@@ -124,7 +124,7 @@ public class BruteForcerImpl implements BruteForcer {
         try {
             result = ShuntingYardAlgorithm.calculateRpn(rpn);
         } catch (ArithmeticException e) {
-            LOGGER.error(rpn + " cannot be calculated. " + e.getMessage());
+            LOGGER.debug(rpn + " cannot be calculated. " + e.getMessage());
         }
         return result;
     }
