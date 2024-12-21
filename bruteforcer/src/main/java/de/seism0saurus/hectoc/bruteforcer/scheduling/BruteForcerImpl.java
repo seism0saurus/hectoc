@@ -29,6 +29,11 @@ import static de.seism0saurus.hectoc.bruteforcer.logic.PossibleSolutionGenerator
 @Component
 public class BruteForcerImpl implements BruteForcer {
 
+    /**
+     * Maximum number of possible permnutations of a hectoc challenge in PNR
+     */
+    public static final int MAX_PERMUTATIONS = 3379794;
+
     private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(BruteForcerImpl.class));
 
     private static AtomicLong correctSolutions = new AtomicLong(0);
@@ -50,7 +55,7 @@ public class BruteForcerImpl implements BruteForcer {
      */
     @Override
     public boolean bruteForce(HectocChallenge challenge, JobContext context) {
-        final JobDashboardProgressBar progressBar = context.progressBar(1);
+        final JobDashboardProgressBar progressBar = context.progressBar(MAX_PERMUTATIONS);
         return findSolutions(challenge, progressBar);
     }
 
