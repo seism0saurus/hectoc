@@ -79,6 +79,9 @@ public class NotificationRepositoryImpl implements NotificationRepository {
         Map<Boolean, List<Notification>> groupedNotifications = notifications.stream()
                 .collect(Collectors.partitioningBy(n -> Notification.NotificationType.MENTION == n.getType() && n.getStatus().getInReplyToId() != null));
         groupedNotifications.get(false).stream()
+                .filter(n -> Notification.NotificationType.UPDATE == n.getType() && n.getStatus().getInReplyToId() != null)
+                        .forEach(n -> LOGGER.info("Got update notification: " + n.toString()));
+        groupedNotifications.get(false).stream()
                 .map(Notification::getId)
                 .forEach(id -> {
                     try {
