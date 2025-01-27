@@ -206,7 +206,13 @@ public class NotificationProcessingScheduler {
             this.notificationRepo.save(pdo);
             LOGGER.info("Dismiss notification " + pdo.getNotificationId() + " successfully");
         } catch (BigBoneRequestException e) {
-            LOGGER.error("Could not dismiss notification. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+            if (e.getHttpStatusCode() == 404){
+                LOGGER.warn("Could not dismiss notification but will remove it nevertheless. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+                pdo.setDismissed(true);
+                this.notificationRepo.save(pdo);
+            } else {
+                LOGGER.error("Could not dismiss notification. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+            }
         }
     }
 
@@ -219,7 +225,7 @@ public class NotificationProcessingScheduler {
      */
     private void dismissNotificationWithoutSave(NotificationPdo pdo){
         try {
-            LOGGER.info("Going to dismiss notification " + pdo.getNotificationId());
+            LOGGER.info("Going to dismiss notification without saving " + pdo.getNotificationId());
             this.mastodonNotificationRepo.dismissNotification(pdo.getNotificationId());
             pdo.setDismissed(true);
             LOGGER.info("Dismiss notification " + pdo.getNotificationId() + " successfully");
