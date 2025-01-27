@@ -9,10 +9,12 @@ import social.bigbone.api.entity.Instance;
 import social.bigbone.api.entity.Notification;
 import social.bigbone.api.exception.BigBoneRequestException;
 
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
@@ -98,22 +100,22 @@ public class NotificationRepositoryImpl implements NotificationRepository {
                         LOGGER.error("Could not dismiss notification. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
                     }
                 });
-        groupedNotifications.get(true).stream()
+        List<Notification> deduplicatedNotificartions = groupedNotifications.get(true).stream()
                 .collect(groupingBy(n -> {
                     assert n.getStatus() != null;
                     return n.getStatus().getId();
                 }, toSet()))
                 .values()
                 .stream()
-                .map( s -> {
+                .map(s -> {
                     if (s.size() > 1) {
                         return s.stream()
-                                .max(Comparator.comparing(n -> n.getCreatedAt().mostPreciseOrFallback(java.time.Instant.ofEpochMilli(0))))
+                                .max(Comparator.comparing(n -> n.getCreatedAt().mostPreciseOrFallback(Instant.ofEpochMilli(0))))
                                 .get();
                     } else {
-                        return s.toArray()[0];
+                        return s.iterator().next();
                     }
-                })
-        return groupedNotifications.get(true);
+                }).toList();
+        return deduplicatedNotificartions;
     }
 }
