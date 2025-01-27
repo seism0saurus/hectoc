@@ -25,6 +25,7 @@ import java.time.ZoneOffset;
 import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -349,8 +350,9 @@ public class NotificationProcessingScheduler {
                     }
                     NotificationPdo pdo;
                     if (notificationRepo.existsByStatusId(m.getStatus().getId())){
-                        pdo = notificationRepo.findByStatusId(m.getStatus().getId());
-                        if (!pdo.getNotificationId().equals(m.getId())){
+                        List<NotificationPdo> pdos = notificationRepo.findByStatusId(m.getStatus().getId());
+                        Optional<NotificationPdo> foundPdo = pdos.stream().filter(p -> p.getNotificationId().equals(m.getId())).findFirst();
+                        if (foundPdo.isEmpty()){
                             pdo = NotificationPdo.builder()
                                     .notificationId(m.getId())
                                     .statusId(m.getStatus().getId())
@@ -360,6 +362,8 @@ public class NotificationProcessingScheduler {
                                     .correct(false)
                                     .date(m.getStatus().getCreatedAt().mostPreciseInstantOrNull().atZone(ZoneOffset.UTC))
                                     .build();
+                        } else {
+                            pdo = foundPdo.get();
                         }
                     } else {
                         pdo = NotificationPdo.builder()
