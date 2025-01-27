@@ -82,7 +82,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
                 .map(Notification::getId)
                 .forEach(id -> {
                     try {
-                        LOGGER.info("Going to dismiss notification because it's not an original answer" + id);
+                        LOGGER.info("Going to dismiss notification because it's not an original answer: " + id);
                         this.dismissNotification(id);
                     } catch (BigBoneRequestException e) {
                         LOGGER.error("Could not dismiss notification. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
