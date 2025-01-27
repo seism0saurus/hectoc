@@ -350,6 +350,17 @@ public class NotificationProcessingScheduler {
                     NotificationPdo pdo;
                     if (notificationRepo.existsByStatusId(m.getStatus().getId())){
                         pdo = notificationRepo.findByStatusId(m.getStatus().getId());
+                        if (!pdo.getNotificationId().equals(m.getId())){
+                            pdo = NotificationPdo.builder()
+                                    .notificationId(m.getId())
+                                    .statusId(m.getStatus().getId())
+                                    .challenge(challenge)
+                                    .solution(m.getStatus().getContent())
+                                    .author(m.getStatus().getAccount().getAcct())
+                                    .correct(false)
+                                    .date(m.getStatus().getCreatedAt().mostPreciseInstantOrNull().atZone(ZoneOffset.UTC))
+                                    .build();
+                        }
                     } else {
                         pdo = NotificationPdo.builder()
                                 .notificationId(m.getId())

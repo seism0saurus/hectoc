@@ -5,12 +5,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import social.bigbone.MastodonClient;
+import social.bigbone.api.entity.Instance;
 import social.bigbone.api.entity.Notification;
 import social.bigbone.api.exception.BigBoneRequestException;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * The implementation of the {@link NotificationRepository NotificationRepository} to access and manipulate {@link social.bigbone.api.entity.Notification Notifications}.
@@ -77,20 +82,38 @@ public class NotificationRepositoryImpl implements NotificationRepository {
      */
     private List<Notification> dismissExceptMentions(List<Notification> notifications) {
         Map<Boolean, List<Notification>> groupedNotifications = notifications.stream()
-                .collect(Collectors.partitioningBy(n -> Notification.NotificationType.MENTION == n.getType() && n.getStatus().getInReplyToId() != null));
-        groupedNotifications.get(false).stream()
-                .filter(n -> Notification.NotificationType.UPDATE == n.getType() && n.getStatus().getInReplyToId() != null)
-                        .forEach(n -> LOGGER.info("Got update notification: " + n.toString()));
+                .collect(Collectors.partitioningBy(n -> {
+                    if ((Notification.NotificationType.MENTION != n.getType() && Notification.NotificationType.UPDATE != n.getType()))
+                        return false;
+                    assert n.getStatus() != null;
+                    return n.getStatus().getInReplyToId() != null;
+                }));
         groupedNotifications.get(false).stream()
                 .map(Notification::getId)
                 .forEach(id -> {
                     try {
-                        LOGGER.info("Going to dismiss notification because it's not an original answer: " + id);
+                        LOGGER.info("Going to dismiss notification because it's not an answer: " + id);
                         this.dismissNotification(id);
                     } catch (BigBoneRequestException e) {
                         LOGGER.error("Could not dismiss notification. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
                     }
                 });
+        groupedNotifications.get(true).stream()
+                .collect(groupingBy(n -> {
+                    assert n.getStatus() != null;
+                    return n.getStatus().getId();
+                }, toSet()))
+                .values()
+                .stream()
+                .map( s -> {
+                    if (s.size() > 1) {
+                        return s.stream()
+                                .max(Comparator.comparing(n -> n.getCreatedAt().mostPreciseOrFallback(java.time.Instant.ofEpochMilli(0))))
+                                .get();
+                    } else {
+                        return s.toArray()[0];
+                    }
+                })
         return groupedNotifications.get(true);
     }
 }
