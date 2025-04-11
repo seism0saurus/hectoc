@@ -20,7 +20,7 @@ import static de.seism0saurus.hectoc.generator.HectocGenerator.UNSOLVABLE_HECTOC
 @Service
 @Profile("scheduler")
 public class Scheduler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BruteForcerImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Scheduler.class);
 
     private final JobScheduler jobScheduler;
     private final Repository repository;
@@ -32,9 +32,9 @@ public class Scheduler {
             Optional<ChallengePdo> existingChallenge = repository.findByChallenge(challenge.toString());
             if (existingChallenge.isEmpty()) {
                 final JobId enqueuedJobId = jobScheduler
-                        .<BruteForcer>enqueue(
+                        .<BruteForceScheduler>enqueue(
                                 UUID.nameUUIDFromBytes(challenge.toString().getBytes()),
-                                bruteForcer -> bruteForcer.bruteForce(challenge, JobContext.Null)
+                                bruteForceScheduler -> bruteForceScheduler.schedule(challenge, JobContext.Null)
                         );
                 repository.save(ChallengePdo.builder()
                                 .challenge(challenge.toString())
