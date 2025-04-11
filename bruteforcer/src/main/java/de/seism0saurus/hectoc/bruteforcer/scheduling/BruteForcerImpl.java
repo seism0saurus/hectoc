@@ -83,7 +83,7 @@ public class BruteForcerImpl implements BruteForcer {
     private boolean checkResult(Stack<StackElement> rpn, HectocChallenge challenge) {
         LOGGER.debug("Checking " + rpn + " for " + challenge);
         BigDecimal result = calculateResult(rpn);
-        if (BigDecimal.valueOf(100).equals(result)) {
+        if (BigDecimal.valueOf(100).compareTo(result) == 0) {
             markHectocSolved(challenge, rpn.toString());
             return true;
         } else {
