@@ -1,6 +1,5 @@
 package de.seism0saurus.hectoc.bruteforcer.logic;
 
-import de.seism0saurus.hectoc.bruteforcer.scheduling.BruteForcerImpl;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
 import org.jobrunr.jobs.context.JobRunrDashboardLogger;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ import java.util.Stack;
  */
 public class NegativeNumberPermutator {
 
-    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(BruteForcerImpl.class));
+    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(NegativeNumberPermutator.class));
 
     /**
      * With n numbers we have 2^n different permutations of negative numbers

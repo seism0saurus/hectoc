@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Stack;
 
 @Component
-public interface NegativeNumberScheduler {
+public interface OperatorGenerator {
 
     /**
      * Attempts to solve the given HectocChallenge using a brute force approach.
@@ -16,5 +16,5 @@ public interface NegativeNumberScheduler {
      * @param challenge the HectocChallenge to be solved, which contains numeric constraints
      * @param context   the JobContext providing additional information or configuration for the task
      */
-    void scheduleNegativeNumberPermutations(HectocChallenge challenge, Stack<Number> stack, JobContext context);
+    void generateOperatorPermutations(HectocChallenge challenge, Stack<Number> stack, JobContext context);
 }

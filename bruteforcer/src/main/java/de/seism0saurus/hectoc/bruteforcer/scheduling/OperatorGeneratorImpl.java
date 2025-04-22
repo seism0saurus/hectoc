@@ -17,18 +17,18 @@ import java.util.Stack;
 import java.util.UUID;
 
 @Component
-public class OperatorSchedulerImpl implements OperatorScheduler {
+public class OperatorGeneratorImpl implements OperatorGenerator {
 
     /**
      * Maximum number of possible permnutations of a hectoc challenge in PNR
      */
     public static final int MAX_PERMUTATIONS = 3_379_794;
 
-    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(OperatorSchedulerImpl.class));
+    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(OperatorGeneratorImpl.class));
 
     private final JobScheduler jobScheduler;
 
-    public OperatorSchedulerImpl(@Autowired JobScheduler jobScheduler) {
+    public OperatorGeneratorImpl(@Autowired JobScheduler jobScheduler) {
         this.jobScheduler = jobScheduler;
     }
 
@@ -41,9 +41,9 @@ public class OperatorSchedulerImpl implements OperatorScheduler {
      * @param context   the JobContext providing the progress bar and other task-related utilities
      */
     @Override
-    public void scheduleOperatorPermutations(HectocChallenge challenge, Stack<Number> stack, JobContext context) {
+    public void generateOperatorPermutations(HectocChallenge challenge, Stack<Number> stack, JobContext context) {
         final JobDashboardProgressBar progressBar = context.progressBar(MAX_PERMUTATIONS);
-        scheduleOperatorPermutations(challenge, stack, progressBar);
+        generateOperatorPermutations(challenge, stack, progressBar);
     }
 
     /**
@@ -57,13 +57,13 @@ public class OperatorSchedulerImpl implements OperatorScheduler {
      *                    that must be used to find solutions.
      * @param progressBar The progress bar to track progress during the solution search process.
      */
-    private void scheduleOperatorPermutations(HectocChallenge challenge, Stack<Number> stack, JobDashboardProgressBar progressBar) {
+    private void generateOperatorPermutations(HectocChallenge challenge, Stack<Number> stack, JobDashboardProgressBar progressBar) {
         PossibleSolutionGenerator.createRpnStacks(stack).stream()
                 .peek(s -> {
                     final JobId enqueuedJobId = jobScheduler
-                            .<BruteForcer>enqueue(
+                            .<SolutionChecker>enqueue(
                                     UUID.nameUUIDFromBytes(("b_" + challenge + s.toString()).getBytes()),
-                                    bruteForcer -> bruteForcer.bruteForce(challenge, s, JobContext.Null)
+                                    bruteForcer -> bruteForcer.check(challenge, s, JobContext.Null)
                             );
                     LOGGER.info("JobId: " + enqueuedJobId);
                 })

@@ -21,13 +21,13 @@ import java.util.Optional;
 import java.util.Stack;
 
 @Component
-public class BruteForcerImpl implements BruteForcer {
+public class SolutionCheckerImpl implements SolutionChecker {
 
-    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(BruteForcerImpl.class));
+    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(SolutionCheckerImpl.class));
 
     private final Repository repository;
 
-    public BruteForcerImpl(@Autowired Repository repository) {
+    public SolutionCheckerImpl(@Autowired Repository repository) {
         this.repository = repository;
     }
 
@@ -41,9 +41,9 @@ public class BruteForcerImpl implements BruteForcer {
      * @return true if the challenge is determined to be solvable based on the repository state, false otherwise
      */
     @Override
-    public boolean bruteForce(HectocChallenge challenge, Stack<StackElement> stack, JobContext context) {
+    public boolean check(HectocChallenge challenge, Stack<StackElement> stack, JobContext context) {
         final JobDashboardProgressBar progressBar = context.progressBar(1);
-        return findSolutions(challenge, stack, progressBar);
+        return check(challenge, stack, progressBar);
     }
 
     /**
@@ -59,7 +59,7 @@ public class BruteForcerImpl implements BruteForcer {
      * @param progressBar The progress bar to track progress during the solution search process.
      * @return True if the challenge is solvable based on the repository state; false otherwise.
      */
-    private boolean findSolutions(HectocChallenge challenge, Stack<StackElement> stack, JobDashboardProgressBar progressBar) {
+    private boolean check(HectocChallenge challenge, Stack<StackElement> stack, JobDashboardProgressBar progressBar) {
         boolean result = this.checkResult(stack, challenge);
         if (result) {
             LOGGER.info("Challenge: {} - {} solutions checked. It is a solution !!!!!!", challenge, stack);

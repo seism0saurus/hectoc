@@ -17,18 +17,18 @@ import java.util.Stack;
 import java.util.UUID;
 
 @Component
-public class PermutationsSchedulerImpl implements PermutationsScheduler {
+public class NumberPermutationGeneratorImpl implements NumberPermutationGenerator {
 
     /**
-     * Maximum number of possible permnutations of a hectoc challenge in PNR
+     * Maximum number of possible permutations of a hectoc challenge in PNR
      */
-    public static final int MAX_PERMUTATIONS = 3_379_794;
+    public static final int MAX_PERMUTATIONS = 32;
 
-    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(PermutationsSchedulerImpl.class));
+    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(NumberPermutationGeneratorImpl.class));
 
     private final JobScheduler jobScheduler;
 
-    public PermutationsSchedulerImpl(@Autowired JobScheduler jobScheduler) {
+    public NumberPermutationGeneratorImpl(@Autowired JobScheduler jobScheduler) {
         this.jobScheduler = jobScheduler;
     }
 
@@ -41,7 +41,7 @@ public class PermutationsSchedulerImpl implements PermutationsScheduler {
      * @param context   the JobContext providing the progress bar and other task-related utilities
      */
     @Override
-    public void schedulePermutations(HectocChallenge challenge, JobContext context) {
+    public void generateNumberPermutations(HectocChallenge challenge, JobContext context) {
         final JobDashboardProgressBar progressBar = context.progressBar(MAX_PERMUTATIONS);
         schedulePermutations(challenge, progressBar);
     }
@@ -61,9 +61,9 @@ public class PermutationsSchedulerImpl implements PermutationsScheduler {
         NumberBlockPermutator.createPermutationsOfBlocksOfNumbers(getChallengeAsStack(challenge)).stream()
                 .peek(s -> {
                     final JobId enqueuedJobId = jobScheduler
-                            .<NegativeNumberScheduler>enqueue(
+                            .<NegativeNumberPermutationGenerator>enqueue(
                                     UUID.nameUUIDFromBytes(("n_" + challenge + s.toString()).getBytes()),
-                                    ngs -> ngs.scheduleNegativeNumberPermutations(challenge, s, JobContext.Null)
+                                    ngs -> ngs.generateNegativeNumberPermutations(challenge, s, JobContext.Null)
                             );
                     LOGGER.info("JobId: " + enqueuedJobId);
                 })
