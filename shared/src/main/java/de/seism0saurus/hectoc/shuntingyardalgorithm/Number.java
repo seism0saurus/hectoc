@@ -3,7 +3,7 @@ package de.seism0saurus.hectoc.shuntingyardalgorithm;
 import java.io.Serial;
 import java.io.Serializable;
 
-public record Number(int number) implements StackElement, Serializable {
+public record Number(int value) implements StackElement, Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -12,11 +12,7 @@ public record Number(int number) implements StackElement, Serializable {
         return new Number(number);
     }
 
-    public int value() {
-        return number;
-    }
-
     public String toString() {
-        return String.valueOf(number);
+        return String.valueOf(value);
     }
 }

@@ -42,9 +42,9 @@ public class NegativeNumberPermutator {
             for (int nthElement = 0; nthElement < size; nthElement++) {
                 Number number = stack.elementAt(nthElement);
                 if (stringRepresentation.charAt(nthElement) == '0') {
-                    newStack.push(Number.of(number.number()));
+                    newStack.push(Number.of(number.value()));
                 } else {
-                    newStack.push(Number.of(-1 * number.number()));
+                    newStack.push(Number.of(-1 * number.value()));
                 }
             }
             digitStacks.add(newStack);
