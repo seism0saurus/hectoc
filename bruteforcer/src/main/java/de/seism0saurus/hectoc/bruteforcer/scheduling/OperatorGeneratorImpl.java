@@ -42,22 +42,8 @@ public class OperatorGeneratorImpl implements OperatorGenerator {
      */
     @Override
     public void generateOperatorPermutations(HectocChallenge challenge, Stack<Number> stack, JobContext context) {
+        LOGGER.info("Challenge: {}; Stack: {}", challenge, stack);
         final JobDashboardProgressBar progressBar = context.progressBar(MAX_PERMUTATIONS);
-        generateOperatorPermutations(challenge, stack, progressBar);
-    }
-
-    /**
-     * Attempts to find and evaluate all possible solutions for a given Hectoc challenge
-     * by generating permutations of numbers, transforming them into Reverse Polish Notation (RPN) stacks,
-     * and validating these stacks against the expected challenge result.
-     * Tracks progress using the provided progress bar and logs the outcomes.
-     * Updates the challenge status in the repository based on the results.
-     *
-     * @param challenge   The Hectoc challenge to be solved. This includes the set of numbers
-     *                    that must be used to find solutions.
-     * @param progressBar The progress bar to track progress during the solution search process.
-     */
-    private void generateOperatorPermutations(HectocChallenge challenge, Stack<Number> stack, JobDashboardProgressBar progressBar) {
         PossibleSolutionGenerator.createRpnStacks(stack).stream()
                 .peek(s -> {
                     final JobId enqueuedJobId = jobScheduler
@@ -65,10 +51,9 @@ public class OperatorGeneratorImpl implements OperatorGenerator {
                                     UUID.nameUUIDFromBytes(("b_" + challenge + s.toString()).getBytes()),
                                     bruteForcer -> bruteForcer.check(challenge, s, JobContext.Null)
                             );
-                    LOGGER.info("JobId: " + enqueuedJobId);
+                    LOGGER.info("Challenge: {}; Stack: {}; JobId: {}",challenge, s, enqueuedJobId);
                 })
                 .forEach(s -> progressBar.increaseByOne());
-
         LOGGER.info("Challenge: {} - {} jobs scheduled", challenge, progressBar.getProgress());
     }
 }

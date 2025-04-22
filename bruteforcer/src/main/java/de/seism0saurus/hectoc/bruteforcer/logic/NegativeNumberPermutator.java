@@ -26,7 +26,7 @@ public class NegativeNumberPermutator {
      * @return a list of stacks with all different permutations of the negative and positive numbers of the original stack of numbers
      */
     public static List<Stack<Number>> createPermutationsOfNegativeNumbers(Stack<Number> stack) {
-        LOGGER.debug("Creating permutations of negative numbers for " + stack);
+        LOGGER.debug("Creating permutations of negative numbers for stack {}", stack);
         final List<Stack<Number>> digitStacks = new ArrayList<>();
         int size = stack.size();
         for (int numberOfPermutations = 0; numberOfPermutations < Math.pow(2, size); numberOfPermutations++) {
@@ -49,7 +49,7 @@ public class NegativeNumberPermutator {
             }
             digitStacks.add(newStack);
         }
-        LOGGER.debug(digitStacks.size() + " permutations of negative numbers created");
+        LOGGER.debug("{} permutations of negative numbers created", digitStacks.size());
         return digitStacks;
     }
 }

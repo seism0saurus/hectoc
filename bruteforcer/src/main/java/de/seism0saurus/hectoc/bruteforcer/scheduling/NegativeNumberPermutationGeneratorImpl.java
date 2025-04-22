@@ -38,20 +38,8 @@ public class NegativeNumberPermutationGeneratorImpl implements NegativeNumberPer
      */
     @Override
     public void generateNegativeNumberPermutations(HectocChallenge challenge, Stack<Number> stack, JobContext context) {
+        LOGGER.info("Challenge: {}; Stack: {}", challenge, stack);
         final JobDashboardProgressBar progressBar = context.progressBar(2^stack.size());
-        generateNegativeNumberPermutations(challenge, stack, progressBar);
-    }
-
-    /**
-     * Generates permutations of negative numbers for a given HectocChallenge and stack of numbers.
-     * The method processes each permutation, enqueues it as a job for operator scheduling,
-     * and updates the progress bar while logging the progress.
-     *
-     * @param challenge the HectocChallenge instance representing the current challenge configuration
-     * @param stack the stack of Number objects for which permutations of negative numbers are generated
-     * @param progressBar the JobDashboardProgressBar that tracks and updates the progress of the job scheduling
-     */
-    private void generateNegativeNumberPermutations(HectocChallenge challenge, Stack<Number> stack, JobDashboardProgressBar progressBar) {
         NegativeNumberPermutator.createPermutationsOfNegativeNumbers(stack).stream()
                 .peek(s -> {
                     final JobId enqueuedJobId = jobScheduler
@@ -59,7 +47,7 @@ public class NegativeNumberPermutationGeneratorImpl implements NegativeNumberPer
                                     UUID.nameUUIDFromBytes(("o_" + challenge + s.toString()).getBytes()),
                                     os -> os.generateOperatorPermutations(challenge, s, JobContext.Null)
                             );
-                    LOGGER.info("JobId: " + enqueuedJobId);
+                    LOGGER.info("Challenge: {}; Stack: {}; JobId: {}",challenge, s, enqueuedJobId);
                 })
                 .forEach(s -> progressBar.increaseByOne());
 

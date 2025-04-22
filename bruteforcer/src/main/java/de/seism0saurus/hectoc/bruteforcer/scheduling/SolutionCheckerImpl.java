@@ -42,33 +42,18 @@ public class SolutionCheckerImpl implements SolutionChecker {
      */
     @Override
     public boolean check(HectocChallenge challenge, Stack<StackElement> stack, JobContext context) {
+        LOGGER.info("Challenge: {}; Stack: {}", challenge, stack);
         final JobDashboardProgressBar progressBar = context.progressBar(1);
-        return check(challenge, stack, progressBar);
-    }
-
-    /**
-     * Attempts to find and evaluate all possible solutions for a given Hectoc challenge
-     * by generating permutations of numbers, transforming them into Reverse Polish Notation (RPN) stacks,
-     * and validating these stacks against the expected challenge result.
-     * Tracks progress using the provided progress bar and logs the outcomes.
-     * Updates the challenge status in the repository based on the results.
-     *
-     * @param challenge   The Hectoc challenge to be solved. This includes the set of numbers
-     *                    that must be used to find solutions.
-     * @param stack
-     * @param progressBar The progress bar to track progress during the solution search process.
-     * @return True if the challenge is solvable based on the repository state; false otherwise.
-     */
-    private boolean check(HectocChallenge challenge, Stack<StackElement> stack, JobDashboardProgressBar progressBar) {
         boolean result = this.checkResult(stack, challenge);
         if (result) {
-            LOGGER.info("Challenge: {} - {} solutions checked. It is a solution !!!!!!", challenge, stack);
+            LOGGER.info("Challenge: {}; Stack: {} checked. It is a solution !!!!!!", challenge, stack);
             return true;
         } else {
-            LOGGER.info("Challenge: {} - {} solutions checked. No solution", challenge, stack);
+            LOGGER.info("Challenge: {}; Stack: {} checked. No solution", challenge, stack);
             return false;
         }
     }
+
 
     /**
      * Checks if the given Reverse Polish Notation (RPN) stack results in the expected value

@@ -42,22 +42,8 @@ public class NumberPermutationGeneratorImpl implements NumberPermutationGenerato
      */
     @Override
     public void generateNumberPermutations(HectocChallenge challenge, JobContext context) {
+        LOGGER.info("Challenge: {}", challenge);
         final JobDashboardProgressBar progressBar = context.progressBar(MAX_PERMUTATIONS);
-        schedulePermutations(challenge, progressBar);
-    }
-
-    /**
-     * Attempts to find and evaluate all possible solutions for a given Hectoc challenge
-     * by generating permutations of numbers, transforming them into Reverse Polish Notation (RPN) stacks,
-     * and validating these stacks against the expected challenge result.
-     * Tracks progress using the provided progress bar and logs the outcomes.
-     * Updates the challenge status in the repository based on the results.
-     *
-     * @param challenge   The Hectoc challenge to be solved. This includes the set of numbers
-     *                    that must be used to find solutions.
-     * @param progressBar The progress bar to track progress during the solution search process.
-     */
-    private void schedulePermutations(HectocChallenge challenge, JobDashboardProgressBar progressBar) {
         NumberBlockPermutator.createPermutationsOfBlocksOfNumbers(getChallengeAsStack(challenge)).stream()
                 .peek(s -> {
                     final JobId enqueuedJobId = jobScheduler
@@ -65,7 +51,7 @@ public class NumberPermutationGeneratorImpl implements NumberPermutationGenerato
                                     UUID.nameUUIDFromBytes(("n_" + challenge + s.toString()).getBytes()),
                                     ngs -> ngs.generateNegativeNumberPermutations(challenge, s, JobContext.Null)
                             );
-                    LOGGER.info("JobId: " + enqueuedJobId);
+                    LOGGER.info("Challenge: {}; Stack: {}; JobId: {}",challenge, s, enqueuedJobId);
                 })
                 .forEach(s -> progressBar.increaseByOne());
 
