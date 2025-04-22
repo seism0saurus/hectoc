@@ -2,6 +2,7 @@ package de.seism0saurus.hectoc.generator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,14 +11,14 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Builder
-@EqualsAndHashCode
 public class HectocChallenge implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     public static final int MIN = 1;
     public static final int MAX = 9;
@@ -86,5 +87,23 @@ public class HectocChallenge implements Serializable {
 
     public String toString() {
         return String.valueOf(firstDigit) + secondDigit + thirdDigit + fourthDigit + fifthDigit + sixthDigit;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        de.seism0saurus.hectoc.generator.HectocChallenge challenge = (HectocChallenge) obj;
+        return firstDigit == challenge.firstDigit &&
+                secondDigit == challenge.secondDigit &&
+                thirdDigit == challenge.thirdDigit &&
+                fourthDigit == challenge.fourthDigit &&
+                fifthDigit == challenge.fifthDigit &&
+                sixthDigit == challenge.sixthDigit;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(toString());
     }
 }
