@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>bruteforcer</artifactId>
-    <description>Bruteforcer for unsolved hectoc challenges</description>
+    <description>Bruteforcer for unsolved hectoc challenges using distributed solvers</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
