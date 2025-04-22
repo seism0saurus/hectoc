@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import social.bigbone.MastodonClient;
-import social.bigbone.api.entity.Instance;
 import social.bigbone.api.entity.Notification;
+import social.bigbone.api.entity.NotificationType;
 import social.bigbone.api.exception.BigBoneRequestException;
 
 import java.time.Instant;
@@ -14,7 +14,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
@@ -85,7 +84,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     private List<Notification> dismissExceptMentions(List<Notification> notifications) {
         Map<Boolean, List<Notification>> groupedNotifications = notifications.stream()
                 .collect(Collectors.partitioningBy(n -> {
-                    if ((Notification.NotificationType.MENTION != n.getType() && Notification.NotificationType.UPDATE != n.getType()))
+                    if ((NotificationType.MENTION != n.getType() && NotificationType.UPDATE != n.getType()))
                         return false;
                     assert n.getStatus() != null;
                     return n.getStatus().getInReplyToId() != null;
