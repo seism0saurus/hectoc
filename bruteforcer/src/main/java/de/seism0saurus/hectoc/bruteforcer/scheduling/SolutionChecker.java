@@ -1,6 +1,7 @@
 package de.seism0saurus.hectoc.bruteforcer.scheduling;
 
 import de.seism0saurus.hectoc.generator.HectocChallenge;
+import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.StackElement;
 import org.jobrunr.jobs.context.JobContext;
 import java.util.Stack;
@@ -10,13 +11,12 @@ import org.springframework.stereotype.Component;
 public interface SolutionChecker {
 
         /**
-         * Validates the given HectocChallenge based on specific criteria and the current state of the stack,
-         * possibly utilizing contextual information provided by the JobContext.
+         * Evaluates the given HectocChallenge based on the provided job context and additional stack elements.
          *
-         * @param challenge the HectocChallenge to be validated, containing a set of six numeric digits from 1 to 9
-         * @param stack a stack of StackElement objects used in the validation process
-         * @param context the JobContext providing additional contextual information for the operation
-         * @return true if the challenge meets the criteria, false otherwise
+         * @param challenge the HectocChallenge to be checked, containing digit constraints and specific rules
+         * @param context the JobContext containing job-specific configurations or information
+         * @param elements an optional array of StackElement instances providing additional context or tools for evaluation
+         * @return true if the given challenge meets all specified criteria; false otherwise
          */
-        boolean check(HectocChallenge challenge, Stack<StackElement> stack, JobContext context);
+        boolean check(HectocChallenge challenge, JobContext context, StackElement... elements);
 }

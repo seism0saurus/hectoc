@@ -1,14 +1,12 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
-import lombok.Data;
+import java.io.Serial;
+import java.io.Serializable;
 
-@Data
-public class Number implements StackElement {
-    private final int number;
+public record Number(int number) implements StackElement, Serializable {
 
-    private Number(final int number) {
-        this.number = number;
-    }
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     public static Number of(final int number) {
         return new Number(number);

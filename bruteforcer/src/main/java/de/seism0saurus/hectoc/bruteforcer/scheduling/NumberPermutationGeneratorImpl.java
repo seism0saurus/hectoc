@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Stack;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class NumberPermutationGeneratorImpl implements NumberPermutationGenerator {
@@ -33,29 +34,36 @@ public class NumberPermutationGeneratorImpl implements NumberPermutationGenerato
     }
 
     /**
-     * Attempts to solve the given HectocChallenge using a brute force approach.
-     * This method utilizes the findSolutions process to evaluate all possible solutions
-     * and tracks progress during computation using the provided JobContext.
+     * Generates and schedules permutations of blocks of numbers from the given HectocChallenge.
+     * Each permutation is used to enqueue a job for processing negative number permutations.
+     * A progress bar tracks the number of scheduled jobs, and detailed logs provide visibility
+     * into the permutation generation and job scheduling process.
      *
-     * @param challenge the HectocChallenge to be solved, containing the set of numbers and constraints
-     * @param context   the JobContext providing the progress bar and other task-related utilities
+     * @param challenge The HectocChallenge that provides the numbers to generate permutations for.
+     *                  It contains six digits, each between 1 and 9.
+     * @param context   The JobContext which provides utilities for job processing,
+     *                  such as a progress bar for tracking the number of scheduled jobs.
      */
     @Override
     public void generateNumberPermutations(HectocChallenge challenge, JobContext context) {
         LOGGER.info("Challenge: {}", challenge);
         final JobDashboardProgressBar progressBar = context.progressBar(MAX_PERMUTATIONS);
+        AtomicInteger counter = new AtomicInteger();
         NumberBlockPermutator.createPermutationsOfBlocksOfNumbers(getChallengeAsStack(challenge)).stream()
                 .peek(s -> {
                     final JobId enqueuedJobId = jobScheduler
                             .<NegativeNumberPermutationGenerator>enqueue(
                                     UUID.nameUUIDFromBytes(("n_" + challenge + s.toString()).getBytes()),
-                                    ngs -> ngs.generateNegativeNumberPermutations(challenge, s, JobContext.Null)
+                                    ngs -> ngs.generateNegativeNumberPermutations(challenge, JobContext.Null, s.toArray(new Number[0]))
                             );
                     LOGGER.info("Challenge: {}; Stack: {}; JobId: {}",challenge, s, enqueuedJobId);
                 })
-                .forEach(s -> progressBar.increaseByOne());
+                .forEach(s -> {
+                    progressBar.increaseByOne();
+                    counter.getAndIncrement();
+                });
 
-        LOGGER.info("Challenge: {} - {} jobs scheduled", challenge, progressBar.getProgress());
+        LOGGER.info("Challenge: {} - {} jobs scheduled", challenge, counter.get());
     }
 
     /**

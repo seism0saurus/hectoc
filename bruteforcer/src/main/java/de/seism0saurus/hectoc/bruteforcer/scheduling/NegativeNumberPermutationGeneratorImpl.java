@@ -3,6 +3,7 @@ package de.seism0saurus.hectoc.bruteforcer.scheduling;
 import de.seism0saurus.hectoc.bruteforcer.logic.NegativeNumberPermutator;
 import de.seism0saurus.hectoc.generator.HectocChallenge;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
+import de.seism0saurus.hectoc.shuntingyardalgorithm.StackElement;
 import org.jobrunr.jobs.JobId;
 import org.jobrunr.jobs.context.JobContext;
 import org.jobrunr.jobs.context.JobDashboardProgressBar;
@@ -13,8 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedHashMap;
 import java.util.Stack;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class NegativeNumberPermutationGeneratorImpl implements NegativeNumberPermutationGenerator {
@@ -28,29 +31,36 @@ public class NegativeNumberPermutationGeneratorImpl implements NegativeNumberPer
     }
 
     /**
-     * Generates permutations of negative numbers for a given HectocChallenge and stack of numbers.
-     * The method processes each permutation, enqueues it as a job for operator scheduling,
-     * and updates the progress bar while logging the progress.
+     * Generates permutations of negative numbers for the provided input numbers and schedules jobs based on these permutations.
+     * The method computes all possible sign variations of the given numbers (positive and negative), updates the progress bar,
+     * and schedules individual jobs for each permutation.
      *
-     * @param challenge the HectocChallenge instance representing the current challenge configuration
-     * @param stack the stack of Number objects for which permutations of negative numbers are generated
-     * @param context the JobContext from JobRunr
+     * @param challenge the HectocChallenge instance, representing the challenge to process
+     * @param context the JobContext containing execution-specific configurations and tools such as progress bars
+     * @param numbers a variable number of Number objects representing the input numbers for which permutations will be generated
      */
     @Override
-    public void generateNegativeNumberPermutations(HectocChallenge challenge, Stack<Number> stack, JobContext context) {
-        LOGGER.info("Challenge: {}; Stack: {}", challenge, stack);
-        final JobDashboardProgressBar progressBar = context.progressBar(2^stack.size());
-        NegativeNumberPermutator.createPermutationsOfNegativeNumbers(stack).stream()
+    public void generateNegativeNumberPermutations(HectocChallenge challenge, JobContext context, Number... numbers) {
+        Stack<Number> actualStack = new Stack<>();
+        for (Number number : numbers) {
+            actualStack.push(number);
+        }
+        LOGGER.info("Challenge: {}; Stack: {}", challenge, actualStack);
+        final JobDashboardProgressBar progressBar = context.progressBar(2^actualStack.size());
+        AtomicInteger counter = new AtomicInteger();
+        NegativeNumberPermutator.createPermutationsOfNegativeNumbers(actualStack).stream()
                 .peek(s -> {
                     final JobId enqueuedJobId = jobScheduler
                             .<OperatorGenerator>enqueue(
                                     UUID.nameUUIDFromBytes(("o_" + challenge + s.toString()).getBytes()),
-                                    os -> os.generateOperatorPermutations(challenge, s, JobContext.Null)
+                                    os -> os.generateOperatorPermutations(challenge, JobContext.Null, s.toArray(new Number[0]))
                             );
                     LOGGER.info("Challenge: {}; Stack: {}; JobId: {}",challenge, s, enqueuedJobId);
                 })
-                .forEach(s -> progressBar.increaseByOne());
-
-        LOGGER.info("Challenge: {} - {} jobs scheduled", challenge, progressBar.getProgress());
+                .forEach(s -> {
+                    progressBar.increaseByOne();
+                    counter.getAndIncrement();
+                });
+        LOGGER.info("Challenge: {}; Stack: {} - {} jobs scheduled", challenge, actualStack, counter.get());
     }
 }

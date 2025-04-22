@@ -3,6 +3,7 @@ package de.seism0saurus.hectoc.bruteforcer.scheduling;
 import de.seism0saurus.hectoc.bruteforcer.logic.PossibleSolutionGenerator;
 import de.seism0saurus.hectoc.generator.HectocChallenge;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
+import de.seism0saurus.hectoc.shuntingyardalgorithm.StackElement;
 import org.jobrunr.jobs.JobId;
 import org.jobrunr.jobs.context.JobContext;
 import org.jobrunr.jobs.context.JobDashboardProgressBar;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Stack;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class OperatorGeneratorImpl implements OperatorGenerator {
@@ -33,27 +35,37 @@ public class OperatorGeneratorImpl implements OperatorGenerator {
     }
 
     /**
-     * Attempts to solve the given HectocChallenge using a brute force approach.
-     * This method utilizes the findSolutions process to evaluate all possible solutions
-     * and tracks progress during computation using the provided JobContext.
+     * Generates all possible operator permutations for the given HectocChallenge using the provided numbers
+     * and schedules jobs for evaluating possible solutions. The method processes the numbers as a stack and
+     * calculates the permutations in Reverse Polish Notation (RPN) format. It uses the job scheduler to enqueue
+     * tasks to check the generated solutions against the challenge.
      *
-     * @param challenge the HectocChallenge to be solved, containing the set of numbers and constraints
-     * @param context   the JobContext providing the progress bar and other task-related utilities
+     * @param challenge the HectocChallenge object representing the problem to solve, which includes constraints and rules
+     * @param context the JobContext object that provides resources such as a progress bar for tracking the scheduling progress
+     * @param numbers the array of Number objects that represent the input numbers used for computing operator permutations
      */
     @Override
-    public void generateOperatorPermutations(HectocChallenge challenge, Stack<Number> stack, JobContext context) {
-        LOGGER.info("Challenge: {}; Stack: {}", challenge, stack);
+    public void generateOperatorPermutations(HectocChallenge challenge, JobContext context, Number... numbers) {
+        Stack<Number> actualStack = new Stack<>();
+        for (Number number : numbers) {
+            actualStack.push(number);
+        }
+        LOGGER.info("Challenge: {}; Stack: {}", challenge, actualStack);
         final JobDashboardProgressBar progressBar = context.progressBar(MAX_PERMUTATIONS);
-        PossibleSolutionGenerator.createRpnStacks(stack).stream()
+        AtomicInteger counter = new AtomicInteger();
+        PossibleSolutionGenerator.createRpnStacks(actualStack).stream()
                 .peek(s -> {
                     final JobId enqueuedJobId = jobScheduler
                             .<SolutionChecker>enqueue(
                                     UUID.nameUUIDFromBytes(("b_" + challenge + s.toString()).getBytes()),
-                                    bruteForcer -> bruteForcer.check(challenge, s, JobContext.Null)
+                                    bruteForcer -> bruteForcer.check(challenge, JobContext.Null, s.toArray(new StackElement[0]))
                             );
                     LOGGER.info("Challenge: {}; Stack: {}; JobId: {}",challenge, s, enqueuedJobId);
                 })
-                .forEach(s -> progressBar.increaseByOne());
-        LOGGER.info("Challenge: {} - {} jobs scheduled", challenge, progressBar.getProgress());
+                .forEach(s -> {
+                    progressBar.increaseByOne();
+                    counter.getAndIncrement();
+                });
+        LOGGER.info("Challenge: {}; Stack: {} - {} jobs scheduled", challenge, actualStack, counter.get());
     }
 }

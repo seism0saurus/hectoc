@@ -41,16 +41,16 @@ public class NumberBlockPermutator {
             Stack<Number> newStack = new Stack<>();
 
             Number number = stack.elementAt(0);
-            newStack.push(Number.of(number.getNumber()));
+            newStack.push(Number.of(number.number()));
 
             for (int nthElement = 0; nthElement < size - 1; nthElement++) {
                 String stringRepresentation = String.format("%1$" + (size-1) + "s", binaryString).replace(' ', '0');
                 number = stack.elementAt(nthElement + 1);
                 if (stringRepresentation.charAt(nthElement) == '0') {
-                    newStack.push(Number.of(number.getNumber()));
+                    newStack.push(Number.of(number.number()));
                 } else {
                     Number oldNumber = newStack.pop();
-                    Number newNumber = Number.of(oldNumber.getNumber() * 10 + number.getNumber());
+                    Number newNumber = Number.of(oldNumber.number() * 10 + number.number());
                     newStack.push(newNumber);
                 }
             }

@@ -32,24 +32,27 @@ public class SolutionCheckerImpl implements SolutionChecker {
     }
 
     /**
-     * Attempts to solve the given HectocChallenge using a brute force approach.
-     * This method utilizes the findSolutions process to evaluate all possible solutions
-     * and tracks progress during computation using the provided JobContext.
+     * Evaluates the given HectocChallenge based on the provided job context and additional stack elements.
      *
-     * @param challenge the HectocChallenge to be solved, containing the set of numbers and constraints
-     * @param context   the JobContext providing the progress bar and other task-related utilities
-     * @return true if the challenge is determined to be solvable based on the repository state, false otherwise
+     * @param challenge the HectocChallenge to be checked, containing digit constraints and specific rules
+     * @param context the JobContext containing job-specific configurations or information
+     * @param elements an optional array of StackElement instances providing additional context or tools for evaluation
+     * @return true if the given challenge meets all specified criteria; false otherwise
      */
     @Override
-    public boolean check(HectocChallenge challenge, Stack<StackElement> stack, JobContext context) {
-        LOGGER.info("Challenge: {}; Stack: {}", challenge, stack);
+    public boolean check(HectocChallenge challenge, JobContext context, StackElement... elements) {
+        Stack<StackElement> actualStack = new Stack<>();
+        for (StackElement element : elements) {
+            actualStack.push(element);
+        }
+        LOGGER.info("Challenge: {}; Stack: {}", challenge, actualStack);
         final JobDashboardProgressBar progressBar = context.progressBar(1);
-        boolean result = this.checkResult(stack, challenge);
+        boolean result = this.checkResult(actualStack, challenge);
         if (result) {
-            LOGGER.info("Challenge: {}; Stack: {} checked. It is a solution !!!!!!", challenge, stack);
+            LOGGER.info("Challenge: {}; Stack: {} checked. It is a solution !!!!!!", challenge, actualStack);
             return true;
         } else {
-            LOGGER.info("Challenge: {}; Stack: {} checked. No solution", challenge, stack);
+            LOGGER.info("Challenge: {}; Stack: {} checked. No solution", challenge, actualStack);
             return false;
         }
     }

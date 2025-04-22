@@ -8,14 +8,15 @@ import org.springframework.stereotype.Component;
 public interface NumberPermutationGenerator {
 
         /**
-         * Generates all possible permutations of numbers based on the specified HectocChallenge.
-         * This method is intended to work within a job execution context, utilizing the provided
-         * JobContext for job-specific configurations or metadata.
+         * Generates and schedules permutations of blocks of numbers from the given HectocChallenge.
+         * Each permutation is used to enqueue a job for processing negative number permutations.
+         * A progress bar tracks the number of scheduled jobs, and detailed logs provide visibility
+         * into the permutation generation and job scheduling process.
          *
-         * @param challenge the HectocChallenge instance containing numeric constraints and digits
-         *                  for which permutations are to be generated
-         * @param context   the JobContext providing additional information or configuration for the
-         *                  task, such as job metadata or logging context
+         * @param challenge The HectocChallenge that provides the numbers to generate permutations for.
+         *                  It contains six digits, each between 1 and 9.
+         * @param context   The JobContext which provides utilities for job processing,
+         *                  such as a progress bar for tracking the number of scheduled jobs.
          */
         void generateNumberPermutations(HectocChallenge challenge, JobContext context);
 }
