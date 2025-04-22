@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents a number that implements the StackElement interface and is serializable.
@@ -23,5 +24,18 @@ public class Number implements StackElement, Serializable {
 
     public static Number of(int value) {
         return new Number(value);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Number number = (Number) obj;
+        return value == number.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

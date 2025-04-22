@@ -3,6 +3,7 @@ package de.seism0saurus.hectoc.generator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.io.Serial;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Getter
 @Builder
+@EqualsAndHashCode
 public class HectocChallenge implements Serializable {
 
     @Serial
