@@ -1,18 +1,27 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
+import lombok.*;
+import lombok.experimental.Accessors;
+
 import java.io.Serial;
 import java.io.Serializable;
 
-public record Number(int value) implements StackElement, Serializable {
+/**
+ * Represents a number that implements the StackElement interface and is serializable.
+ */
+@Getter
+@Accessors(fluent = true)
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+public class Number implements StackElement, Serializable {
 
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3L;
 
-    public static Number of(final int number) {
-        return new Number(number);
-    }
+    private int value;
 
-    public String toString() {
-        return String.valueOf(value);
+    public static Number of(int value) {
+        return new Number(value);
     }
 }

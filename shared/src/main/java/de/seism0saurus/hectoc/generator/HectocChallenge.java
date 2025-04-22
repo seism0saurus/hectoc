@@ -3,22 +3,23 @@ package de.seism0saurus.hectoc.generator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-@Data
+
+@Getter
 @Builder
 public class HectocChallenge implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     public static final int MIN = 1;
     public static final int MAX = 9;
-    public static final List<Character> ALLOWED_CHARS = new ArrayList<>(List.of('1', '2', '3', '4', '5', '6', '7', '8', '9'));
+    public static final List<Character> ALLOWED_CHARS = List.of('1', '2', '3', '4', '5', '6', '7', '8', '9');
 
     private final int firstDigit;
     private final int secondDigit;
@@ -63,7 +64,7 @@ public class HectocChallenge implements Serializable {
 
     public HectocChallenge(final String hectoc) {
         if (hectoc == null || hectoc.length() != 6) {
-            throw new IllegalArgumentException("String is not a hectoc. Please provide a String with 6 numbers bewteen 1 and 9");
+            throw new IllegalArgumentException("String is not a hectoc. Please provide a String with 6 numbers between 1 and 9");
         }
         List<Integer> hectocSymbols = new ArrayList<>();
         hectoc.codePoints().mapToObj(c -> (char) c).forEach(c -> {

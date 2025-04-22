@@ -14,12 +14,9 @@ public enum Operator implements StackElement, Serializable {
     public static Operator from(final char character) {
         return switch (character) {
             case '+' -> PLUS;
-            case '-' -> MINUS;
-            case '−' -> MINUS;
-            case '*' -> MULTIPLICATION;
-            case 'x' -> MULTIPLICATION;
-            case '/' -> DIVISION;
-            case '÷' -> DIVISION;
+            case '-', '−' -> MINUS;
+            case '*', 'x' -> MULTIPLICATION;
+            case '/', '÷' -> DIVISION;
             case '^' -> POWER;
             case '(' -> LEFTPARENTHESIS;
             case ')' -> RIGHTPARENTHESIS;
