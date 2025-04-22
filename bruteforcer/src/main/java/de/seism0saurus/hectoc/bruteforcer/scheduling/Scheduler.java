@@ -32,9 +32,9 @@ public class Scheduler {
             Optional<ChallengePdo> existingChallenge = repository.findByChallenge(challenge.toString());
             if (existingChallenge.isEmpty()) {
                 final JobId enqueuedJobId = jobScheduler
-                        .<BruteForceScheduler>enqueue(
+                        .<PermutationsScheduler>enqueue(
                                 UUID.nameUUIDFromBytes(challenge.toString().getBytes()),
-                                bruteForceScheduler -> bruteForceScheduler.schedule(challenge, JobContext.Null)
+                                ps -> ps.schedulePermutations(challenge, JobContext.Null)
                         );
                 repository.save(ChallengePdo.builder()
                                 .challenge(challenge.toString())
