@@ -1,6 +1,8 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
-public enum Operator implements StackElement {
+import java.io.Serializable;
+
+public enum Operator implements StackElement, Serializable {
     PLUS(1), MINUS(1), MULTIPLICATION(2), DIVISION(2), POWER(3), LEFTPARENTHESIS(4), RIGHTPARENTHESIS(4), NULLOPERATOR(5);
 
     private final int precedence;
