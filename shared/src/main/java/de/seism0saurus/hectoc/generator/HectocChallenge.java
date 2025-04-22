@@ -6,6 +6,7 @@ import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import java.util.Objects;
 
 @Getter
 @Builder
+@NoArgsConstructor
 public class HectocChallenge implements Serializable {
 
     @Serial
@@ -24,12 +26,12 @@ public class HectocChallenge implements Serializable {
     public static final int MAX = 9;
     public static final List<Character> ALLOWED_CHARS = List.of('1', '2', '3', '4', '5', '6', '7', '8', '9');
 
-    private final int firstDigit;
-    private final int secondDigit;
-    private final int thirdDigit;
-    private final int fourthDigit;
-    private final int fifthDigit;
-    private final int sixthDigit;
+    private int firstDigit;
+    private int secondDigit;
+    private int thirdDigit;
+    private int fourthDigit;
+    private int fifthDigit;
+    private int sixthDigit;
 
     @JsonCreator
     protected HectocChallenge(@JsonProperty("firstDigit") int firstDigit,
