@@ -3,10 +3,7 @@ package de.seism0saurus.hectoc.generator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Getter
 @Builder
-@NoArgsConstructor
 public class HectocChallenge implements Serializable {
 
     @Serial
@@ -33,8 +28,60 @@ public class HectocChallenge implements Serializable {
     private int fifthDigit;
     private int sixthDigit;
 
+    public int getFirstDigit() {
+        return firstDigit;
+    }
+
+    public void setFirstDigit(int firstDigit) {
+        this.firstDigit = firstDigit;
+    }
+
+    public int getSecondDigit() {
+        return secondDigit;
+    }
+
+    public void setSecondDigit(int secondDigit) {
+        this.secondDigit = secondDigit;
+    }
+
+    public int getThirdDigit() {
+        return thirdDigit;
+    }
+
+    public void setThirdDigit(int thirdDigit) {
+        this.thirdDigit = thirdDigit;
+    }
+
+    public int getFourthDigit() {
+        return fourthDigit;
+    }
+
+    public void setFourthDigit(int fourthDigit) {
+        this.fourthDigit = fourthDigit;
+    }
+
+    public int getFifthDigit() {
+        return fifthDigit;
+    }
+
+    public void setFifthDigit(int fifthDigit) {
+        this.fifthDigit = fifthDigit;
+    }
+
+    public int getSixthDigit() {
+        return sixthDigit;
+    }
+
+    public void setSixthDigit(int sixthDigit) {
+        this.sixthDigit = sixthDigit;
+    }
+
+    public HectocChallenge(){
+        super();
+    }
+
     @JsonCreator
-    protected HectocChallenge(@JsonProperty("firstDigit") int firstDigit,
+    public HectocChallenge(@JsonProperty("firstDigit") int firstDigit,
                               @JsonProperty("secondDigit") int secondDigit,
                               @JsonProperty("thirdDigit") int thirdDigit,
                               @JsonProperty("fourthDigit") int fourthDigit,
@@ -87,6 +134,7 @@ public class HectocChallenge implements Serializable {
         this.sixthDigit = hectocSymbols.get(5);
     }
 
+    @Override
     public String toString() {
         return String.valueOf(firstDigit) + secondDigit + thirdDigit + fourthDigit + fifthDigit + sixthDigit;
     }

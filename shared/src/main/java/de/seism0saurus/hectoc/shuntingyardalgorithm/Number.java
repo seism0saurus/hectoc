@@ -1,8 +1,5 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
-import lombok.*;
-import lombok.experimental.Accessors;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,11 +7,6 @@ import java.util.Objects;
 /**
  * Represents a number that implements the StackElement interface and is serializable.
  */
-@Getter
-@Accessors(fluent = true)
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
 public class Number implements StackElement, Serializable {
 
     @Serial
@@ -22,8 +14,28 @@ public class Number implements StackElement, Serializable {
 
     private int value;
 
+    public Number() {
+        this(0);
+    }
+
+    public Number(int value) {
+        this.value = value;
+    }
+
     public static Number of(int value) {
         return new Number(value);
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public int value() {
+        return getValue();
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 
     @Override
@@ -37,5 +49,10 @@ public class Number implements StackElement, Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
     }
 }
