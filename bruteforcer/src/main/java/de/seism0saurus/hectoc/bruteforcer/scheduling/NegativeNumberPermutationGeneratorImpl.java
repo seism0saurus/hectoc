@@ -3,7 +3,6 @@ package de.seism0saurus.hectoc.bruteforcer.scheduling;
 import de.seism0saurus.hectoc.bruteforcer.logic.NegativeNumberPermutator;
 import de.seism0saurus.hectoc.generator.HectocChallenge;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
-import de.seism0saurus.hectoc.shuntingyardalgorithm.StackElement;
 import org.jobrunr.jobs.JobId;
 import org.jobrunr.jobs.context.JobContext;
 import org.jobrunr.jobs.context.JobDashboardProgressBar;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
 import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,8 +34,8 @@ public class NegativeNumberPermutationGeneratorImpl implements NegativeNumberPer
      * and schedules individual jobs for each permutation.
      *
      * @param challenge the HectocChallenge instance, representing the challenge to process
-     * @param context the JobContext containing execution-specific configurations and tools such as progress bars
-     * @param numbers a variable number of Number objects representing the input numbers for which permutations will be generated
+     * @param context   the JobContext containing execution-specific configurations and tools such as progress bars
+     * @param numbers   a variable number of Number objects representing the input numbers for which permutations will be generated
      */
     @Override
     public void generateNegativeNumberPermutations(HectocChallenge challenge, JobContext context, Number... numbers) {

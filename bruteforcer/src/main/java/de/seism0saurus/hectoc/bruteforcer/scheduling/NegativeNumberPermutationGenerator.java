@@ -16,8 +16,8 @@ public interface NegativeNumberPermutationGenerator {
      * and schedules individual jobs for each permutation.
      *
      * @param challenge the HectocChallenge instance, representing the challenge to process
-     * @param context the JobContext containing execution-specific configurations and tools such as progress bars
-     * @param numbers a variable number of Number objects representing the input numbers for which permutations will be generated
+     * @param context   the JobContext containing execution-specific configurations and tools such as progress bars
+     * @param numbers   a variable number of Number objects representing the input numbers for which permutations will be generated
      */
     void generateNegativeNumberPermutations(HectocChallenge challenge, JobContext context, Number... numbers);
 }

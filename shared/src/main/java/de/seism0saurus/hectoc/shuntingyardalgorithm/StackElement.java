@@ -1,5 +1,7 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
-public interface StackElement {
+import java.io.Serializable;
+
+public interface StackElement extends Serializable {
 
 }

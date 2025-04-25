@@ -1,39 +1,45 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
+import com.fasterxml.jackson.annotation.*;
+
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Represents a number that implements the StackElement interface and is serializable.
  */
-public class Number implements StackElement, Serializable {
+public class Number implements StackElement {
 
     @Serial
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 4L;
 
     private int value;
 
     public Number() {
-        this(0);
+        super();
     }
 
-    public Number(int value) {
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    public Number(@JsonProperty("value") int value) {
         this.value = value;
     }
 
+    @JsonIgnore
     public static Number of(int value) {
         return new Number(value);
     }
 
+    @JsonGetter("value")
     public int getValue() {
         return value;
     }
 
+    @JsonIgnore
     public int value() {
         return getValue();
     }
 
+    @JsonSetter("value")
     public void setValue(int value) {
         this.value = value;
     }
@@ -43,7 +49,7 @@ public class Number implements StackElement, Serializable {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Number number = (Number) obj;
-        return value == number.value;
+        return this.value == number.value;
     }
 
     @Override

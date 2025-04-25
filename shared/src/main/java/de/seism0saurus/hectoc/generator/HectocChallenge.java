@@ -1,9 +1,10 @@
 package de.seism0saurus.hectoc.generator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import lombok.Builder;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,7 +16,7 @@ import java.util.Objects;
 public class HectocChallenge implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 4L;
 
     public static final int MIN = 1;
     public static final int MAX = 9;
@@ -28,65 +29,77 @@ public class HectocChallenge implements Serializable {
     private int fifthDigit;
     private int sixthDigit;
 
+    @JsonGetter("firstDigit")
     public int getFirstDigit() {
         return firstDigit;
     }
 
+    @JsonSetter("firstDigit")
     public void setFirstDigit(int firstDigit) {
         this.firstDigit = firstDigit;
     }
 
+    @JsonGetter("secondDigit")
     public int getSecondDigit() {
         return secondDigit;
     }
 
+    @JsonSetter("secondDigit")
     public void setSecondDigit(int secondDigit) {
         this.secondDigit = secondDigit;
     }
 
+    @JsonGetter("thirdDigit")
     public int getThirdDigit() {
         return thirdDigit;
     }
 
+    @JsonSetter("thirdDigit")
     public void setThirdDigit(int thirdDigit) {
         this.thirdDigit = thirdDigit;
     }
 
+    @JsonGetter("fourthDigit")
     public int getFourthDigit() {
         return fourthDigit;
     }
 
+    @JsonSetter("fourthDigit")
     public void setFourthDigit(int fourthDigit) {
         this.fourthDigit = fourthDigit;
     }
 
+    @JsonGetter("fifthDigit")
     public int getFifthDigit() {
         return fifthDigit;
     }
 
+    @JsonSetter("fifthDigit")
     public void setFifthDigit(int fifthDigit) {
         this.fifthDigit = fifthDigit;
     }
 
+    @JsonGetter("sixthDigit")
     public int getSixthDigit() {
         return sixthDigit;
     }
 
+    @JsonSetter("sixthDigit")
     public void setSixthDigit(int sixthDigit) {
         this.sixthDigit = sixthDigit;
     }
 
-    public HectocChallenge(){
+    public HectocChallenge() {
         super();
     }
 
     @JsonCreator
     public HectocChallenge(@JsonProperty("firstDigit") int firstDigit,
-                              @JsonProperty("secondDigit") int secondDigit,
-                              @JsonProperty("thirdDigit") int thirdDigit,
-                              @JsonProperty("fourthDigit") int fourthDigit,
-                              @JsonProperty("fifthDigit") int fifthDigit,
-                              @JsonProperty("sixthDigit") int sixthDigit) {
+                           @JsonProperty("secondDigit") int secondDigit,
+                           @JsonProperty("thirdDigit") int thirdDigit,
+                           @JsonProperty("fourthDigit") int fourthDigit,
+                           @JsonProperty("fifthDigit") int fifthDigit,
+                           @JsonProperty("sixthDigit") int sixthDigit) {
         if (firstDigit < MIN || firstDigit > MAX) {
             throw new IllegalArgumentException("The first number is invalid. Please provide a number between 1 and 9");
         }
