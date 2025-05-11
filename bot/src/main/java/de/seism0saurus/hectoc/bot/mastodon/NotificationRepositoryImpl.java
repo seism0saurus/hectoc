@@ -51,6 +51,12 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     public NotificationRepositoryImpl(
             @Value(value = "${mastodon.instance}") String instance,
             @Value(value = "${mastodon.accessToken}") String accessToken) {
+        if (instance == null || instance.isEmpty()) {
+            throw new IllegalArgumentException("The Mastodon instance cannot be null or empty.");
+        }
+        if (accessToken == null || accessToken.isEmpty()) {
+            throw new IllegalArgumentException("The access token cannot be null or empty.");
+        }
         this.client = new MastodonClient.Builder(instance)
                 .accessToken(accessToken)
                 .setReadTimeoutSeconds(180)
