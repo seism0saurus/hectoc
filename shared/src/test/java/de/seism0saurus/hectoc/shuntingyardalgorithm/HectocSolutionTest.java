@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class HectocSolutionTest {
 
-    private final HectocChallenge challange = HectocChallenge.builder()
+    private final HectocChallenge challenge = HectocChallenge.builder()
             .firstDigit(1)
             .secondDigit(2)
             .thirdDigit(3)
@@ -25,7 +25,7 @@ public class HectocSolutionTest {
             .fifthDigit(5)
             .sixthDigit(6)
             .build();
-    private final HectocSolution solution = new HectocSolution(challange);
+    private final HectocSolution solution = new HectocSolution(challenge);
 
     @Test
     public void detectChangedOrderOfNumbers() {
@@ -58,18 +58,23 @@ public class HectocSolutionTest {
 
 
     @Test
-    public void acceptSyntacticalCorrectEquotations() {
+    public void acceptSyntacticalCorrectEquitations() {
         assertDoesNotThrow(() -> solution.checkSolution("((1))^2/3*4-5+(6)"));
     }
 
     @Test
-    public void acceptSyntacticalCorrectButSenslesEquotatons() {
+    public void acceptAlternativeSymbolsEquitations() {
+        assertDoesNotThrow(() -> solution.checkSolution("(1:2÷3)(4x5x6)"));
+    }
+
+    @Test
+    public void acceptSyntacticalCorrectButSenslesEquitations() {
         assertDoesNotThrow(() -> solution.checkSolution("123456"));
     }
 
     @Test
     public void testUnaryOperatorFollowedByPlusAtFirstPosition() {
-        final HectocChallenge challange = HectocChallenge.builder()
+        final HectocChallenge challenge = HectocChallenge.builder()
                 .firstDigit(5)
                 .secondDigit(5)
                 .thirdDigit(9)
@@ -77,14 +82,14 @@ public class HectocSolutionTest {
                 .fifthDigit(1)
                 .sixthDigit(1)
                 .build();
-        final HectocSolution solution = new HectocSolution(challange);
+        final HectocSolution solution = new HectocSolution(challenge);
         assertDoesNotThrow(() -> solution.checkSolution("-5+5+99+1*1"));
         assertTrue(solution.isValid());
     }
 
     @Test
     public void testUnaryOperatorFollowedByMultiplicationAtFirstPosition() {
-        final HectocChallenge challange = HectocChallenge.builder()
+        final HectocChallenge challenge = HectocChallenge.builder()
                 .firstDigit(5)
                 .secondDigit(1)
                 .thirdDigit(9)
@@ -92,14 +97,14 @@ public class HectocSolutionTest {
                 .fifthDigit(1)
                 .sixthDigit(5)
                 .build();
-        final HectocSolution solution = new HectocSolution(challange);
+        final HectocSolution solution = new HectocSolution(challenge);
         assertDoesNotThrow(() -> solution.checkSolution("-5*1+99+1+5"));
         assertTrue(solution.isValid());
     }
 
     @Test
     public void testEqualInWrongPosition() {
-        final HectocChallenge challange = HectocChallenge.builder()
+        final HectocChallenge challenge = HectocChallenge.builder()
                 .firstDigit(5)
                 .secondDigit(1)
                 .thirdDigit(9)
@@ -107,7 +112,7 @@ public class HectocSolutionTest {
                 .fifthDigit(1)
                 .sixthDigit(5)
                 .build();
-        final HectocSolution solution = new HectocSolution(challange);
+        final HectocSolution solution = new HectocSolution(challenge);
         assertThrows(IllegalArgumentException.class,
                 () -> solution.formatAndCheckSolution("-5*1=99+1+5"));
         assertFalse(solution.isValid());
@@ -115,7 +120,7 @@ public class HectocSolutionTest {
 
     @Test
     public void testEqual100AtEndOfSolution() {
-        final HectocChallenge challange = HectocChallenge.builder()
+        final HectocChallenge challenge = HectocChallenge.builder()
                 .firstDigit(5)
                 .secondDigit(1)
                 .thirdDigit(9)
@@ -123,7 +128,7 @@ public class HectocSolutionTest {
                 .fifthDigit(1)
                 .sixthDigit(5)
                 .build();
-        final HectocSolution solution = new HectocSolution(challange);
+        final HectocSolution solution = new HectocSolution(challenge);
         assertDoesNotThrow(() -> solution.formatAndCheckSolution("-5*1+99+1+5=100"));
         assertTrue(solution.isValid());
     }
@@ -192,7 +197,8 @@ public class HectocSolutionTest {
                 Arguments.of(new HectocChallenge("193476"), "1+9+3*4*7+6"),
                 Arguments.of(new HectocChallenge("968546"), "(-9+6+8+5)*(4+6)"),
                 Arguments.of(new HectocChallenge("522712"), "5*22-(7+1+2)"),
-                Arguments.of(new HectocChallenge("461222"), "-46+12^2+2")
+                Arguments.of(new HectocChallenge("461222"), "-46+12^2+2"),
+                Arguments.of(new HectocChallenge("954483"), "95*(4:4)+(8-3)")
         );
     }
 

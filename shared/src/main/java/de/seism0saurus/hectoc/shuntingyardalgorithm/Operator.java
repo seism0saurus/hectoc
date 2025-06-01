@@ -16,7 +16,7 @@ public enum Operator implements StackElement, Serializable {
             case '+' -> PLUS;
             case '-', '−' -> MINUS;
             case '*', 'x' -> MULTIPLICATION;
-            case '/', '÷' -> DIVISION;
+            case '/', '÷', ':' -> DIVISION;
             case '^' -> POWER;
             case '(' -> LEFTPARENTHESIS;
             case ')' -> RIGHTPARENTHESIS;
