@@ -34,6 +34,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
      */
     private final static Logger LOGGER = LoggerFactory.getLogger(NotificationRepositoryImpl.class);
 
+
     /**
      * The mastodon client is required to communicate with the configured mastodon instance.
      */
@@ -105,7 +106,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
                         LOGGER.error("Could not dismiss notification. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
                     }
                 });
-        List<Notification> deduplicatedNotificartions = groupedNotifications.get(true).stream()
+        List<Notification> deduplicatedNotifications = groupedNotifications.get(true).stream()
                 .collect(groupingBy(n -> {
                     assert n.getStatus() != null;
                     return n.getStatus().getId();
@@ -121,6 +122,6 @@ public class NotificationRepositoryImpl implements NotificationRepository {
                         return s.iterator().next();
                     }
                 }).toList();
-        return deduplicatedNotificartions;
+        return deduplicatedNotifications;
     }
 }
