@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @author seism0saurus
  */
 @Service
-@Profile({"reports", "delay-scheduling"})
+@Profile("reports & delay-scheduling")
 public class ReportDelayScheduler {
 
     /**

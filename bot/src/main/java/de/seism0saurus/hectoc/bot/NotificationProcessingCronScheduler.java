@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @author seism0saurus
  */
 @Service
-@Profile({"notifications", "cron-scheduling"})
+@Profile("notifications & cron-scheduling")
 public class NotificationProcessingCronScheduler {
 
     /**

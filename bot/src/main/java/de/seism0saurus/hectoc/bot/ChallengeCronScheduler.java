@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @author seism0saurus
  */
 @Service
-@Profile({"challenges", "cron-scheduling"})
+@Profile("challenges & cron-scheduling")
 public class ChallengeCronScheduler {
 
     /**

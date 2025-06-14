@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @author seism0saurus
  */
 @Service
-@Profile({"challenges", "delay-scheduling"})
+@Profile("challenges & delay-scheduling")
 public class ChallengeDelayScheduler {
 
     /**

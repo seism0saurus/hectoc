@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @author seism0saurus
  */
 @Service
-@Profile({"notifications", "delay-scheduling"})
+@Profile("notifications & delay-scheduling")
 public class NotificationProcessingDelayScheduler {
 
     /**
