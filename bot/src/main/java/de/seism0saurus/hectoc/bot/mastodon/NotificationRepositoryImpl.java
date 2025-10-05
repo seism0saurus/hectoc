@@ -6,11 +6,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import social.bigbone.MastodonClient;
 import social.bigbone.api.entity.Notification;
+import social.bigbone.api.entity.NotificationType;
 import social.bigbone.api.exception.BigBoneRequestException;
 
+import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * The implementation of the {@link NotificationRepository NotificationRepository} to access and manipulate {@link social.bigbone.api.entity.Notification Notifications}.
@@ -27,6 +33,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
      * @see "src/main/ressources/logback.xml"
      */
     private final static Logger LOGGER = LoggerFactory.getLogger(NotificationRepositoryImpl.class);
+
 
     /**
      * The mastodon client is required to communicate with the configured mastodon instance.
@@ -45,6 +52,12 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     public NotificationRepositoryImpl(
             @Value(value = "${mastodon.instance}") String instance,
             @Value(value = "${mastodon.accessToken}") String accessToken) {
+        if (instance == null || instance.isEmpty()) {
+            throw new IllegalArgumentException("The Mastodon instance cannot be null or empty.");
+        }
+        if (accessToken == null || accessToken.isEmpty()) {
+            throw new IllegalArgumentException("The access token cannot be null or empty.");
+        }
         this.client = new MastodonClient.Builder(instance)
                 .accessToken(accessToken)
                 .setReadTimeoutSeconds(180)
@@ -77,17 +90,38 @@ public class NotificationRepositoryImpl implements NotificationRepository {
      */
     private List<Notification> dismissExceptMentions(List<Notification> notifications) {
         Map<Boolean, List<Notification>> groupedNotifications = notifications.stream()
-                .collect(Collectors.partitioningBy(n -> Notification.NotificationType.MENTION == n.getType() && n.getStatus().getInReplyToId() != null));
+                .collect(Collectors.partitioningBy(n -> {
+                    if ((NotificationType.MENTION != n.getType() && NotificationType.UPDATE != n.getType()))
+                        return false;
+                    assert n.getStatus() != null;
+                    return n.getStatus().getInReplyToId() != null;
+                }));
         groupedNotifications.get(false).stream()
                 .map(Notification::getId)
                 .forEach(id -> {
                     try {
-                        LOGGER.info("Going to dismiss notification " + id);
+                        LOGGER.info("Going to dismiss notification because it's not an answer: " + id);
                         this.dismissNotification(id);
                     } catch (BigBoneRequestException e) {
                         LOGGER.error("Could not dismiss notification. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
                     }
                 });
-        return groupedNotifications.get(true);
+        List<Notification> deduplicatedNotifications = groupedNotifications.get(true).stream()
+                .collect(groupingBy(n -> {
+                    assert n.getStatus() != null;
+                    return n.getStatus().getId();
+                }, toSet()))
+                .values()
+                .stream()
+                .map(s -> {
+                    if (s.size() > 1) {
+                        return s.stream()
+                                .max(Comparator.comparing(n -> n.getCreatedAt().mostPreciseOrFallback(Instant.ofEpochMilli(0))))
+                                .get();
+                    } else {
+                        return s.iterator().next();
+                    }
+                }).toList();
+        return deduplicatedNotifications;
     }
 }

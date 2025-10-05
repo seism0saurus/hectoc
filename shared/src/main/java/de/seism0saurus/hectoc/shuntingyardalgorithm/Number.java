@@ -1,24 +1,64 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.*;
 
-@Data
+import java.io.Serial;
+import java.util.Objects;
+
+/**
+ * Represents a number that implements the StackElement interface and is serializable.
+ */
 public class Number implements StackElement {
-    private final int number;
 
-    private Number(final int number) {
-        this.number = number;
+    @Serial
+    private static final long serialVersionUID = 4L;
+
+    private int value;
+
+    public Number() {
+        super();
     }
 
-    public static Number of(final int number) {
-        return new Number(number);
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    public Number(@JsonProperty("value") int value) {
+        this.value = value;
     }
 
+    @JsonIgnore
+    public static Number of(int value) {
+        return new Number(value);
+    }
+
+    @JsonGetter("value")
+    public int getValue() {
+        return value;
+    }
+
+    @JsonIgnore
     public int value() {
-        return number;
+        return getValue();
     }
 
+    @JsonSetter("value")
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Number number = (Number) obj;
+        return this.value == number.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+
+    @Override
     public String toString() {
-        return String.valueOf(number);
+        return String.valueOf(value);
     }
 }

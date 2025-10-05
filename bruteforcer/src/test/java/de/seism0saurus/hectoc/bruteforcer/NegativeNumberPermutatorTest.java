@@ -66,7 +66,7 @@ public class NegativeNumberPermutatorTest {
     }
 
     @Test
-    public void createPermutationsOfNegativeNumbers_4ElementStack_Returns_ListWith8Stacks() {
+    public void createPermutationsOfNegativeNumbers_3ElementStack_Returns_ListWith8Stacks() {
         Stack<Number> stack = new Stack<>();
         stack.push(Number.of(1));
         stack.push(Number.of(3));
@@ -112,7 +112,7 @@ public class NegativeNumberPermutatorTest {
     }
 
     @Test
-    public void createPermutationsOfNegativeNumbers_5ElementStack_Returns_ListWith16Stacks() {
+    public void createPermutationsOfNegativeNumbers_4ElementStack_Returns_ListWith16Stacks() {
         Stack<Number> stack = new Stack<>();
         stack.push(Number.of(1));
         stack.push(Number.of(3));
@@ -208,7 +208,7 @@ public class NegativeNumberPermutatorTest {
     }
 
     @Test
-    public void createPermutationsOfNegativeNumbers_6ElementStack_Returns_ListWith32Stacks() {
+    public void createPermutationsOfNegativeNumbers_5ElementStack_Returns_ListWith32Stacks() {
         Stack<Number> stack = new Stack<>();
         stack.push(Number.of(1));
         stack.push(Number.of(3));

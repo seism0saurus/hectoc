@@ -24,7 +24,7 @@ public class HectocSolution implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public static final List<Character> ALLOWED_CHARS = List.of('1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '^', '(', ')');
+    public static final List<Character> ALLOWED_CHARS = List.of('1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', 'x', '/', '÷', ':', '^', '(', ')');
     @Getter
     private BigDecimal result = BigDecimal.ZERO;
     @Getter
@@ -86,7 +86,7 @@ public class HectocSolution implements Serializable {
     }
 
     private void checkFormat(final String equotation) {
-        Pattern pattern = Pattern.compile("^[-\\(]*[1-9]([+\\-*/\\^\\(\\)]*[1-9]){5}[\\)]*$");
+        Pattern pattern = Pattern.compile("^[-\\(]*[1-9]([+\\-*x/:÷\\^\\(\\)]*[1-9]){5}[\\)]*$");
         Matcher matcher = pattern.matcher(equotation);
         if (!matcher.find()) {
             throw new IllegalArgumentException(
@@ -96,7 +96,7 @@ public class HectocSolution implements Serializable {
 
     private void checkUsedNumbers(final String equotation) {
         Pattern pattern = Pattern
-                .compile("^[-\\(]*([1-9])[+\\-*/\\^\\(\\)]*([1-9])[+\\-*/\\^\\(\\)]*([1-9])[+\\-*/\\^\\(\\)]*([1-9])[+\\-*/\\^\\(\\)]*([1-9])[+\\-*/\\^\\(\\)]*([1-9])[\\)]*$");
+                .compile("^[-\\(]*([1-9])[+\\-*x/:÷\\^\\(\\)]*([1-9])[+\\-*x/:÷\\^\\(\\)]*([1-9])[+\\-*x/:÷\\^\\(\\)]*([1-9])[+\\-*x/:÷\\^\\(\\)]*([1-9])[+\\-*x/:÷\\^\\(\\)]*([1-9])[\\)]*$");
         Matcher matcher = pattern.matcher(equotation);
         if (!matcher.find()) {
             throw new IllegalArgumentException(

@@ -1,6 +1,5 @@
 package de.seism0saurus.hectoc.bruteforcer.logic;
 
-import de.seism0saurus.hectoc.bruteforcer.scheduling.BruteForcerImpl;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
 import org.jobrunr.jobs.context.JobRunrDashboardLogger;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ import java.util.Stack;
  */
 public class NegativeNumberPermutator {
 
-    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(BruteForcerImpl.class));
+    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(NegativeNumberPermutator.class));
 
     /**
      * With n numbers we have 2^n different permutations of negative numbers
@@ -27,7 +26,7 @@ public class NegativeNumberPermutator {
      * @return a list of stacks with all different permutations of the negative and positive numbers of the original stack of numbers
      */
     public static List<Stack<Number>> createPermutationsOfNegativeNumbers(Stack<Number> stack) {
-        LOGGER.debug("Creating permutations of negative numbers for " + stack);
+        LOGGER.debug("Creating permutations of negative numbers for stack {}", stack);
         final List<Stack<Number>> digitStacks = new ArrayList<>();
         int size = stack.size();
         for (int numberOfPermutations = 0; numberOfPermutations < Math.pow(2, size); numberOfPermutations++) {
@@ -43,14 +42,14 @@ public class NegativeNumberPermutator {
             for (int nthElement = 0; nthElement < size; nthElement++) {
                 Number number = stack.elementAt(nthElement);
                 if (stringRepresentation.charAt(nthElement) == '0') {
-                    newStack.push(Number.of(number.getNumber()));
+                    newStack.push(Number.of(number.value()));
                 } else {
-                    newStack.push(Number.of(-1 * number.getNumber()));
+                    newStack.push(Number.of(-1 * number.value()));
                 }
             }
             digitStacks.add(newStack);
         }
-        LOGGER.debug(digitStacks.size() + " permutations of negative numbers created");
+        LOGGER.debug("{} permutations of negative numbers created", digitStacks.size());
         return digitStacks;
     }
 }

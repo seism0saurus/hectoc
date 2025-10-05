@@ -36,7 +36,7 @@ public class HectocTokenizer {
                                 tokens.push(Number.of(Character.getNumericValue(c)));
                             }
                         }
-                        case '+', '-', '−', '*', 'x', '/', '÷', '^', '(', ')' -> {
+                        case '+', '-', '−', '*', 'x', '/', '÷', ':', '^', '(', ')' -> {
                             if (isOperatorALeftParenthesisWithUnaryMinusBefore(c, tokens)) {
                                 //Throw away the minus and replace it with (-1) *
                                 tokens.pop();
