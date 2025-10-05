@@ -1,6 +1,5 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
-import de.seism0saurus.hectoc.shuntingyardalgorithm.Number;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

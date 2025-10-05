@@ -1,6 +1,6 @@
 # Hectoc Bot
 
-The Hectoc Bot in the is a Mastodon bot, that runs [@hourlyhectoc@botsin.space](https://botsin.space/@hourlyhectoc).
+The Hectoc Bot in the is a Mastodon bot, that runs [@hourlyhectoc@mastodon.seism0saurus.de](https://mastodon.seism0saurus.de/@hourlyhectoc).
 It posts a Hectoc every hour and can favorite correct answers. Wrong answers get a private commend.
 
 ### GitHub Actions

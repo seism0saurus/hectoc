@@ -1,6 +1,5 @@
 package de.seism0saurus.hectoc.bot.db;
 
-import de.seism0saurus.hectoc.bot.ReportScheduler;
 import de.seism0saurus.hectoc.generator.HectocChallenge;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.HectocSolution;
 import liquibase.change.custom.CustomTaskChange;

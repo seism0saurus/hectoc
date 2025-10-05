@@ -3,6 +3,8 @@ package de.seism0saurus.hectoc.shuntingyardalgorithm;
 import de.seism0saurus.hectoc.generator.HectocChallenge;
 import lombok.Getter;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,9 +19,12 @@ import java.util.regex.Pattern;
  *
  * @author seism0saurus
  */
-public class HectocSolution {
+public class HectocSolution implements Serializable {
 
-    public static final List<Character> ALLOWED_CHARS = List.of('1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '^', '(', ')');
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    public static final List<Character> ALLOWED_CHARS = List.of('1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', 'x', '/', '÷', ':', '^', '(', ')');
     @Getter
     private BigDecimal result = BigDecimal.ZERO;
     @Getter
@@ -81,7 +86,7 @@ public class HectocSolution {
     }
 
     private void checkFormat(final String equotation) {
-        Pattern pattern = Pattern.compile("^[-\\(]*[1-9]([+\\-*/\\^\\(\\)]*[1-9]){5}[\\)]*$");
+        Pattern pattern = Pattern.compile("^[-\\(]*[1-9]([+\\-*x/:÷\\^\\(\\)]*[1-9]){5}[\\)]*$");
         Matcher matcher = pattern.matcher(equotation);
         if (!matcher.find()) {
             throw new IllegalArgumentException(
@@ -91,7 +96,7 @@ public class HectocSolution {
 
     private void checkUsedNumbers(final String equotation) {
         Pattern pattern = Pattern
-                .compile("^[-\\(]*([1-9])[+\\-*/\\^\\(\\)]*([1-9])[+\\-*/\\^\\(\\)]*([1-9])[+\\-*/\\^\\(\\)]*([1-9])[+\\-*/\\^\\(\\)]*([1-9])[+\\-*/\\^\\(\\)]*([1-9])[\\)]*$");
+                .compile("^[-\\(]*([1-9])[+\\-*x/:÷\\^\\(\\)]*([1-9])[+\\-*x/:÷\\^\\(\\)]*([1-9])[+\\-*x/:÷\\^\\(\\)]*([1-9])[+\\-*x/:÷\\^\\(\\)]*([1-9])[+\\-*x/:÷\\^\\(\\)]*([1-9])[\\)]*$");
         Matcher matcher = pattern.matcher(equotation);
         if (!matcher.find()) {
             throw new IllegalArgumentException(
