@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import social.bigbone.api.entity.Account;
 import social.bigbone.api.entity.Context;
@@ -25,6 +23,7 @@ import java.time.ZoneOffset;
 import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -33,19 +32,18 @@ import java.util.stream.Collectors;
  * @author seism0saurus
  */
 @Service
-@Profile("notifications")
-public class NotificationProcessingScheduler {
+public class NotificationProcessingService {
 
     /**
-     * The {@link org.slf4j.Logger Logger} for this class.
+     * The {@link Logger Logger} for this class.
      * The logger is used for logging as configured for the application.
      *
      * @see "src/main/ressources/logback.xml"
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(NotificationProcessingScheduler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotificationProcessingService.class);
 
     /**
-     * The {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository} of this class.
+     * The {@link StatusRepository StatusRepository} of this class.
      * The repository is used to create new toots at mastodon.
      */
     private final StatusRepository statusRepository;
@@ -57,40 +55,40 @@ public class NotificationProcessingScheduler {
     private final de.seism0saurus.hectoc.bot.mastodon.NotificationRepository mastodonNotificationRepo;
 
     /**
-     * The {@link de.seism0saurus.hectoc.bot.TextGenerator TextGenerator} of this class.
+     * The {@link TextGenerator TextGenerator} of this class.
      * The generator is used to create the text for new toots at mastodon.
      */
     private final TextGenerator generator;
 
     /**
-     * The {@link de.seism0saurus.hectoc.bot.db.NotificationRepository NotificationRepository} of this class.
+     * The {@link NotificationRepository NotificationRepository} of this class.
      * The repository is used to store or load notifications and solutions.
      */
     private final NotificationRepository notificationRepo;
 
     /**
-     * The {@link de.seism0saurus.hectoc.bot.db.ChallengeRepository ChallengeRepository} of this class.
+     * The {@link ChallengeRepository ChallengeRepository} of this class.
      * The repository is used to store or load existing challenges.
      */
     private final ChallengeRepository challengeRepo;
 
     /**
      * The sole constructor for this class.
-     * The needed classes are {@link org.springframework.beans.factory.annotation.Autowired autowired} by Spring.
+     * The needed classes are {@link Autowired autowired} by Spring.
      *
-     * @param generator The {@link de.seism0saurus.hectoc.bot.TextGenerator TextGenerator} of this class. Will be stored to {@link #generator generator}.
-     * @param notificationRepo The {@link de.seism0saurus.hectoc.bot.db.NotificationRepository NotificationRepository} of this class. Will be stored to {@link #notificationRepo notificationRepo}.
+     * @param generator                The {@link TextGenerator TextGenerator} of this class. Will be stored to {@link #generator generator}.
+     * @param notificationRepo         The {@link NotificationRepository NotificationRepository} of this class. Will be stored to {@link #notificationRepo notificationRepo}.
      * @param mastodonNotificationRepo The {@link de.seism0saurus.hectoc.bot.mastodon.NotificationRepository NotificationRepository} of this class. Will be stored to {@link #mastodonNotificationRepo mastodonNotificationRepo}.
-     * @param statusRepository The {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository} of this class. Will be stored to {@link #statusRepository statusRepository}.
-     * @param challengeRepo The {@link de.seism0saurus.hectoc.bot.db.ChallengeRepository ChallengeRepository} of this class. Will be stored to {@link #challengeRepo challengeRepo}.
+     * @param statusRepository         The {@link StatusRepository StatusRepository} of this class. Will be stored to {@link #statusRepository statusRepository}.
+     * @param challengeRepo            The {@link ChallengeRepository ChallengeRepository} of this class. Will be stored to {@link #challengeRepo challengeRepo}.
      */
-    public NotificationProcessingScheduler(
+    public NotificationProcessingService(
             @Autowired TextGenerator generator,
             @Autowired NotificationRepository notificationRepo,
             @Autowired de.seism0saurus.hectoc.bot.mastodon.NotificationRepository mastodonNotificationRepo,
             @Autowired StatusRepository statusRepository,
             @Autowired ChallengeRepository challengeRepo
-            ) {
+    ) {
         this.mastodonNotificationRepo = mastodonNotificationRepo;
         LOGGER.info("Handler for mentions on created");
         this.generator = generator;
@@ -100,16 +98,13 @@ public class NotificationProcessingScheduler {
     }
 
     /**
-     * Schedules the processing of new mastodon notifications.
-     * processNotifications will be run according to the {@link org.springframework.scheduling.annotation.Scheduled Scheduled annotation}.
      * This fetches all notifications from mastodon via the {@link de.seism0saurus.hectoc.bot.mastodon.NotificationRepository NotificationRepository}.
      * Then the notifications are processed and answers to previous challenges are extracted and stored.
      * The answers are parsed and depending on the probed solution they will be favourite or answered.
      * <p>
      * Exceptions are logged as errors and suppressed. No further error handling applies.
      */
-    @Scheduled(cron = "${schedule.notification}")
-    public void processNotifications(){
+    public void processNotifications() {
         LOGGER.info("Going to fetch all notifications");
         try {
             List<Notification> mentions = this.mastodonNotificationRepo.getNotifications();
@@ -155,7 +150,7 @@ public class NotificationProcessingScheduler {
                             sendWrongSolutionAnswerStatus(pdo, solution.getResultOfSolution(solutionString));
                             pdo.setCorrect(false);
                         }
-                    } catch (IllegalArgumentException | EmptyStackException e){
+                    } catch (IllegalArgumentException | EmptyStackException e) {
                         LOGGER.info("Solution in status " + pdo.getStatusId() + " ist syntactically wrong or couldn't be found: " + e.getMessage());
                         sendCouldNotParseStatus(pdo);
                         pdo.setCorrect(false);
@@ -181,7 +176,7 @@ public class NotificationProcessingScheduler {
         try {
             LOGGER.info("Check if " + pdo.getStatusId() + " is already favoured");
             List<Account> accounts = this.statusRepository.getFavouritedBy(pdo.getStatusId());
-            if (accounts.isEmpty()){
+            if (accounts.isEmpty()) {
                 LOGGER.info("Going to favour status " + pdo.getStatusId());
                 statusRepository.favouriteStatus(pdo.getStatusId());
                 LOGGER.info("Status " + pdo.getStatusId() + " successfully favoured");
@@ -198,7 +193,7 @@ public class NotificationProcessingScheduler {
      *
      * @param pdo The notification that should be dismissed.
      */
-    private void dismissNotification(NotificationPdo pdo){
+    private void dismissNotification(NotificationPdo pdo) {
         try {
             LOGGER.info("Going to dismiss notification " + pdo.getNotificationId());
             this.mastodonNotificationRepo.dismissNotification(pdo.getNotificationId());
@@ -206,7 +201,13 @@ public class NotificationProcessingScheduler {
             this.notificationRepo.save(pdo);
             LOGGER.info("Dismiss notification " + pdo.getNotificationId() + " successfully");
         } catch (BigBoneRequestException e) {
-            LOGGER.error("Could not dismiss notification. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+            if (e.getHttpStatusCode() == 404) {
+                LOGGER.warn("Could not dismiss notification but will remove it nevertheless. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+                pdo.setDismissed(true);
+                this.notificationRepo.save(pdo);
+            } else {
+                LOGGER.error("Could not dismiss notification. Status code: " + e.getHttpStatusCode() + "; message: " + e.getMessage() + "; cause:" + e.getCause());
+            }
         }
     }
 
@@ -217,9 +218,9 @@ public class NotificationProcessingScheduler {
      *
      * @param pdo The notification that should be dismissed.
      */
-    private void dismissNotificationWithoutSave(NotificationPdo pdo){
+    private void dismissNotificationWithoutSave(NotificationPdo pdo) {
         try {
-            LOGGER.info("Going to dismiss notification " + pdo.getNotificationId());
+            LOGGER.info("Going to dismiss notification without saving " + pdo.getNotificationId());
             this.mastodonNotificationRepo.dismissNotification(pdo.getNotificationId());
             pdo.setDismissed(true);
             LOGGER.info("Dismiss notification " + pdo.getNotificationId() + " successfully");
@@ -240,7 +241,7 @@ public class NotificationProcessingScheduler {
         try {
             LOGGER.info("Check if " + pdo.getStatusId() + " is already answered");
             Context context = this.statusRepository.getContext(pdo.getStatusId());
-            if (wasNotAnsweredByBot(context)){
+            if (wasNotAnsweredByBot(context)) {
                 try {
                     Status status = this.statusRepository.replyToStatus(generator.correctAnswer(pdo.getAuthor()), pdo.getStatusId());
                     LOGGER.info("Status " + pdo.getStatusId() + " successfully answered with " + status.getId());
@@ -266,7 +267,7 @@ public class NotificationProcessingScheduler {
         try {
             LOGGER.info("Check if " + pdo.getStatusId() + " is already answered");
             Context context = this.statusRepository.getContext(pdo.getStatusId());
-            if (wasNotAnsweredByBot(context)){
+            if (wasNotAnsweredByBot(context)) {
                 try {
                     Status status = this.statusRepository.replyDirectToStatus(generator.wrongAnswer(result, pdo.getAuthor()), pdo.getStatusId());
                     LOGGER.info("Status " + pdo.getStatusId() + " successfully answered with " + status.getId());
@@ -292,7 +293,7 @@ public class NotificationProcessingScheduler {
         try {
             LOGGER.info("Check if " + pdo.getStatusId() + " is already answered");
             Context context = this.statusRepository.getContext(pdo.getStatusId());
-            if (wasNotAnsweredByBot(context)){
+            if (wasNotAnsweredByBot(context)) {
                 try {
                     Status status = statusRepository.replyDirectToStatus(generator.notFound(pdo.getAuthor()), pdo.getStatusId());
                     LOGGER.info("Status " + pdo.getStatusId() + " successfully answered with " + status.getId());
@@ -316,7 +317,7 @@ public class NotificationProcessingScheduler {
     private static boolean wasNotAnsweredByBot(Context context) {
         return context.getDescendants().stream()
                 .filter(s ->
-                        "@hourlyhectoc@botsin.space".equals(s.getAccount()
+                        "@hourlyhectoc@mastodon.seism0saurus.de".equals(s.getAccount()
                                 .getUsername())) //getUsername is ok, because we are on the same server instance as our bot since we are the bot
                 .findAny()
                 .isEmpty();
@@ -336,14 +337,28 @@ public class NotificationProcessingScheduler {
                 .map(m -> {
                     ChallengePdo challenge;
                     String replyId = m.getStatus().getInReplyToId();
-                    if (challengeRepo.existsByStatusId(replyId)){
+                    if (challengeRepo.existsByStatusId(replyId)) {
                         challenge = challengeRepo.findByStatusId(replyId);
                     } else {
                         challenge = fetchAndStoreChallenge(replyId);
                     }
                     NotificationPdo pdo;
-                    if (notificationRepo.existsByStatusId(m.getStatus().getId())){
-                        pdo = notificationRepo.findByStatusId(m.getStatus().getId());
+                    if (notificationRepo.existsByStatusId(m.getStatus().getId())) {
+                        List<NotificationPdo> pdos = notificationRepo.findByStatusId(m.getStatus().getId());
+                        Optional<NotificationPdo> foundPdo = pdos.stream().filter(p -> p.getNotificationId().equals(m.getId())).findFirst();
+                        if (foundPdo.isEmpty()) {
+                            pdo = NotificationPdo.builder()
+                                    .notificationId(m.getId())
+                                    .statusId(m.getStatus().getId())
+                                    .challenge(challenge)
+                                    .solution(m.getStatus().getContent())
+                                    .author(m.getStatus().getAccount().getAcct())
+                                    .correct(false)
+                                    .date(m.getStatus().getCreatedAt().mostPreciseInstantOrNull().atZone(ZoneOffset.UTC))
+                                    .build();
+                        } else {
+                            pdo = foundPdo.get();
+                        }
                     } else {
                         pdo = NotificationPdo.builder()
                                 .notificationId(m.getId())
@@ -356,7 +371,7 @@ public class NotificationProcessingScheduler {
                                 .build();
                     }
                     // Dismiss if the post was no answer to a challenge
-                    if (null == challenge){
+                    if (null == challenge) {
                         dismissNotificationWithoutSave(pdo);
                         return null;
                     }
@@ -378,7 +393,7 @@ public class NotificationProcessingScheduler {
         try {
             LOGGER.info("Going to fetch challenge " + replyId);
             String challengeText = this.statusRepository.getChallenge(replyId);
-            if (null == challengeText){
+            if (null == challengeText) {
                 return challenge;
             }
             challenge = ChallengePdo.builder()

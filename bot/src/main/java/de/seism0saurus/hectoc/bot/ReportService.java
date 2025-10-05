@@ -7,8 +7,6 @@ import de.seism0saurus.hectoc.bot.db.ReportRepository;
 import de.seism0saurus.hectoc.bot.mastodon.StatusRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import social.bigbone.api.entity.Status;
 import social.bigbone.api.exception.BigBoneRequestException;
@@ -25,8 +23,7 @@ import java.util.List;
  * @author seism0saurus
  */
 @Service
-@Profile("reports")
-public class ReportScheduler {
+public class ReportService {
 
     /**
      * The {@link Logger Logger} for this class.
@@ -34,28 +31,28 @@ public class ReportScheduler {
      *
      * @see "src/main/ressources/logback.xml"
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReportScheduler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
 
     /**
-     * The {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository} of this class.
+     * The {@link StatusRepository StatusRepository} of this class.
      * The repository is used to create new toots at mastodon.
      */
     private final StatusRepository statusRepository;
 
     /**
-     * The {@link de.seism0saurus.hectoc.bot.db.NotificationRepository NotificationRepository} of this class.
+     * The {@link NotificationRepository NotificationRepository} of this class.
      * The repository is used to create new toots at mastodon.
      */
     private final NotificationRepository notificationRepository;
 
     /**
-     * The {@link de.seism0saurus.hectoc.bot.TextGenerator TextGenerator} of this class.
+     * The {@link TextGenerator TextGenerator} of this class.
      * The generator is used to create the text for new toots at mastodon.
      */
     private final TextGenerator generator;
 
     /**
-     * The {@link de.seism0saurus.hectoc.bot.db.ReportPdo ReportPdo} of this class.
+     * The {@link ReportPdo ReportPdo} of this class.
      * The repository is used to store newly posted reports for further reference.
      */
     private final ReportRepository reportRepository;
@@ -64,12 +61,12 @@ public class ReportScheduler {
      * The sole constructor for this class.
      * The needed classes are {@link org.springframework.beans.factory.annotation.Autowired autowired} by Spring.
      *
-     * @param generator              The {@link de.seism0saurus.hectoc.bot.TextGenerator TextGenerator} of this class. Will be stored to {@link ReportScheduler#generator generator}.
-     * @param reportRepository                   The {@link de.seism0saurus.hectoc.bot.db.ReportRepository ReportRepository} of this class. Will be stored to {@link ReportScheduler#reportRepository repo}.
-     * @param statusRepository       The {@link de.seism0saurus.hectoc.bot.mastodon.StatusRepository StatusRepository} of this class. Will be stored to {@link ReportScheduler#statusRepository statusRepository}.
-     * @param notificationRepository The {@link de.seism0saurus.hectoc.bot.db.NotificationRepository NotificationRepository} of this class. Will be stored to {@link ReportScheduler#notificationRepository notificationRepository}.
+     * @param generator              The {@link TextGenerator TextGenerator} of this class. Will be stored to {@link ReportService#generator generator}.
+     * @param reportRepository       The {@link ReportRepository ReportRepository} of this class. Will be stored to {@link ReportService#reportRepository repo}.
+     * @param statusRepository       The {@link StatusRepository StatusRepository} of this class. Will be stored to {@link ReportService#statusRepository statusRepository}.
+     * @param notificationRepository The {@link NotificationRepository NotificationRepository} of this class. Will be stored to {@link ReportService#notificationRepository notificationRepository}.
      */
-    public ReportScheduler(
+    public ReportService(
             TextGenerator generator,
             ReportRepository reportRepository,
             StatusRepository statusRepository,
@@ -81,13 +78,10 @@ public class ReportScheduler {
     }
 
     /**
-     * Schedules the posting of a report with the number of challenges and the best participants.
-     * postReport will be run according to the {@link Scheduled Scheduled annotation}.
      * It generates a new report and creates a new toot on mastodon via the {@link StatusRepository StatusRepository}.
      * <p>
      * Exceptions are logged as errors and suppressed. No further error handling is applied.
      */
-    @Scheduled(cron = "${schedule.report}")
     public void postReport() {
         final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         if (isReportAlreadySent(now)) return;
@@ -127,10 +121,11 @@ public class ReportScheduler {
 
     /**
      * Prepares a report text by fetching the needed data from the repository and formatting the results.
+     *
      * @param firstSecondOfMonth
      * @param lastSecondOfMonth
      * @param timerange
-     * @param now The first day of the wanted month.
+     * @param now                The first day of the wanted month.
      * @return A formatted text for the report.
      */
     private String getReportText(final ZonedDateTime now, final boolean publicPost, ZonedDateTime firstSecondOfMonth, ZonedDateTime lastSecondOfMonth, String timerange) {
@@ -141,12 +136,13 @@ public class ReportScheduler {
 
     /**
      * Checks if the report for this month is already sent.
+     *
      * @param now The first day of the wanted month.
      * @return True, if the report was already sent. False otherwise.
      */
     private boolean isReportAlreadySent(ZonedDateTime now) {
         List<ReportPdo> allOnDay = this.reportRepository.findAllOnDay(now);
-        if (!allOnDay.isEmpty()){
+        if (!allOnDay.isEmpty()) {
             LOGGER.info("Report is already present for today. Skipping report.");
             allOnDay.forEach(r -> LOGGER.info("Report: " + r));
             return true;
@@ -156,6 +152,7 @@ public class ReportScheduler {
 
     /**
      * Checks if the current day is the first day of the month.
+     *
      * @param now The current date.
      * @return True, if the date is the first day of the month. False, if it is NOT the first day of the month.
      */

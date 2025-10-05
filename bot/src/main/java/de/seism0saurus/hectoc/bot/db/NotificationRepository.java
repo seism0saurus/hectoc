@@ -24,7 +24,7 @@ public interface NotificationRepository extends JpaRepository<NotificationPdo, U
      * @see social.bigbone.api.entity.Status#getId()
      * @see NotificationPdo#getId()
      */
-    NotificationPdo findByStatusId(String statusId);
+    List<NotificationPdo> findByStatusId(String statusId);
 
     /**
      * Checks, if the {@link de.seism0saurus.hectoc.bot.db.NotificationPdo NotificationPdo} for the toot with the given Status ID exists.

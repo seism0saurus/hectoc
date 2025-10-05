@@ -1,5 +1,6 @@
 package de.seism0saurus.hectoc.bruteforcer;
 
+import de.seism0saurus.hectoc.bruteforcer.logic.OperatorPermutator;
 import de.seism0saurus.hectoc.shuntingyardalgorithm.StackElement;
 import org.junit.jupiter.api.Test;
 

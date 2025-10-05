@@ -1,6 +1,8 @@
 package de.seism0saurus.hectoc.shuntingyardalgorithm;
 
-public enum Operator implements StackElement {
+import java.io.Serializable;
+
+public enum Operator implements StackElement, Serializable {
     PLUS(1), MINUS(1), MULTIPLICATION(2), DIVISION(2), POWER(3), LEFTPARENTHESIS(4), RIGHTPARENTHESIS(4), NULLOPERATOR(5);
 
     private final int precedence;
@@ -12,12 +14,9 @@ public enum Operator implements StackElement {
     public static Operator from(final char character) {
         return switch (character) {
             case '+' -> PLUS;
-            case '-' -> MINUS;
-            case '−' -> MINUS;
-            case '*' -> MULTIPLICATION;
-            case 'x' -> MULTIPLICATION;
-            case '/' -> DIVISION;
-            case '÷' -> DIVISION;
+            case '-', '−' -> MINUS;
+            case '*', 'x' -> MULTIPLICATION;
+            case '/', '÷', ':' -> DIVISION;
             case '^' -> POWER;
             case '(' -> LEFTPARENTHESIS;
             case ')' -> RIGHTPARENTHESIS;

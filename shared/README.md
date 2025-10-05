@@ -1,7 +1,7 @@
 # Hectoc Library
 
 The Hectoc library in the [shared](../shared) folder contains some Java classes to generate Hectocs
-and check solutions with a modified version of a [Shunting Yard Algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm)
+and check solutionPdos with a modified version of a [Shunting Yard Algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm)
 and stacks.
 
 You can use that library, if you want to implement your own Java apps or tools for Hectocs.

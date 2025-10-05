@@ -25,16 +25,16 @@ public class HectocTokenizerTest {
 
     @ParameterizedTest
     @MethodSource("provideTokens")
-    public void tokenize(final String equotation, final Stack<StackElement> expectedStack) {
+    public void tokenize(final String Equitation, final Stack<StackElement> expectedStack) {
         final HectocTokenizer hectocTokenizer = new HectocTokenizer();
 
-        final Stack<StackElement> actualStack = hectocTokenizer.tokenize(equotation);
+        final Stack<StackElement> actualStack = hectocTokenizer.tokenize(Equitation);
 
         assertEquals(expectedStack, actualStack);
     }
 
     private static Stream<Arguments> provideTokens() {
-        final String firstEquotation = "1+2+3";
+        final String firstEquitation = "1+2+3";
         final Stack<StackElement> firstStack = new Stack<>();
         firstStack.push(Number.of(1));
         firstStack.push(Operator.PLUS);
@@ -42,13 +42,13 @@ public class HectocTokenizerTest {
         firstStack.push(Operator.PLUS);
         firstStack.push(Number.of(3));
 
-        final String secondEquotation = "12+3";
+        final String secondEquitation = "12+3";
         final Stack<StackElement> secondStack = new Stack<>();
         secondStack.push(Number.of(12));
         secondStack.push(Operator.PLUS);
         secondStack.push(Number.of(3));
 
-        final String thirdEquotation = "(1+2)^2*51/51-1";
+        final String thirdEquitation = "(1+2)^2*51/51-1";
         final Stack<StackElement> thirdStack = new Stack<>();
         thirdStack.push(Operator.LEFTPARENTHESIS);
         thirdStack.push(Number.of(1));
@@ -64,13 +64,13 @@ public class HectocTokenizerTest {
         thirdStack.push(Operator.MINUS);
         thirdStack.push(Number.of(1));
 
-        final String negativeNumberAtTheStartEquotation = "-3+5";
-        final Stack<StackElement> negativeNumberAtTheStartEquotationStack = new Stack<>();
-        negativeNumberAtTheStartEquotationStack.push(Number.of(-3));
-        negativeNumberAtTheStartEquotationStack.push(Operator.PLUS);
-        negativeNumberAtTheStartEquotationStack.push(Number.of(5));
+        final String negativeNumberAtTheStartEquitation = "-3+5";
+        final Stack<StackElement> negativeNumberAtTheStartEquitationStack = new Stack<>();
+        negativeNumberAtTheStartEquitationStack.push(Number.of(-3));
+        negativeNumberAtTheStartEquitationStack.push(Operator.PLUS);
+        negativeNumberAtTheStartEquitationStack.push(Number.of(5));
 
-        final String negativeNumberInTheMiddleEquotation = "(5+8+7)*(-9+2*7)";
+        final String negativeNumberInTheMiddleEquitation = "(5+8+7)*(-9+2*7)";
         final Stack<StackElement> negativeNumberInTheMiddleStack = new Stack<>();
         negativeNumberInTheMiddleStack.push(Operator.LEFTPARENTHESIS);
         negativeNumberInTheMiddleStack.push(Number.of(5));
@@ -88,7 +88,7 @@ public class HectocTokenizerTest {
         negativeNumberInTheMiddleStack.push(Number.of(7));
         negativeNumberInTheMiddleStack.push(Operator.RIGHTPARENTHESIS);
 
-        final String unaryMinusBeforeParenthesisEquotation = "(-(4+3)+8+4)*5*4";
+        final String unaryMinusBeforeParenthesisEquitation = "(-(4+3)+8+4)*5*4";
         final Stack<StackElement> unaryMinusBeforeParenthesisStack = new Stack<>();
         unaryMinusBeforeParenthesisStack.push(Operator.LEFTPARENTHESIS);
         unaryMinusBeforeParenthesisStack.push(Number.of(-1));
@@ -108,7 +108,7 @@ public class HectocTokenizerTest {
         unaryMinusBeforeParenthesisStack.push(Operator.MULTIPLICATION);
         unaryMinusBeforeParenthesisStack.push(Number.of(4));
 
-        final String unaryMinusBeforeParenthesisAsFirstElementEquotation = "-(1+2)";
+        final String unaryMinusBeforeParenthesisAsFirstElementEquitation = "-(1+2)";
         final Stack<StackElement> unaryMinusBeforeParenthesisAsFirstElementStack = new Stack<>();
         unaryMinusBeforeParenthesisAsFirstElementStack.push(Number.of(-1));
         unaryMinusBeforeParenthesisAsFirstElementStack.push(Operator.MULTIPLICATION);
@@ -118,7 +118,7 @@ public class HectocTokenizerTest {
         unaryMinusBeforeParenthesisAsFirstElementStack.push(Number.of(2));
         unaryMinusBeforeParenthesisAsFirstElementStack.push(Operator.RIGHTPARENTHESIS);
 
-        final String unaryMinusBetweenParenthesisEquotation = "(2+2)-(1+2)";
+        final String unaryMinusBetweenParenthesisEquitation = "(2+2)-(1+2)";
         final Stack<StackElement> unaryMinusBetweenParenthesisStack = new Stack<>();
         unaryMinusBetweenParenthesisStack.push(Operator.LEFTPARENTHESIS);
         unaryMinusBetweenParenthesisStack.push(Number.of(2));
@@ -132,7 +132,7 @@ public class HectocTokenizerTest {
         unaryMinusBetweenParenthesisStack.push(Number.of(2));
         unaryMinusBetweenParenthesisStack.push(Operator.RIGHTPARENTHESIS);
 
-        final String parenthesisMinusNumberEquotation = "(1+2)-3";
+        final String parenthesisMinusNumberEquitation = "(1+2)-3";
         final Stack<StackElement> parenthesisMinusNumberStack = new Stack<>();
         parenthesisMinusNumberStack.push(Operator.LEFTPARENTHESIS);
         parenthesisMinusNumberStack.push(Number.of(1));
@@ -142,7 +142,7 @@ public class HectocTokenizerTest {
         parenthesisMinusNumberStack.push(Operator.MINUS);
         parenthesisMinusNumberStack.push(Number.of(3));
 
-        final String otherOperatorsMinusNumberEquotation = "1*-1+2/-2+3^-3";
+        final String otherOperatorsMinusNumberEquitation = "1*-1+2/-2+3^-3";
         final Stack<StackElement> otherOperatorsMinusNumberStack = new Stack<>();
         otherOperatorsMinusNumberStack.push(Number.of(1));
         otherOperatorsMinusNumberStack.push(Operator.MULTIPLICATION);
@@ -156,25 +156,25 @@ public class HectocTokenizerTest {
         otherOperatorsMinusNumberStack.push(Operator.POWER);
         otherOperatorsMinusNumberStack.push(Number.of(-3));
 
-        final String alternativeMathSymbolsMinusEquotation = "3−5";
+        final String alternativeMathSymbolsMinusEquitation = "3−5";
         final Stack<StackElement> alternativeMathSymbolsMinusStack = new Stack<>();
         alternativeMathSymbolsMinusStack.push(Number.of(3));
         alternativeMathSymbolsMinusStack.push(Operator.MINUS);
         alternativeMathSymbolsMinusStack.push(Number.of(5));
 
-        final String alternativeMathSymbolsMultiplicationEquotation = "3x5";
+        final String alternativeMathSymbolsMultiplicationEquitation = "3x5";
         final Stack<StackElement> alternativeMathSymbolsMultiplicationStack = new Stack<>();
         alternativeMathSymbolsMultiplicationStack.push(Number.of(3));
         alternativeMathSymbolsMultiplicationStack.push(Operator.MULTIPLICATION);
         alternativeMathSymbolsMultiplicationStack.push(Number.of(5));
 
-        final String alternativeMathSymbolsDivisionEquotation = "3÷5";
+        final String alternativeMathSymbolsDivisionEquitation = "3÷5";
         final Stack<StackElement> alternativeMathSymbolsDivisionStack = new Stack<>();
         alternativeMathSymbolsDivisionStack.push(Number.of(3));
         alternativeMathSymbolsDivisionStack.push(Operator.DIVISION);
         alternativeMathSymbolsDivisionStack.push(Number.of(5));
 
-        final String noSymbolBetweenPrenthesisAndOperandEquotation = "(4+1)2";
+        final String noSymbolBetweenPrenthesisAndOperandEquitation = "(4+1)2";
         final Stack<StackElement> noSymbolBetweenPrenthesisAndOperandStack = new Stack<>();
         noSymbolBetweenPrenthesisAndOperandStack.push(Operator.LEFTPARENTHESIS);
         noSymbolBetweenPrenthesisAndOperandStack.push(Number.of(4));
@@ -184,7 +184,7 @@ public class HectocTokenizerTest {
         noSymbolBetweenPrenthesisAndOperandStack.push(Operator.MULTIPLICATION);
         noSymbolBetweenPrenthesisAndOperandStack.push(Number.of(2));
 
-        final String noSymbolBetweenOperandAndPrenthesisEquotation = "2(4+1)";
+        final String noSymbolBetweenOperandAndPrenthesisEquitation = "2(4+1)";
         final Stack<StackElement> noSymbolBetweenOperandAndPrenthesisStack = new Stack<>();
         noSymbolBetweenOperandAndPrenthesisStack.push(Number.of(2));
         noSymbolBetweenOperandAndPrenthesisStack.push(Operator.MULTIPLICATION);
@@ -194,7 +194,7 @@ public class HectocTokenizerTest {
         noSymbolBetweenOperandAndPrenthesisStack.push(Number.of(1));
         noSymbolBetweenOperandAndPrenthesisStack.push(Operator.RIGHTPARENTHESIS);
 
-        final String noSymbolBetweenTwoPrenthesisEquotation = "(1+2)(4+1)";
+        final String noSymbolBetweenTwoPrenthesisEquitation = "(1+2)(4+1)";
         final Stack<StackElement> noSymbolBetweenTwoPrenthesisStack = new Stack<>();
         noSymbolBetweenTwoPrenthesisStack.push(Operator.LEFTPARENTHESIS);
         noSymbolBetweenTwoPrenthesisStack.push(Number.of(1));
@@ -208,23 +208,36 @@ public class HectocTokenizerTest {
         noSymbolBetweenTwoPrenthesisStack.push(Number.of(1));
         noSymbolBetweenTwoPrenthesisStack.push(Operator.RIGHTPARENTHESIS);
 
+        final String alternativeCharsEquitation = "1x2+9:3÷3";
+        final Stack<StackElement> alternativeCharsStack = new Stack<>();
+        alternativeCharsStack.push(Number.of(1));
+        alternativeCharsStack.push(Operator.MULTIPLICATION);
+        alternativeCharsStack.push(Number.of(2));
+        alternativeCharsStack.push(Operator.PLUS);
+        alternativeCharsStack.push(Number.of(9));
+        alternativeCharsStack.push(Operator.DIVISION);
+        alternativeCharsStack.push(Number.of(3));
+        alternativeCharsStack.push(Operator.DIVISION);
+        alternativeCharsStack.push(Number.of(3));
+
         return Stream.of(
-                Arguments.of(firstEquotation, firstStack),
-                Arguments.of(secondEquotation, secondStack),
-                Arguments.of(thirdEquotation, thirdStack),
-                Arguments.of(negativeNumberAtTheStartEquotation, negativeNumberAtTheStartEquotationStack),
-                Arguments.of(negativeNumberInTheMiddleEquotation, negativeNumberInTheMiddleStack),
-                Arguments.of(unaryMinusBeforeParenthesisEquotation, unaryMinusBeforeParenthesisStack),
-                Arguments.of(unaryMinusBeforeParenthesisAsFirstElementEquotation, unaryMinusBeforeParenthesisAsFirstElementStack),
-                Arguments.of(unaryMinusBetweenParenthesisEquotation, unaryMinusBetweenParenthesisStack),
-                Arguments.of(parenthesisMinusNumberEquotation, parenthesisMinusNumberStack),
-                Arguments.of(otherOperatorsMinusNumberEquotation, otherOperatorsMinusNumberStack),
-                Arguments.of(alternativeMathSymbolsMinusEquotation, alternativeMathSymbolsMinusStack),
-                Arguments.of(alternativeMathSymbolsMultiplicationEquotation, alternativeMathSymbolsMultiplicationStack),
-                Arguments.of(alternativeMathSymbolsDivisionEquotation, alternativeMathSymbolsDivisionStack),
-                Arguments.of(noSymbolBetweenPrenthesisAndOperandEquotation, noSymbolBetweenPrenthesisAndOperandStack),
-                Arguments.of(noSymbolBetweenOperandAndPrenthesisEquotation, noSymbolBetweenOperandAndPrenthesisStack),
-                Arguments.of(noSymbolBetweenTwoPrenthesisEquotation, noSymbolBetweenTwoPrenthesisStack)
+                Arguments.of(firstEquitation, firstStack),
+                Arguments.of(secondEquitation, secondStack),
+                Arguments.of(thirdEquitation, thirdStack),
+                Arguments.of(negativeNumberAtTheStartEquitation, negativeNumberAtTheStartEquitationStack),
+                Arguments.of(negativeNumberInTheMiddleEquitation, negativeNumberInTheMiddleStack),
+                Arguments.of(unaryMinusBeforeParenthesisEquitation, unaryMinusBeforeParenthesisStack),
+                Arguments.of(unaryMinusBeforeParenthesisAsFirstElementEquitation, unaryMinusBeforeParenthesisAsFirstElementStack),
+                Arguments.of(unaryMinusBetweenParenthesisEquitation, unaryMinusBetweenParenthesisStack),
+                Arguments.of(parenthesisMinusNumberEquitation, parenthesisMinusNumberStack),
+                Arguments.of(otherOperatorsMinusNumberEquitation, otherOperatorsMinusNumberStack),
+                Arguments.of(alternativeMathSymbolsMinusEquitation, alternativeMathSymbolsMinusStack),
+                Arguments.of(alternativeMathSymbolsMultiplicationEquitation, alternativeMathSymbolsMultiplicationStack),
+                Arguments.of(alternativeMathSymbolsDivisionEquitation, alternativeMathSymbolsDivisionStack),
+                Arguments.of(noSymbolBetweenPrenthesisAndOperandEquitation, noSymbolBetweenPrenthesisAndOperandStack),
+                Arguments.of(noSymbolBetweenOperandAndPrenthesisEquitation, noSymbolBetweenOperandAndPrenthesisStack),
+                Arguments.of(noSymbolBetweenTwoPrenthesisEquitation, noSymbolBetweenTwoPrenthesisStack),
+                Arguments.of(alternativeCharsEquitation, alternativeCharsStack)
         );
     }
 }
