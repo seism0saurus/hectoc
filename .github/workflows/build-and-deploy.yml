@@ -158,7 +158,7 @@ jobs:
           path: ~/.m2/repository
           key: maven-repo
       - name: Install Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 18.13.0
           cache: 'npm'
