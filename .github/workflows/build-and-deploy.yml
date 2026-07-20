@@ -82,7 +82,7 @@ jobs:
       - name: Copy jar
         run: cp /home/runner/work/hectoc/hectoc/bot/target/bot-*.jar bot.jar
       - name: Archive bot jar
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bot
           path: bot.jar
@@ -170,7 +170,7 @@ jobs:
       - name: Copy jar
         run: cp /home/runner/work/hectoc/hectoc/webapp/target/webapp-*.jar webapp.jar
       - name: Archive webapp jar
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: webapp
           path: webapp.jar
@@ -250,7 +250,7 @@ jobs:
       - name: Copy jar
         run: cp /home/runner/work/hectoc/hectoc/bruteforcer/target/bruteforcer-*.jar bruteforcer.jar
       - name: Archive bruteforcer jar
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bruteforcer
           path: bruteforcer.jar
