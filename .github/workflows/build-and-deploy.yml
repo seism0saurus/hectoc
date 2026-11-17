@@ -7,6 +7,10 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ "main" ]
     types: [ "closed" ]
+  schedule:
+    # Nightly rebuild so the images pick up patched base images (JRE, OS packages)
+    - cron: "30 2 * * *"
+  workflow_dispatch:
 
 env:
   VERSION: 0.0.1-SNAPSHOT
@@ -31,6 +35,7 @@ jobs:
           key: maven-repo
 
   changes:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
@@ -39,7 +44,7 @@ jobs:
       bruteforcer: ${{ steps.filter.outputs.bruteforcer }}
       webapp: ${{ steps.filter.outputs.webapp }}
       shared: ${{ steps.filter.outputs.shared }}
-      pom: ${{ steps.filter.outputs.pom }}
+      parent: ${{ steps.filter.outputs.parent }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -59,7 +64,10 @@ jobs:
 
   build-bot:
     runs-on: ubuntu-latest
-    if: needs.changes.outputs.bot == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true'
+    if: >
+      !cancelled() && needs.build-shared.result == 'success' && (
+        github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' ||
+        needs.changes.outputs.bot == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true')
     needs:
       - build-shared
       - changes
@@ -108,10 +116,16 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/seism0saurus/hectoc-bot
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=raw,value=main,enable={{is_default_branch}}
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: bot/containerimage/.
+          pull: true
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -140,7 +154,10 @@ jobs:
 
   build-webapp:
     runs-on: ubuntu-latest
-    if: needs.changes.outputs.webapp == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true'
+    if: >
+      !cancelled() && needs.build-shared.result == 'success' && (
+        github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' ||
+        needs.changes.outputs.webapp == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true')
     needs:
       - build-shared
       - changes
@@ -196,10 +213,16 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/seism0saurus/hectoc-webapp
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=raw,value=main,enable={{is_default_branch}}
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: webapp/containerimage/.
+          pull: true
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -228,7 +251,9 @@ jobs:
 
   build-bruteforcer:
     runs-on: ubuntu-latest
-    if: needs.changes.outputs.bruteforcer == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true'
+    if: >
+      !cancelled() && needs.build-shared.result == 'success' &&
+      (needs.changes.outputs.bruteforcer == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.parent == 'true')
     needs:
       - build-shared
       - changes
@@ -276,10 +301,16 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/seism0saurus/hectoc-bruteforcer
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=raw,value=main,enable={{is_default_branch}}
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: bruteforcer/containerimage/.
+          pull: true
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
