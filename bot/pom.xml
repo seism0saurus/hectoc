@@ -19,20 +19,6 @@
         <kotlinx.serialization.version>1.6.2</kotlinx.serialization.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>maven-central-snapshots</id>
-            <name>Maven Central Snapshot Repository</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <dependencies>
         <!--Spring Boot-->
         <dependency>
@@ -46,9 +32,9 @@
 
         <!--Bigbone Mastodon Client-->
         <dependency>
-            <groupId>social.bigbone</groupId>
+            <groupId>io.github.pattafeufeu</groupId>
             <artifactId>bigbone</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
